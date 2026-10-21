@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryomen Sukuna — King of Curses</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #030303;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #c9b8a8;
+            cursor: crosshair;
+        }
+
+        /* LAYER 0: shrine */
+        #shrine-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* LAYER 1: Sukuna figure */
+        #sukuna-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* LAYER 2: cursed particles */
+        #cursed-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* LAYER 3: vignette */
+        .vignette {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.92) 100%),
+                linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.55) 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* LAYER 4: content */
+        .scroll-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow-y: auto;
+            z-index: 4;
+            scroll-behavior: smooth;
+        }
+
+        .scroll-container::-webkit-scrollbar { width: 6px; }
+        .scroll-container::-webkit-scrollbar-track { background: #080808; }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #6b1a1a;
+            border-radius: 3px;
+        }
+
+        /* LAYER 5: domain FX canvas */
+        #domain-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* LAYER 10: domain text overlay */
+        .domain-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            will-change: opacity, transform;
+        }
+        .domain-text.show {
+            animation: domainTextReveal 4.2s ease-out forwards;
+        }
+        @keyframes domainTextReveal {
+            0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.82); filter: blur(8px); }
+            12%  { opacity: 1; transform: translate(-50%, -50%) scale(1);    filter: blur(0); }
+            78%  { opacity: 1; transform: translate(-50%, -50%) scale(1);    filter: blur(0); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.18); filter: blur(6px); }
+        }
+        .dt-kanji {
+            font-size: clamp(2.4rem, 9vw, 6.5rem);
+            color: #f0dcc6;
+            letter-spacing: 0.3em;
+            font-weight: 900;
+            text-shadow:
+                0 0 30px rgba(220,50,35,1),
+                0 0 80px rgba(200,35,25,0.8),
+                0 0 160px rgba(140,15,15,0.6);
+            margin-bottom: 22px;
+            padding-left: 0.3em;
+        }
+        .dt-name {
+            font-size: clamp(1rem, 3vw, 1.9rem);
+            letter-spacing: 0.55em;
+            text-transform: uppercase;
+            color: #d4b8a0;
+            margin-bottom: 12px;
+            padding-left: 0.55em;
+            text-shadow: 0 0 20px rgba(200,40,30,0.8);
+        }
+        .dt-sub {
+            font-size: clamp(0.75rem, 1.8vw, 1.2rem);
+            letter-spacing: 0.45em;
+            color: #8b2a2a;
+            padding-left: 0.45em;
+            text-shadow: 0 0 20px rgba(180,30,30,0.6);
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+        .hero h1 {
+            font-size: clamp(2.6rem, 9vw, 6.5rem);
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #e8d5c0;
+            text-shadow:
+                0 0 20px rgba(180, 30, 30, 0.9),
+                0 0 60px rgba(180, 30, 30, 0.6),
+                0 0 140px rgba(120, 10, 10, 0.4);
+            animation: pulseGlow 4s ease-in-out infinite;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+        .hero .subtitle {
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: #8a6a5a;
+            margin-bottom: 40px;
+        }
+        .hero .kanji {
+            font-size: clamp(1.8rem, 5.5vw, 3.5rem);
+            color: #7a1f1f;
+            letter-spacing: 0.3em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(180, 30, 30, 0.7);
+            animation: flicker 6s infinite;
+        }
+        .hero .tagline {
+            max-width: 600px;
+            font-size: 1rem;
+            line-height: 1.9;
+            color: #9a8070;
+            font-style: italic;
+        }
+        .hero .click-hint {
+            margin-top: 40px;
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: #6b1a1a;
+            animation: pulseText 2.4s ease-in-out infinite;
+        }
+        @keyframes pulseText {
+            0%,100% { opacity: 0.4; }
+            50%     { opacity: 1; }
+        }
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: #5a3a2a;
+            font-size: 0.72rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+        .scroll-hint::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, #6b1a1a, transparent);
+        }
+        @keyframes pulseGlow {
+            0%,100% { text-shadow: 0 0 20px rgba(180,30,30,0.9), 0 0 60px rgba(180,30,30,0.6), 0 0 140px rgba(120,10,10,0.4); }
+            50% { text-shadow: 0 0 32px rgba(230,45,45,1), 0 0 95px rgba(200,30,30,0.75), 0 0 200px rgba(150,15,15,0.55); }
+        }
+        @keyframes flicker {
+            0%,100% { opacity: 1; }
+            5% { opacity: 0.55; }
+            9% { opacity: 1; }
+            52% { opacity: 0.8; }
+            56% { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%,100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* ============ SECTIONS ============ */
+        .section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 30px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .section.visible { opacity: 1; transform: translateY(0); }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .section-header .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, #6b1a1a, transparent);
+        }
+        .section-header .line:first-child {
+            background: linear-gradient(to left, #6b1a1a, transparent);
+        }
+        .section-header h2 {
+            font-size: clamp(1.3rem, 3vw, 1.9rem);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #c9a88a;
+            white-space: nowrap;
+            font-weight: 400;
+        }
+        .section p {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: #ab9282;
+            margin-bottom: 20px;
+        }
+        .section p em { color: #d4b8a0; font-style: italic; }
+        .section strong { color: #e8c8a8; font-weight: 600; }
+
+        .ability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        .ability-card {
+            background: rgba(18, 7, 7, 0.78);
+            border: 1px solid rgba(107, 26, 26, 0.45);
+            padding: 30px 25px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.4s ease, transform 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+        .ability-card:hover {
+            border-color: #8b2a2a;
+            transform: translateY(-4px);
+        }
+        .ability-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(to right, transparent, #8b2a2a, transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .ability-card:hover::before { opacity: 1; }
+        .ability-card h3 {
+            font-size: 1.05rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #d4a88a;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+        .ability-card .jp {
+            font-size: 0.8rem;
+            color: #5a3a2a;
+            letter-spacing: 0.25em;
+            margin-bottom: 12px;
+        }
+        .ability-card p { font-size: 0.95rem; line-height: 1.8; margin-bottom: 0; }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+        .stat-label {
+            width: 150px;
+            font-size: 0.82rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #8a6a5a;
+            flex-shrink: 0;
+        }
+        .stat-bar {
+            flex: 1;
+            height: 3px;
+            background: rgba(107, 26, 26, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(to right, #6b1a1a, #c43a3a);
+            width: 0;
+            transition: width 1.5s ease;
+            box-shadow: 0 0 10px rgba(196, 58, 58, 0.5);
+        }
+        .stat-fill.max {
+            background: linear-gradient(to right, #8b1a1a, #e84a4a);
+            box-shadow: 0 0 15px rgba(232, 74, 74, 0.7);
+        }
+
+        .domain-section { text-align: center; padding: 120px 30px; }
+        .domain-section h2 {
+            font-size: clamp(1.9rem, 5vw, 3.4rem);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #e8d5c0;
+            text-shadow:
+                0 0 30px rgba(180, 30, 30, 0.9),
+                0 0 85px rgba(180, 30, 30, 0.6),
+                0 0 160px rgba(120, 10, 10, 0.45);
+            margin-bottom: 10px;
+            animation: domainPulse 3s ease-in-out infinite;
+        }
+        .domain-section .domain-kanji {
+            font-size: clamp(1.1rem, 3vw, 1.9rem);
+            color: #8b2a2a;
+            letter-spacing: 0.5em;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(180, 30, 30, 0.55);
+        }
+        .domain-section .domain-desc {
+            max-width: 650px;
+            margin: 0 auto;
+            font-size: 1.02rem;
+            line-height: 2;
+            color: #ab9282;
+        }
+        .domain-section .domain-desc em { color: #d4b8a0; }
+        @keyframes domainPulse {
+            0%,100% { text-shadow: 0 0 30px rgba(180,30,30,0.9), 0 0 85px rgba(180,30,30,0.6), 0 0 160px rgba(120,10,10,0.45); }
+            50% { text-shadow: 0 0 55px rgba(255,50,50,1), 0 0 130px rgba(220,40,40,0.85), 0 0 230px rgba(180,20,20,0.65); }
+        }
+
+        .quote-block {
+            border-left: 2px solid #6b1a1a;
+            padding: 20px 30px;
+            margin: 40px 0;
+            background: rgba(15, 5, 5, 0.55);
+        }
+        .quote-block p {
+            font-size: 1.15rem;
+            font-style: italic;
+            color: #c9a88a;
+            line-height: 1.9;
+            margin-bottom: 10px;
+        }
+        .quote-block cite {
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #5a3a2a;
+            font-style: normal;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 80px 30px 130px;
+            color: #3a2a2a;
+            font-size: 0.78rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+        .footer .divider {
+            width: 80px;
+            height: 1px;
+            background: #3a1a1a;
+            margin: 0 auto 30px;
+        }
+
+        @media (max-width: 600px) {
+            .section { padding: 70px 20px; }
+            .ability-grid { grid-template-columns: 1fr; }
+            .stat-label { width: 105px; font-size: 0.72rem; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="shrine-canvas"></canvas>
+<canvas id="sukuna-canvas"></canvas>
+<canvas id="cursed-canvas"></canvas>
+<div class="vignette"></div>
+
+<div class="scroll-container">
+
+    <section class="hero">
+        <div class="kanji">両面宿儺</div>
+        <h1>Ryomen Sukuna</h1>
+        <div class="subtitle">King of Curses</div>
+        <p class="tagline">
+            The strongest jujutsu sorcerer in history. A walking disaster.
+            A name whispered in fear for a thousand years.
+        </p>
+        <div class="click-hint">Click anywhere to open the domain</div>
+        <div class="scroll-hint">Scroll</div>
+    </section>
+
+    <section class="section">
+        <div class="section-header"><div class="line"></div><h2>Origins</h2><div class="line"></div></div>
+        <p>
+            Born during the Heian Era — the golden age of jujutsu — Sukuna was a
+            <strong>calamity given human form</strong>. Legend says he was born to a starving
+            woman, and that he consumed his twin in the womb to survive. What emerged was
+            not a child, but a <em>demon with two faces and four arms</em>, a being whose
+            very existence defied the natural order.
+        </p>
+        <p>
+            He rose to become the most powerful sorcerer of his time, slaughtering the
+            era's greatest shamans with contemptuous ease. His rampage was so absolute
+            that people began to <strong>worship him as a deity</strong> — not out of love,
+            but out of terror. He was called the <em>Disgraced One</em>, the
+            <em>King of Curses</em>, and eventually, simply, <strong>Sukuna</strong>.
+        </p>
+        <p>
+            When he finally died, his body could not be destroyed. His power was split into
+            <strong>twenty indestructible fingers</strong> — cursed objects of unimaginable
+            potency that survived for a millennium, waiting for a vessel foolish enough to
+            consume them.
+        </p>
+        <div class="quote-block">
+            <p>"Less of a sorcerer and more of a walking disaster."</p>
+            <cite>— Gege Akutami</cite>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header"><div class="line"></div><h2>Appearance</h2><div class="line"></div></div>
+        <p>
+            In his true form, Sukuna is a <strong>four-armed, four-eyed terror</strong>.
+            A second pair of eyes sits beneath his regular ones, usually closed — until
+            they open, and the world remembers what fear tastes like. His face and body
+            are covered in intricate <strong>black tribal tattoos</strong>, markings that
+            trace across his skin like the script of a dead language. His hair is a
+            spiked halo of pink-red, and his nails are black and sharp as talons.
+        </p>
+        <p>
+            A large mouth rests on his midriff, adding to the impossible geometry of his
+            body. In his original Heian-era form, he was described as a <em>demon with
+            two faces and four arms</em>. When possessing Yuji Itadori, his appearance
+            shifts to match his vessel, but the markings remain — crawling across Yuji's
+            face, chest, and arms the moment Sukuna takes control.
+        </p>
+        <p>
+            He wears a light kimono with black edges, a black scarf, and black shoes. The
+            overall impression is not of a warrior, but of <strong>something ancient and
+            patient</strong>, a predator that has waited a thousand years and finds the
+            modern world amusing.
+        </p>
+    </section>
+
+    <section class="section">
+        <div class="section-header"><div class="line"></div><h2>Personality</h2><div class="line"></div></div>
+        <p>
+            Sukuna is <strong>sadistic</strong>. He does not kill out of necessity; he kills
+            because he enjoys it. He is <strong>greedy</strong>, always demanding more —
+            more power, more control, more amusement. He is <strong>arrogant</strong>, but
+            his arrogance is earned; no one in a thousand years has proven him wrong.
+        </p>
+        <p>
+            He is <em>not</em> a mindless beast. Sukuna is capable of patience, strategy,
+            and even a kind of twisted honor. He keeps his word when it suits him. He
+            respects strength. He finds weakness contemptible, but he does not hate it —
+            he simply <strong>does not care</strong>. The suffering of others is not a
+            means to an end for Sukuna; it is the end itself, or at least a pleasant
+            byproduct.
+        </p>
+        <p>
+            He views the modern world with a mixture of curiosity and disdain. He is
+            amused by the rituals of sorcery that have grown up around him, the way his
+            fingers are treated as relics. But amusement does not soften him. When he
+            decides to act, he acts with <strong>absolute, unhesitating lethality</strong>.
+        </p>
+    </section>
+
+    <section class="section">
+        <div class="section-header"><div class="line"></div><h2>Abilities</h2><div class="line"></div></div>
+        <p>
+            Sukuna's power is not a single technique — it is an entire ecosystem of
+            destruction. His cursed energy reserves are <strong>immeasurable</strong>,
+            his control absolute. He can heal himself with the Reverse Cursed Technique,
+            counter domains with Domain Amplification, and adapt to techniques after
+            seeing them once.
+        </p>
+
+        <div class="ability-grid">
+            <div class="ability-card">
+                <div class="jp">解体</div>
+                <h3>Dismantle</h3>
+                <p>Sukuna's default slashing attack. Invisible blades of cursed energy that can cut through buildings, curses, and sorcerers with equal indifference. It is not aimed — it simply <em>is</em>.</p>
+            </div>
+            <div class="ability-card">
+                <div class="jp">捌</div>
+                <h3>Cleave</h3>
+                <p>An adaptive slash that adjusts its strength based on the target's cursed energy and durability. It is not a technique of precision — it is a technique of <em>inevitability</em>.</p>
+            </div>
+            <div class="ability-card">
+                <div class="jp">竈</div>
+                <h3>Furnace</h3>
+                <p>Sukuna's fire technique, revealed during the Shibuya Incident. An arrow of flame that burns with cursed energy, capable of incinerating anything in its path. Still not fully explained.</p>
+            </div>
+            <div class="ability-card">
+                <div class="jp">反転術式</div>
+                <h3>Reverse Cursed Technique</h3>
+                <p>The ability to heal wounds by converting cursed energy into positive energy. Sukuna's mastery is so refined he can regenerate limbs and survive injuries that would kill any other sorcerer.</p>
+            </div>
+            <div class="ability-card">
+                <div class="jp">領域展開</div>
+                <h3>Malevolent Shrine</h3>
+                <p>His Domain Expansion. Unlike any other domain, it has <em>no barrier</em> — its range is dictated solely by Sukuna's will. Within its radius, Cleave and Dismantle strike everything, living or not, without discrimination.</p>
+            </div>
+            <div class="ability-card">
+                <div class="jp">世界斬り</div>
+                <h3>World Cutting Slash</h3>
+                <p>A technique acquired after observing Mahoraga's adaptation. It cuts not the target, but <em>the space it occupies</em> — a slash that bypasses conventional durability entirely.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="domain-section">
+        <h2>Malevolent Shrine</h2>
+        <div class="domain-kanji">伏魔御廚子</div>
+        <p class="domain-desc">
+            Sukuna's Domain Expansion is the pinnacle of his lethality. Unlike Gojo's
+            Unlimited Void, which traps enemies in infinite information, Malevolent
+            Shrine is <em>simpler</em> and <em>more absolute</em>: within its range,
+            Cleave and Dismantle strike everything. There is no barrier to break, no
+            escape through logic. The only defense is to be strong enough to survive —
+            and almost no one is.
+        </p>
+        <p class="domain-desc" style="margin-top: 20px;">
+            Its effective radius is <strong>200 meters</strong>, expanded through a
+            Binding Vow that trades a closed barrier for unparalleled reach. In Shibuya,
+            it reduced an entire city block to dust in seconds. It is the only Domain
+            Expansion in the series that operates without a border — because Sukuna does
+            not need one. <em>He is the border.</em>
+        </p>
+    </section>
+
+    <section class="section">
+        <div class="section-header"><div class="line"></div><h2>Combat Parameters</h2><div class="line"></div></div>
+        <div class="stat-row"><div class="stat-label">Cursed Energy</div><div class="stat-bar"><div class="stat-fill max" data-width="100%"></div></div></div>
+        <div class="stat-row"><div class="stat-label">Technique Mastery</div><div class="stat-bar"><div class="stat-fill max" data-width="100%"></div></div></div>
+        <div class="stat-row"><div class="stat-label">Physical Strength</div><div class="stat-bar"><div class="stat-fill" data-width="95%"></div></div></div>
+        <div class="stat-row"><div class="stat-label">Battle IQ</div><div class="stat-bar"><div class="stat-fill max" data-width="100%"></div></div></div>
+        <div class="stat-row"><div class="stat-label">Durability</div><div class="stat-bar"><div class="stat-fill" data-width="98%"></div></div></div>
+        <div class="stat-row"><div class="stat-label">Malevolence</div><div class="stat-bar"><div class="stat-fill max" data-width="100%"></div></div></div>
+    </section>
+
+    <section class="section">
+        <div class="section-header"><div class="line"></div><h2>Legacy</h2><div class="line"></div></div>
+        <p>
+            Sukuna is not a villain who wants to rule the world. He does not seek
+            followers, or a throne, or a new order. He seeks <strong>amusement</strong>.
+            The world is his playground, and everyone in it is either a toy or a
+            temporary distraction. This is what makes him terrifying: he cannot be
+            negotiated with, because he wants nothing that can be given.
+        </p>
+        <p>
+            His twenty fingers remain scattered across the world, indestructible relics
+            of a power that refuses to die. Every sorcerer knows the name. Every curse
+            remembers the fear. And somewhere, in the dark between worlds, the King of
+            Curses waits — patient, amused, and certain that one day, someone will be
+            foolish enough to let him out again.
+        </p>
+        <div class="quote-block">
+            <p>"Know your place, fool."</p>
+            <cite>— Ryomen Sukuna</cite>
+        </div>
+    </section>
+
+    <div class="footer">
+        <div class="divider"></div>
+        <p>両面宿儺 — The King of Curses</p>
+        <p style="margin-top: 10px; font-size: 0.68rem;">Jujutsu Kaisen · Gege Akutami</p>
+    </div>
+
+</div>
+
+<div class="domain-text" id="domain-text">
+    <div class="dt-kanji">領域展開</div>
+    <div class="dt-name">Malevolent Shrine</div>
+    <div class="dt-sub">伏魔御廚子</div>
+</div>
+
+<script>
+// ============================================================
+// GLOBAL
+// ============================================================
+let W = 0, H = 0, t = 0;
+
+const shrineCanvas = document.getElementById('shrine-canvas');
+const skCtx = shrineCanvas.getContext('2d');
+
+const sukunaCanvas = document.getElementById('sukuna-canvas');
+const sknCtx = sukunaCanvas.getContext('2d');
+
+const cvCanvas = document.getElementById('cursed-canvas');
+const cvCtx = cvCanvas.getContext('2d');
+
+const domCanvas = document.getElementById('domain-canvas');
+const domCtx = domCanvas.getContext('2d');
+
+const domainTextEl = document.getElementById('domain-text');
+
+// Domain state
+const domainFX = {
+    active: false,
+    start: 0,
+    duration: 5000,
+    slashes: [],
+    shockwaves: [],
+    flash: 0,
+    spawnUntil: 0
+};
+
+// Sukuna response intensity (0-1) — driven by domain state
+let sukunaIntensity = 0;
+
+// ============================================================
+// RESIZE
+// ============================================================
+function resizeAll() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    [shrineCanvas, sukunaCanvas, cvCanvas, domCanvas].forEach(c => {
+        c.width = W;
+        c.height = H;
+    });
+    initEmbers();
+    // Reposition particles
+    for (const p of particles) {
+        p.x = Math.random() * W;
+        p.y = Math.random() * H;
+    }
+    initEmbers();
+}
+
+// ============================================================
+// SUKUNA FIGURE
+// ============================================================
+function limb(ctx, x1, y1, x2, y2, x3, y3, w1, w2) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.quadraticCurveTo(x2, y2, x3, y3);
+    ctx.lineCap = 'round';
+    ctx.lineWidth = w1;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.quadraticCurveTo(x2, y2, x3, y3);
+    ctx.lineWidth = w2;
+    ctx.stroke();
+}
+
+function drawSukuna() {
+    sknCtx.clearRect(0, 0, W, H);
+
+    const scale = Math.min(W, H) / 900;
+    const cx = W * 0.5;
+    const cy = H * 0.58;
+
+    // Domain response
+    const dI = sukunaIntensity;
+    const breath = Math.sin(t * 0.9) * 0.012 + 1 + dI * 0.02;
+    const sway = Math.sin(t * 0.45) * 6;
+    const auraPulse = 0.5 + 0.5 * Math.sin(t * 1.6) + dI * 1.2;
+
+    sknCtx.save();
+    sknCtx.translate(cx + sway, cy);
+    sknCtx.scale(scale * breath, scale * breath);
+
+    // Aura
+    const auraGrad = sknCtx.createRadialGradient(0, -60, 20, 0, -60, 420 + dI * 160);
+    auraGrad.addColorStop(0, `rgba(160, 20, 20, ${0.30 + auraPulse * 0.18})`);
+    auraGrad.addColorStop(0.45, `rgba(90, 10, 10, ${0.14 + auraPulse * 0.08})`);
+    auraGrad.addColorStop(1, 'rgba(40, 4, 4, 0)');
+    sknCtx.fillStyle = auraGrad;
+    sknCtx.beginPath();
+    sknCtx.arc(0, -60, 420 + dI * 160, 0, Math.PI * 2);
+    sknCtx.fill();
+
+    // Rising wisps
+    const wispCount = 16 + Math.floor(dI * 20);
+    for (let i = 0; i < wispCount; i++) {
+        const seed = i * 37.7;
+        const life = ((t * 0.35 + i * 0.31) % 1);
+        const wy = 120 - life * (460 + dI * 260);
+        const wx = Math.sin(t * 0.8 + seed) * (130 + dI * 40) + Math.sin(life * 6 + seed) * 26;
+        const wr = 6 + life * (20 + dI * 14);
+        const alpha = (1 - life) * (0.18 + dI * 0.25) * (0.6 + auraPulse * 0.4);
+        const g = sknCtx.createRadialGradient(wx, wy, 0, wx, wy, wr);
+        g.addColorStop(0, `rgba(210, 55, 40, ${alpha})`);
+        g.addColorStop(1, 'rgba(210, 55, 40, 0)');
+        sknCtx.fillStyle = g;
+        sknCtx.beginPath();
+        sknCtx.arc(wx, wy, wr, 0, Math.PI * 2);
+        sknCtx.fill();
+    }
+
+    const skinDark = '#0c0505';
+    const skinMid  = '#170a0a';
+    const rim      = 'rgba(190, 45, 35, 0.85)';
+    const rimSoft  = `rgba(150, 30, 25, ${0.35 + dI * 0.4})`;
+    const inkMark  = 'rgba(8, 2, 2, 0.95)';
+
+    sknCtx.lineCap = 'round';
+    sknCtx.lineJoin = 'round';
+
+    // Torso
+    sknCtx.beginPath();
+    sknCtx.moveTo(-70, 250);
+    sknCtx.quadraticCurveTo(-95, 120, -60, -10);
+    sknCtx.quadraticCurveTo(-40, -55, 0, -58);
+    sknCtx.quadraticCurveTo(40, -55, 60, -10);
+    sknCtx.quadraticCurveTo(95, 120, 70, 250);
+    sknCtx.closePath();
+    const torsoGrad = sknCtx.createLinearGradient(-70, -60, 70, 250);
+    torsoGrad.addColorStop(0, skinMid);
+    torsoGrad.addColorStop(0.6, skinDark);
+    torsoGrad.addColorStop(1, '#050202');
+    sknCtx.fillStyle = torsoGrad;
+    sknCtx.fill();
+    sknCtx.strokeStyle = rimSoft;
+    sknCtx.lineWidth = 2.5;
+    sknCtx.stroke();
+
+    // Neck
+    sknCtx.beginPath();
+    sknCtx.moveTo(-16, -52);
+    sknCtx.lineTo(-14, -84);
+    sknCtx.lineTo(14, -84);
+    sknCtx.lineTo(16, -52);
+    sknCtx.closePath();
+    sknCtx.fillStyle = skinMid;
+    sknCtx.fill();
+
+    // Head
+    const headY = -128;
+    sknCtx.beginPath();
+    sknCtx.ellipse(0, headY, 44, 54, 0, 0, Math.PI * 2);
+    const headGrad = sknCtx.createRadialGradient(-10, headY - 14, 6, 0, headY, 62);
+    headGrad.addColorStop(0, '#1d0d0d');
+    headGrad.addColorStop(1, '#080303');
+    sknCtx.fillStyle = headGrad;
+    sknCtx.fill();
+    sknCtx.strokeStyle = rimSoft;
+    sknCtx.lineWidth = 2;
+    sknCtx.stroke();
+
+    // Hair spikes
+    sknCtx.fillStyle = '#120606';
+    const spikes = 11;
+    for (let i = 0; i < spikes; i++) {
+        const a = -Math.PI * 0.92 + (i / (spikes - 1)) * Math.PI * 0.84;
+        const len = 34 + Math.sin(i * 2.3 + t * 0.8) * 6 + dI * 8;
+        const bx = Math.cos(a) * 42;
+        const by = headY + Math.sin(a) * 50;
+        const tx = Math.cos(a) * (42 + len);
+        const ty = headY + Math.sin(a) * (50 + len);
+        const px = -Math.sin(a) * 12;
+        const py = Math.cos(a) * 12;
+        sknCtx.beginPath();
+        sknCtx.moveTo(bx - px, by - py);
+        sknCtx.quadraticCurveTo((bx + tx) / 2, (by + ty) / 2 - 6, tx, ty);
+        sknCtx.quadraticCurveTo((bx + tx) / 2, (by + ty) / 2 + 6, bx + px, by + py);
+        sknCtx.closePath();
+        sknCtx.fill();
+    }
+
+    // Hair rim glow
+    sknCtx.strokeStyle = `rgba(170, 40, 35, ${0.22 + dI * 0.5})`;
+    sknCtx.lineWidth = 1.4;
+    for (let i = 0; i < spikes; i++) {
+        const a = -Math.PI * 0.92 + (i / (spikes - 1)) * Math.PI * 0.84;
+        const len = 34 + Math.sin(i * 2.3 + t * 0.8) * 6 + dI * 8;
+        const bx = Math.cos(a) * 42;
+        const by = headY + Math.sin(a) * 50;
+        const tx = Math.cos(a) * (42 + len);
+        const ty = headY + Math.sin(a) * (50 + len);
+        sknCtx.beginPath();
+        sknCtx.moveTo(bx, by);
+        sknCtx.lineTo(tx, ty);
+        sknCtx.stroke();
+    }
+
+    // Face markings
+    sknCtx.strokeStyle = inkMark;
+    sknCtx.lineWidth = 4;
+    sknCtx.beginPath();
+    sknCtx.moveTo(-34, headY - 26);
+    sknCtx.quadraticCurveTo(0, headY - 34, 34, headY - 26);
+    sknCtx.stroke();
+    sknCtx.lineWidth = 3;
+    sknCtx.beginPath();
+    sknCtx.moveTo(-30, headY + 6);
+    sknCtx.quadraticCurveTo(-22, headY + 18, -14, headY + 26);
+    sknCtx.stroke();
+    sknCtx.beginPath();
+    sknCtx.moveTo(30, headY + 6);
+    sknCtx.quadraticCurveTo(22, headY + 18, 14, headY + 26);
+    sknCtx.stroke();
+    sknCtx.beginPath();
+    sknCtx.moveTo(-22, headY + 34);
+    sknCtx.lineTo(-14, headY + 46);
+    sknCtx.stroke();
+    sknCtx.beginPath();
+    sknCtx.moveTo(22, headY + 34);
+    sknCtx.lineTo(14, headY + 46);
+    sknCtx.stroke();
+
+    // Eyes — brighter during domain
+    const glow = 0.65 + 0.35 * Math.sin(t * 2.4) + dI * 0.7;
+    function eye(ex, ey, w, h, openness) {
+        sknCtx.beginPath();
+        sknCtx.ellipse(ex, ey, w, h, 0, 0, Math.PI * 2);
+        sknCtx.fillStyle = '#0a0202';
+        sknCtx.fill();
+        const g = sknCtx.createRadialGradient(ex, ey, 0, ex, ey, w * (1.5 + dI));
+        g.addColorStop(0, `rgba(255, 90, 60, ${glow})`);
+        g.addColorStop(0.5, `rgba(200, 35, 25, ${glow * 0.7})`);
+        g.addColorStop(1, 'rgba(120, 10, 10, 0)');
+        sknCtx.fillStyle = g;
+        sknCtx.beginPath();
+        sknCtx.ellipse(ex, ey, w * openness, h * openness, 0, 0, Math.PI * 2);
+        sknCtx.fill();
+        sknCtx.fillStyle = 'rgba(10, 0, 0, 0.85)';
+        sknCtx.beginPath();
+        sknCtx.ellipse(ex, ey, w * 0.18, h * 0.85, 0, 0, Math.PI * 2);
+        sknCtx.fill();
+        sknCtx.fillStyle = `rgba(255, 190, 150, ${glow})`;
+        sknCtx.beginPath();
+        sknCtx.arc(ex, ey - h * 0.1, w * 0.14, 0, Math.PI * 2);
+        sknCtx.fill();
+    }
+    eye(-17, headY - 8, 11, 7, 1);
+    eye(17, headY - 8, 11, 7, 1);
+    // Lower eyes open wider during domain
+    const lowerBlink = Math.max(0.15,
+        Math.abs(Math.sin(t * 0.7)) * (1 - dI) + dI * 1.15
+    );
+    eye(-15, headY + 16, 9, 5.5, Math.min(lowerBlink, 1.3));
+    eye(15, headY + 16, 9, 5.5, Math.min(lowerBlink, 1.3));
+
+    // Mouth
+    sknCtx.strokeStyle = 'rgba(120, 30, 25, 0.9)';
+    sknCtx.lineWidth = 2.5;
+    sknCtx.beginPath();
+    sknCtx.moveTo(-12, headY + 36);
+    sknCtx.quadraticCurveTo(0, headY + 42, 12, headY + 36);
+    sknCtx.stroke();
+
+    // Arms — lift and spread during domain
+    const armRaise = dI * 120;
+    const armSpread = dI * 50;
+    const armSway = Math.sin(t * 0.8) * 7 * (1 + dI * 1.5);
+    const armSway2 = Math.sin(t * 0.8 + 1.4) * 9 * (1 + dI * 1.5);
+
+    // Upper arms
+    const ulx1 = -56, uly1 = 10;
+    const ulx2 = -140 - armSpread * 0.5, uly2 = 30 + armSway - armRaise * 0.5;
+    const ulx3 = -196 - armSpread, uly3 = 96 + armSway - armRaise;
+
+    const urx1 = 56, ury1 = 10;
+    const urx2 = 140 + armSpread * 0.5, ury2 = 30 - armSway - armRaise * 0.5;
+    const urx3 = 196 + armSpread, ury3 = 96 - armSway - armRaise;
+
+    // Lower arms
+    const llx1 = -58, lly1 = 90;
+    const llx2 = -128 - armSpread * 0.5, lly2 = 128 + armSway2 - armRaise * 0.6;
+    const llx3 = -170 - armSpread, lly3 = 196 + armSway2 - armRaise;
+
+    const lrx1 = 58, lry1 = 90;
+    const lrx2 = 128 + armSpread * 0.5, lry2 = 128 - armSway2 - armRaise * 0.6;
+    const lrx3 = 170 + armSpread, lry3 = 196 - armSway2 - armRaise;
+
+    sknCtx.strokeStyle = skinMid;
+    limb(sknCtx, ulx1, uly1, ulx2, uly2, ulx3, uly3, 26, 18);
+    limb(sknCtx, urx1, ury1, urx2, ury2, urx3, ury3, 26, 18);
+    limb(sknCtx, llx1, lly1, llx2, lly2, llx3, lly3, 22, 15);
+    limb(sknCtx, lrx1, lry1, lrx2, lry2, lrx3, lry3, 22, 15);
+
+    sknCtx.strokeStyle = rimSoft;
+    sknCtx.lineWidth = 1.8;
+    limb(sknCtx, ulx1, uly1, ulx2, uly2, ulx3, uly3, 27, 19);
+    limb(sknCtx, urx1, ury1, urx2, ury2, urx3, ury3, 27, 19);
+    limb(sknCtx, llx1, lly1, llx2, lly2, llx3, lly3, 23, 16);
+    limb(sknCtx, lrx1, lry1, lrx2, lry2, lrx3, lry3, 23, 16);
+
+    function hand(hx, hy, dir) {
+        sknCtx.fillStyle = skinMid;
+        sknCtx.beginPath();
+        sknCtx.ellipse(hx, hy, 11, 14, dir * 0.3, 0, Math.PI * 2);
+        sknCtx.fill();
+        sknCtx.fillStyle = '#050101';
+        for (let f = -2; f <= 2; f++) {
+            const fx = hx + Math.cos(dir * 0.5 + f * 0.32) * 12;
+            const fy = hy + Math.sin(dir * 0.5 + f * 0.32) * 12 + 6;
+            sknCtx.beginPath();
+            sknCtx.ellipse(fx, fy, 2.4, 4.2, dir * 0.3 + f * 0.1, 0, Math.PI * 2);
+            sknCtx.fill();
+        }
+    }
+    hand(ulx3, uly3, -1);
+    hand(urx3, ury3, 1);
+    hand(llx3, lly3, -1);
+    hand(lrx3, lry3, 1);
+
+    // Torso markings
+    sknCtx.strokeStyle = inkMark;
+    sknCtx.lineWidth = 4;
+    sknCtx.beginPath();
+    sknCtx.moveTo(-46, 20);
+    sknCtx.quadraticCurveTo(0, 34, 46, 20);
+    sknCtx.stroke();
+    sknCtx.beginPath();
+    sknCtx.moveTo(-40, 56);
+    sknCtx.quadraticCurveTo(0, 70, 40, 56);
+    sknCtx.stroke();
+    sknCtx.lineWidth = 3;
+    sknCtx.beginPath();
+    sknCtx.moveTo(0, 10);
+    sknCtx.lineTo(0, 96);
+    sknCtx.stroke();
+
+    // Belly mouth
+    sknCtx.strokeStyle = 'rgba(120, 30, 25, 0.85)';
+    sknCtx.lineWidth = 2.4;
+    sknCtx.beginPath();
+    sknCtx.moveTo(-26, 108);
+    sknCtx.quadraticCurveTo(0, 118 + Math.sin(t * 1.2) * 2, 26, 108);
+    sknCtx.stroke();
+    sknCtx.strokeStyle = 'rgba(180, 160, 150, 0.35)';
+    sknCtx.lineWidth = 1.5;
+    for (let i = -3; i <= 3; i++) {
+        sknCtx.beginPath();
+        sknCtx.moveTo(i * 7, 106 + Math.abs(i) * 0.5);
+        sknCtx.lineTo(i * 7, 114 - Math.abs(i) * 0.5);
+        sknCtx.stroke();
+    }
+
+    // Body rim light
+    sknCtx.strokeStyle = rim;
+    sknCtx.lineWidth = 1.6;
+    sknCtx.globalAlpha = 0.35 + auraPulse * 0.3;
+    sknCtx.beginPath();
+    sknCtx.moveTo(-70, 250);
+    sknCtx.quadraticCurveTo(-95, 120, -60, -10);
+    sknCtx.quadraticCurveTo(-40, -55, 0, -58);
+    sknCtx.quadraticCurveTo(40, -55, 60, -10);
+    sknCtx.quadraticCurveTo(95, 120, 70, 250);
+    sknCtx.stroke();
+    sknCtx.globalAlpha = 1;
+
+    sknCtx.restore();
+}
+
+// ============================================================
+// SHRINE (behind Sukuna) — domain expansion structure
+// ============================================================
+function drawShrine() {
+    skCtx.clearRect(0, 0, W, H);
+    if (!domainFX.active) return;
+
+    const now = performance.now();
+    const elapsed = now - domainFX.start;
+    const phase = elapsed / domainFX.duration;
+
+    if (phase > 0.95) return;
+
+    // Rise curve
+    let rise;
+    if (phase < 0.15) rise = 0;
+    else if (phase < 0.30) rise = (phase - 0.15) / 0.15;
+    else if (phase < 0.75) rise = 1;
+    else if (phase < 0.95) rise = 1 - (phase - 0.75) / 0.20;
+    else rise = 0;
+    rise = Math.max(0, Math.min(1, rise));
+    if (rise <= 0) return;
+
+    const centerX = W / 2;
+    const baseY = H + 120;
+    const shrineHeight = H * 0.95;
+    const currentHeight = shrineHeight * rise;
+    const topY = baseY - currentHeight;
+    const bottomY = baseY;
+    const shrineWidth = Math.min(W * 0.7, 720);
+
+    skCtx.save();
+
+    // Outer glow behind shrine
+    const glow = skCtx.createRadialGradient(
+        centerX, topY + shrineHeight * 0.35, 20,
+        centerX, topY + shrineHeight * 0.35, shrineWidth * 1.1
+    );
+    glow.addColorStop(0, `rgba(200, 35, 30, ${0.55 * rise})`);
+    glow.addColorStop(0.5, `rgba(110, 15, 10, ${0.25 * rise})`);
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    skCtx.fillStyle = glow;
+    skCtx.fillRect(0, 0, W, H);
+
+    skCtx.fillStyle = `rgba(8, 0, 0, ${0.88 * rise})`;
+    skCtx.strokeStyle = `rgba(200, 40, 30, ${0.65 * rise})`;
+    skCtx.lineWidth = 2;
+
+    // Main body — stepped base
+    skCtx.beginPath();
+    skCtx.moveTo(centerX - shrineWidth * 0.55, bottomY);
+    skCtx.lineTo(centerX - shrineWidth * 0.42, topY + shrineHeight * 0.30);
+    skCtx.lineTo(centerX + shrineWidth * 0.42, topY + shrineHeight * 0.30);
+    skCtx.lineTo(centerX + shrineWidth * 0.55, bottomY);
+    skCtx.closePath();
+    skCtx.fill();
+    skCtx.stroke();
+
+    // Lower roof — wide curved
+    skCtx.beginPath();
+    skCtx.moveTo(centerX - shrineWidth * 0.62, topY + shrineHeight * 0.33);
+    skCtx.quadraticCurveTo(
+        centerX - shrineWidth * 0.34, topY + shrineHeight * 0.27,
+        centerX - shrineWidth * 0.24, topY + shrineHeight * 0.17
+    );
+    skCtx.lineTo(centerX + shrineWidth * 0.24, topY + shrineHeight * 0.17);
+    skCtx.quadraticCurveTo(
+        centerX + shrineWidth * 0.34, topY + shrineHeight * 0.27,
+        centerX + shrineWidth * 0.62, topY + shrineHeight * 0.33
+    );
+    skCtx.closePath();
+    skCtx.fill();
+    skCtx.stroke();
+
+    // Middle tier
+    skCtx.beginPath();
+    skCtx.moveTo(centerX - shrineWidth * 0.30, topY + shrineHeight * 0.19);
+    skCtx.lineTo(centerX - shrineWidth * 0.22, topY + shrineHeight * 0.09);
+    skCtx.lineTo(centerX + shrineWidth * 0.22, topY + shrineHeight * 0.09);
+    skCtx.lineTo(centerX + shrineWidth * 0.30, topY + shrineHeight * 0.19);
+    skCtx.closePath();
+    skCtx.fill();
+    skCtx.stroke();
+
+    // Upper roof — curved
+    skCtx.beginPath();
+    skCtx.moveTo(centerX - shrineWidth * 0.40, topY + shrineHeight * 0.11);
+    skCtx.quadraticCurveTo(
+        centerX - shrineWidth * 0.22, topY + shrineHeight * 0.07,
+        centerX - shrineWidth * 0.16, topY - shrineHeight * 0.005
+    );
+    skCtx.lineTo(centerX + shrineWidth * 0.16, topY - shrineHeight * 0.005);
+    skCtx.quadraticCurveTo(
+        centerX + shrineWidth * 0.22, topY + shrineHeight * 0.07,
+        centerX + shrineWidth * 0.40, topY + shrineHeight * 0.11
+    );
+    skCtx.closePath();
+    skCtx.fill();
+    skCtx.stroke();
+
+    // Crown spikes
+    for (let i = -2; i <= 2; i++) {
+        const sx = centerX + i * shrineWidth * 0.11;
+        const sy = topY - shrineHeight * 0.005;
+        const spikeH = shrineHeight * 0.09 + Math.abs(i) * shrineHeight * 0.02;
+        skCtx.beginPath();
+        skCtx.moveTo(sx - shrineWidth * 0.03, sy);
+        skCtx.lineTo(sx, sy - spikeH);
+        skCtx.lineTo(sx + shrineWidth * 0.03, sy);
+        skCtx.closePath();
+        skCtx.fill();
+        skCtx.stroke();
+    }
+
+    // Glowing demon eyes on shrine
+    const eyeY = topY + shrineHeight * 0.21;
+    const eyeGlow = 0.75 + 0.25 * Math.sin(now * 0.005);
+    for (let side = -1; side <= 1; side += 2) {
+        const ex = centerX + side * shrineWidth * 0.09;
+        const eg = skCtx.createRadialGradient(ex, eyeY, 0, ex, eyeY, shrineWidth * 0.10);
+        eg.addColorStop(0, `rgba(255, 80, 50, ${eyeGlow * rise})`);
+        eg.addColorStop(0.4, `rgba(210, 30, 20, ${eyeGlow * 0.6 * rise})`);
+        eg.addColorStop(1, 'rgba(100, 10, 10, 0)');
+        skCtx.fillStyle = eg;
+        skCtx.beginPath();
+        skCtx.arc(ex, eyeY, shrineWidth * 0.10, 0, Math.PI * 2);
+        skCtx.fill();
+    }
+
+    skCtx.restore();
+}
+
+// ============================================================
+// CURSED PARTICLES (foreground layer)
+// ============================================================
+let particles = [];
+let mouse = { x: -1000, y: -1000 };
+
+const CONFIG = {
+    count: 110,
+    minRadius: 0.8,
+    maxRadius: 3.2,
+    minSpeed: 0.15,
+    maxSpeed: 0.6,
+    connectionDistance: 140,
+    mouseRadius: 170,
+    colors: [
+        { r: 180, g: 30, b: 30 },
+        { r: 120, g: 15, b: 15 },
+        { r: 200, g: 50, b: 40 },
+        { r: 80, g: 10, b: 10 },
+        { r: 220, g: 80, b: 60 },
+    ]
+};
+
+class Particle {
+    constructor() { this.reset(true); }
+    reset(initial = false) {
+        this.x = Math.random() * W;
+        this.y = initial ? Math.random() * H : H + 20;
+        this.radius = CONFIG.minRadius + Math.random() * (CONFIG.maxRadius - CONFIG.minRadius);
+        this.speedY = -(CONFIG.minSpeed + Math.random() * (CONFIG.maxSpeed - CONFIG.minSpeed));
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.color = CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)];
+        this.baseOpacity = 0.28 + Math.random() * 0.45;
+        this.opacity = this.baseOpacity;
+        this.pulseSpeed = 0.005 + Math.random() * 0.015;
+        this.pulsePhase = Math.random() * Math.PI * 2;
+        this.wobble = Math.random() * 0.02;
+        this.wobblePhase = Math.random() * Math.PI * 2;
+    }
+    update() {
+        this.y += this.speedY;
+        this.wobblePhase += 0.01;
+        this.x += this.speedX + Math.sin(this.wobblePhase) * this.wobble;
+        this.pulsePhase += this.pulseSpeed;
+        this.opacity = this.baseOpacity + Math.sin(this.pulsePhase) * 0.2;
+
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONFIG.mouseRadius && dist > 0.1) {
+            const force = (CONFIG.mouseRadius - dist) / CONFIG.mouseRadius;
+            const angle = Math.atan2(dy, dx);
+            this.x += Math.cos(angle) * force * 2.5;
+            this.y += Math.sin(angle) * force * 2.5;
+        }
+        if (this.y < -30 || this.x < -50 || this.x > W + 50) this.reset();
+        this.opacity = Math.max(0.08, Math.min(0.9, this.opacity));
+    }
+    draw(ctx) {
+        const { r, g, b } = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity * 0.08})`;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity})`;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 0.4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 200, 180, ${this.opacity * 0.6})`;
+        ctx.fill();
+    }
+}
+
+function drawConnections(ctx, arr) {
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = i + 1; j < arr.length; j++) {
+            const a = arr[i], b = arr[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < CONFIG.connectionDistance) {
+                const opacity = (1 - dist / CONFIG.connectionDistance) * 0.11;
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.strokeStyle = `rgba(160, 30, 30, ${opacity})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+let embers = [];
+function initEmbers() {
+    embers = [];
+    for (let i = 0; i < 24; i++) {
+        embers.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            radius: 2 + Math.random() * 5,
+            speedY: -(0.08 + Math.random() * 0.25),
+            speedX: (Math.random() - 0.5) * 0.2,
+            opacity: 0.05 + Math.random() * 0.11,
+            pulsePhase: Math.random() * Math.PI * 2,
+            pulseSpeed: 0.003 + Math.random() * 0.008,
+        });
+    }
+}
+
+function drawEmbers(ctx) {
+    for (const e of embers) {
+        e.y += e.speedY;
+        e.x += e.speedX;
+        e.pulsePhase += e.pulseSpeed;
+        const opacity = e.opacity + Math.sin(e.pulsePhase) * 0.04;
+        if (e.y < -50) { e.y = H + 50; e.x = Math.random() * W; }
+
+        const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.radius * 4);
+        grad.addColorStop(0, `rgba(200, 60, 40, ${Math.max(0, opacity)})`);
+        grad.addColorStop(1, 'rgba(200, 60, 40, 0)');
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.radius * 4, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220, 100, 70, ${Math.max(0, opacity * 1.5)})`;
+        ctx.fill();
+    }
+}
+
+// ============================================================
+// DOMAIN FX (in front of everything)
+// ============================================================
+function drawDomainFX() {
+    domCtx.clearRect(0, 0, W, H);
+    if (!domainFX.active) return;
+
+    const now = performance.now();
+    const elapsed = now - domainFX.start;
+    const phase = elapsed / domainFX.duration;
+
+    if (phase >= 1) {
+        domainFX.active = false;
+        return;
+    }
+
+    // Screen shake offset
+    let shakeX = 0, shakeY = 0;
+    if (phase > 0.25 && phase < 0.8) {
+        const peak = 1 - Math.abs((phase - 0.5) / 0.3);
+        const strength = Math.max(0, peak) * 14;
+        shakeX = (Math.random() - 0.5) * strength;
+        shakeY = (Math.random() - 0.5) * strength;
+    }
+
+    domCtx.save();
+    domCtx.translate(shakeX, shakeY);
+
+    // Veil — darkens edges, keeps center visible
+    let veilOpacity = 0;
+    if (phase < 0.12) veilOpacity = (phase / 0.12) * 0.85;
+    else if (phase < 0.82) veilOpacity = 0.85;
+    else veilOpacity = Math.max(0, 1 - (phase - 0.82) / 0.18) * 0.85;
+
+    if (veilOpacity > 0.001) {
+        const vg = domCtx.createRadialGradient(
+            W / 2, H * 0.5, H * 0.12,
+            W / 2, H * 0.5, Math.max(W, H) * 0.78
+        );
+        vg.addColorStop(0, `rgba(50, 5, 5, ${veilOpacity * 0.15})`);
+        vg.addColorStop(0.35, `rgba(30, 2, 2, ${veilOpacity * 0.55})`);
+        vg.addColorStop(0.75, `rgba(10, 0, 0, ${veilOpacity * 0.9})`);
+        vg.addColorStop(1, `rgba(0, 0, 0, ${veilOpacity})`);
+        domCtx.fillStyle = vg;
+        domCtx.fillRect(-30, -30, W + 60, H + 60);
+    }
+
+    // Shockwaves
+    for (const sw of domainFX.shockwaves) {
+        sw.radius += sw.speed;
+        sw.life = 1 - sw.radius / sw.maxRadius;
+        if (sw.life > 0) {
+            domCtx.strokeStyle = `rgba(220, 50, 35, ${sw.life * 0.45})`;
+            domCtx.lineWidth = 4;
+            domCtx.beginPath();
+            domCtx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+            domCtx.stroke();
+            domCtx.strokeStyle = `rgba(255, 120, 90, ${sw.life * 0.2})`;
+            domCtx.lineWidth = 9;
+            domCtx.beginPath();
+            domCtx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+            domCtx.stroke();
+        }
+    }
+    domainFX.shockwaves = domainFX.shockwaves.filter(sw => sw.life > 0);
+
+    // Slashes
+    for (const s of domainFX.slashes) {
+        s.life -= s.lifeSpeed;
+        if (s.life <= 0) continue;
+
+        const half = s.length / 2;
+        const dx = Math.cos(s.angle) * half;
+        const dy = Math.sin(s.angle) * half;
+
+        // Glow
+        domCtx.strokeStyle = `rgba(255, 50, 40, ${s.life * 0.55})`;
+        domCtx.lineWidth = s.thickness * 4;
+        domCtx.lineCap = 'round';
+        domCtx.beginPath();
+        domCtx.moveTo(s.x - dx, s.y - dy);
+        domCtx.lineTo(s.x + dx, s.y + dy);
+        domCtx.stroke();
+
+        // Core
+        domCtx.strokeStyle = `rgba(255, 235, 220, ${s.life})`;
+        domCtx.lineWidth = s.thickness;
+        domCtx.beginPath();
+        domCtx.moveTo(s.x - dx, s.y - dy);
+        domCtx.lineTo(s.x + dx, s.y + dy);
+        domCtx.stroke();
+    }
+    domainFX.slashes = domainFX.slashes.filter(s => s.life > 0);
+
+    // Initial flash
+    if (domainFX.flash > 0) {
+        domCtx.fillStyle = `rgba(255, 40, 25, ${domainFX.flash * 0.3})`;
+        domCtx.fillRect(-30, -30, W + 60, H + 60);
+        domainFX.flash = Math.max(0, domainFX.flash - 0.08);
+    }
+
+    domCtx.restore();
+}
+
+// ============================================================
+// DOMAIN TRIGGER
+// ============================================================
+function triggerDomain() {
+    const now = performance.now();
+    domainFX.active = true;
+    domainFX.start = now;
+    domainFX.slashes = [];
+    domainFX.shockwaves = [];
+    domainFX.flash = 1;
+    domainFX.spawnUntil = now + 3200;
+
+    // Restart text animation
+    domainTextEl.classList.remove('show');
+    void domainTextEl.offsetWidth;
+    domainTextEl.classList.add('show');
+
+    // Spawn slashes over time
+    let lastSpawn = now;
+    function spawnTick() {
+        if (!domainFX.active) return;
+        const tn = performance.now();
+        if (tn > domainFX.spawnUntil) return;
+        const spawnRate = 55;
+        while (lastSpawn < tn) {
+            const count = 1 + Math.floor(Math.random() * 3);
+            for (let i = 0; i < count; i++) {
+                domainFX.slashes.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    angle: Math.random() * Math.PI,
+                    length: 180 + Math.random() * 650,
+                    life: 1,
+                    lifeSpeed: 0.018 + Math.random() * 0.035,
+                    thickness: 1 + Math.random() * 2.4
+                });
+            }
+            // Occasional shockwave
+            if (Math.random() < 0.25) {
+                domainFX.shockwaves.push({
+                    x: W / 2,
+                    y: H * 0.55,
+                    radius: 10,
+                    maxRadius: Math.max(W, H) * 0.9,
+                    life: 1,
+                    speed: 12 + Math.random() * 10
+                });
+            }
+            lastSpawn += spawnRate;
+        }
+        requestAnimationFrame(spawnTick);
+    }
+    spawnTick();
+}
+
+document.addEventListener('click', triggerDomain);
+document.addEventListener('touchstart', (e) => {
+    // Avoid triggering on tiny accidental touches
+    if (e.touches.length === 1) triggerDomain();
+}, { passive: true });
+
+// ============================================================
+// MAIN LOOP
+// ============================================================
+function loop() {
+    t += 0.016;
+
+    // Drive sukuna intensity from domain state
+    if (domainFX.active) {
+        const elapsed = performance.now() - domainFX.start;
+        const p = elapsed / domainFX.duration;
+        let target;
+        if (p < 0.12) target = p / 0.12 * 0.35;
+        else if (p < 0.28) target = 0.35 + ((p - 0.12) / 0.16) * 0.65;
+        else if (p < 0.72) target = 1;
+        else if (p < 1) target = Math.max(0, 1 - (p - 0.72) / 0.28);
+        else target = 0;
+        sukunaIntensity += (target - sukunaIntensity) * 0.15;
+    } else {
+        sukunaIntensity *= 0.93;
+        if (sukunaIntensity < 0.005) sukunaIntensity = 0;
+    }
+
+    // Draw layers
+    drawShrine();
+    drawSukuna();
+
+    cvCtx.fillStyle = 'rgba(3, 3, 3, 0.18)';
+    cvCtx.fillRect(0, 0, W, H);
+    drawConnections(cvCtx, particles);
+    drawEmbers(cvCtx);
+    for (const p of particles) { p.update(); p.draw(cvCtx); }
+
+    drawDomainFX();
+
+    requestAnimationFrame(loop);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+    resizeAll();
+    particles = [];
+    for (let i = 0; i < CONFIG.count; i++) particles.push(new Particle());
+    initEmbers();
+    loop();
+}
+
+window.addEventListener('resize', resizeAll);
+
+window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+});
+window.addEventListener('mouseleave', () => {
+    mouse.x = -1000;
+    mouse.y = -1000;
+});
+window.addEventListener('touchmove', e => {
+    const touch = e.touches[0];
+    if (touch) { mouse.x = touch.clientX; mouse.y = touch.clientY; }
+}, { passive: true });
+window.addEventListener('touchend', () => {
+    mouse.x = -1000;
+    mouse.y = -1000;
+});
+
+// Section reveal
+const sections = document.querySelectorAll('.section');
+const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+sections.forEach(s => sectionObserver.observe(s));
+
+// Stat bars
+const statFills = document.querySelectorAll('.stat-fill');
+let statsAnimated = false;
+const statsBlock = document.querySelectorAll('.section')[4];
+if (statsBlock) {
+    const o = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting && !statsAnimated) {
+                statsAnimated = true;
+                statFills.forEach(f => {
+                    setTimeout(() => { f.style.width = f.dataset.width; }, 300);
+                });
+            }
+        });
+    }, { threshold: 0.3 });
+    o.observe(statsBlock);
+}
+
+init();
+</script>
+
+</body>
+</html>
