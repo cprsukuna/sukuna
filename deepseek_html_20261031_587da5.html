@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sukuna Hosting — Professional Panel</title>
+
+<!-- xterm.js for a real terminal -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" />
+<script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+
+<style>
+  /* ============================================================
+     RESET & DESIGN TOKENS
+     ============================================================ */
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --bg-root:        #070509;
+    --bg-surface:     #0e0a12;
+    --bg-elevated:    #140e1a;
+    --bg-input:       rgba(255,255,255,.04);
+
+    --border:         rgba(180,120,145,.18);
+    --border-active:  rgba(255,61,110,.55);
+
+    --primary:        #ff3d6e;
+    --primary-dim:    #c42a52;
+    --primary-glow:   rgba(255,61,110,.28);
+
+    --accent:         #8b5cf6;
+    --success:        #34d399;
+    --warning:        #fbbf24;
+    --danger:         #f87171;
+
+    --text:           #f5e9ef;
+    --text-muted:     #a68b98;
+    --text-dim:       #6e5a66;
+
+    --font-sans:      'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-mono:      'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+
+    --radius-sm:      8px;
+    --radius-md:      14px;
+    --radius-lg:      20px;
+
+    --shadow-card:    0 8px 32px rgba(0,0,0,.45), 0 0 0 1px var(--border);
+  }
+
+  html, body { height:100%; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg-root);
+    color: var(--text);
+    overflow-x: hidden;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================================
+     BACKGROUND (kept subtle & professional)
+     ============================================================ */
+  .bg-canvas {
+    position: fixed; inset:0; z-index:-2;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 0%, rgba(255,61,110,.10), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 95% 100%, rgba(139,92,246,.08), transparent 60%),
+      var(--bg-root);
+  }
+  .bg-grid {
+    position: fixed; inset:0; z-index:-1;
+    background-image:
+      linear-gradient(rgba(180,120,145,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(180,120,145,.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, #000 25%, transparent 75%);
+    pointer-events: none;
+  }
+
+  /* ============================================================
+     PAGE SYSTEM
+     ============================================================ */
+  .page {
+    position: fixed; inset:0;
+    display: flex; align-items:center; justify-content:center;
+    padding: 24px;
+    opacity:0; visibility:hidden;
+    transform: translateY(16px) scale(.985);
+    transition: opacity .45s ease, transform .45s ease, visibility .45s;
+    overflow-y: auto;
+  }
+  .page.active {
+    opacity:1; visibility:visible;
+    transform: none;
+  }
+
+  /* ============================================================
+     AUTH CARD (login / signup)
+     ============================================================ */
+  .auth-card {
+    width:100%; max-width: 440px;
+    background: linear-gradient(160deg, rgba(20,14,26,.92), rgba(12,8,16,.96));
+    backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 44px 38px 38px;
+    box-shadow: var(--shadow-card), 0 0 100px rgba(255,61,110,.06);
+    position: relative;
+    animation: cardIn .65s cubic-bezier(.2,.9,.3,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity:0; transform: translateY(28px) scale(.96); }
+    to   { opacity:1; transform: none; }
+  }
+  .auth-card::before {
+    content:""; position:absolute; inset:-1px; border-radius: var(--radius-lg);
+    padding:1px; pointer-events:none;
+    background: linear-gradient(135deg, var(--primary), transparent 35%, transparent 65%, var(--accent));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity:.55;
+  }
+
+  .brand-block { text-align:center; margin-bottom: 30px; }
+  .brand-mark {
+    width:60px; height:60px; margin:0 auto 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    display:flex; align-items:center; justify-content:center;
+    font-size: 28px;
+    box-shadow: 0 0 28px var(--primary-glow);
+  }
+  .brand-block h1 {
+    font-size: 1.55rem; font-weight: 800; letter-spacing: 2.5px;
+    background: linear-gradient(90deg, #fff 20%, var(--primary) 60%, #fff 90%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip:text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 5s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  .brand-block p {
+    color: var(--text-muted); font-size:.82rem; margin-top:6px;
+    letter-spacing:.6px;
+  }
+
+  /* Tabs */
+  .auth-tabs {
+    display:flex; background: rgba(0,0,0,.35);
+    border-radius: 12px; padding:5px; margin-bottom:26px;
+    position: relative; border: 1px solid var(--border);
+  }
+  .auth-tab {
+    flex:1; background:none; border:none; color: var(--text-muted);
+    padding: 11px; font-weight:600; font-size:.9rem;
+    cursor:pointer; border-radius:9px; z-index:2; position:relative;
+    transition: color .3s; font-family: var(--font-sans);
+  }
+  .auth-tab.active { color:#fff; }
+  .tab-pill {
+    position:absolute; top:5px; left:5px; bottom:5px;
+    width: calc(50% - 5px);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    border-radius: 9px;
+    transition: transform .35s cubic-bezier(.4,1.3,.5,1);
+    box-shadow: 0 4px 16px var(--primary-glow);
+    z-index:1;
+  }
+
+  /* Form fields */
+  .field { position:relative; margin-bottom: 18px; }
+  .field input {
+    width:100%; padding: 15px 14px 7px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    color:#fff; font-size:.92rem; outline:none;
+    transition: border-color .25s, box-shadow .25s;
+    font-family: var(--font-sans);
+  }
+  .field input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255,61,110,.13);
+  }
+  .field label {
+    position:absolute; left:14px; top:50%; transform: translateY(-50%);
+    color: var(--text-muted); font-size:.88rem;
+    pointer-events:none; transition: .2s ease;
+    padding: 0 4px; background: transparent;
+  }
+  .field input:focus + label,
+  .field input:not(:placeholder-shown) + label {
+    top: 7px; transform:none; font-size:.68rem;
+    color: var(--primary);
+    background: var(--bg-elevated);
+    border-radius: 4px;
+  }
+  .field input::placeholder { color: transparent; }
+
+  .auth-error {
+    color: var(--danger); font-size:.8rem;
+    min-height: 16px; margin: -8px 0 12px;
+    opacity:0; transition:.2s;
+  }
+  .auth-error.show { opacity:1; }
+
+  .btn-primary {
+    width:100%; padding: 14px; border:none; border-radius: 11px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    color:#fff; font-weight:700; font-size:.95rem; letter-spacing:.4px;
+    cursor:pointer; position:relative; overflow:hidden;
+    transition: transform .18s, box-shadow .3s;
+    box-shadow: 0 8px 26px rgba(255,61,110,.30);
+    font-family: var(--font-sans);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 34px rgba(255,61,110,.45);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .auth-footer {
+    text-align:center; margin-top: 20px;
+    font-size:.83rem; color: var(--text-muted);
+  }
+  .auth-footer a {
+    color: var(--primary); text-decoration:none; font-weight:600;
+  }
+  .auth-footer a:hover { text-decoration: underline; }
+
+  /* ============================================================
+     DASHBOARD LAYOUT
+     ============================================================ */
+  #dashboard { padding:0; display:block; overflow-y:auto; }
+
+  .app-shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  /* --- Sidebar --- */
+  .sidebar {
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border);
+    padding: 22px 16px;
+    display: flex; flex-direction: column;
+    position: sticky; top:0; height:100vh;
+  }
+  .sidebar-brand {
+    display:flex; align-items:center; gap:10px;
+    padding: 0 8px 22px; margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    font-weight:800; letter-spacing:1.5px; font-size:.95rem;
+  }
+  .sidebar-brand .mark {
+    width:34px; height:34px; border-radius:9px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; flex-shrink:0;
+  }
+  .nav-group { margin-top: 18px; }
+  .nav-label {
+    font-size:.65rem; text-transform:uppercase; letter-spacing:1.2px;
+    color: var(--text-dim); font-weight:700;
+    padding: 0 10px; margin-bottom: 8px;
+  }
+  .nav-item {
+    display:flex; align-items:center; gap:10px;
+    padding: 10px 12px; border-radius: 9px;
+    color: var(--text-muted); font-size:.88rem; font-weight:500;
+    cursor:pointer; transition: .18s; margin-bottom:2px;
+    border: 1px solid transparent;
+  }
+  .nav-item:hover {
+    background: rgba(255,255,255,.03);
+    color: var(--text);
+  }
+  .nav-item.active {
+    background: rgba(255,61,110,.09);
+    border-color: rgba(255,61,110,.25);
+    color: var(--primary);
+  }
+  .nav-item .ico { font-size:15px; width:18px; text-align:center; }
+
+  .sidebar-footer {
+    margin-top:auto;
+    padding: 14px 10px 0;
+    border-top: 1px solid var(--border);
+    font-size:.75rem; color: var(--text-dim);
+  }
+  .sidebar-footer .user-row {
+    display:flex; align-items:center; gap:10px;
+    margin-bottom: 12px;
+  }
+  .avatar {
+    width:34px; height:34px; border-radius:50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:.85rem; color:#fff;
+    flex-shrink:0;
+  }
+  .user-row .uname { color: var(--text); font-weight:600; font-size:.83rem; }
+  .user-row .urole { color: var(--text-dim); font-size:.7rem; }
+  .btn-logout {
+    width:100%; padding:8px; border-radius:8px;
+    background: transparent; border:1px solid var(--border);
+    color: var(--text-muted); font-size:.78rem; font-weight:600;
+    cursor:pointer; transition:.18s; font-family: var(--font-sans);
+  }
+  .btn-logout:hover {
+    border-color: var(--danger); color: var(--danger);
+  }
+
+  /* --- Main content --- */
+  .main-content {
+    padding: 26px 30px 40px;
+    max-width: 1360px; width:100%;
+  }
+
+  .page-header {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    flex-wrap:wrap; gap:16px; margin-bottom: 26px;
+  }
+  .page-header h2 {
+    font-size:1.45rem; font-weight:800; letter-spacing:-.3px;
+  }
+  .page-header p {
+    color: var(--text-muted); font-size:.85rem; margin-top:4px;
+  }
+  .header-badge {
+    display:inline-flex; align-items:center; gap:7px;
+    padding: 7px 14px; border-radius: 30px;
+    background: rgba(52,211,153,.10);
+    border: 1px solid rgba(52,211,153,.30);
+    color: var(--success); font-size:.78rem; font-weight:700;
+  }
+  .header-badge .pulse-dot {
+    width:7px; height:7px; border-radius:50%;
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:.4; transform:scale(.8); }
+  }
+
+  /* Plan banner */
+  .plan-banner {
+    background: linear-gradient(135deg, rgba(255,61,110,.10), rgba(139,92,246,.08));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:14px;
+    margin-bottom: 22px;
+  }
+  .plan-banner h3 { font-size:1.05rem; font-weight:700; }
+  .plan-banner p  { color: var(--text-muted); font-size:.83rem; margin-top:3px; }
+  .plan-tag {
+    padding: 7px 18px; border-radius: 30px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    color:#fff; font-size:.72rem; font-weight:800;
+    letter-spacing:1px; text-transform:uppercase;
+    box-shadow: 0 4px 18px var(--primary-glow);
+  }
+
+  /* Stat cards */
+  .stats-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px; margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    transition: border-color .25s, transform .25s;
+  }
+  .stat-card:hover {
+    border-color: rgba(255,61,110,.30);
+    transform: translateY(-2px);
+  }
+  .stat-top {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom: 12px;
+  }
+  .stat-label {
+    font-size:.7rem; text-transform:uppercase; letter-spacing:1px;
+    color: var(--text-dim); font-weight:700;
+  }
+  .stat-icon {
+    width:34px; height:34px; border-radius:9px;
+    background: rgba(255,61,110,.10);
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px;
+  }
+  .stat-number {
+    font-size:1.7rem; font-weight:800; letter-spacing:-.5px;
+  }
+  .stat-number small {
+    font-size:.8rem; color: var(--text-dim); font-weight:500;
+    margin-left: 2px;
+  }
+  .stat-desc { font-size:.75rem; color: var(--text-muted); margin-top:2px; }
+
+  .progress-track {
+    height:6px; background: rgba(0,0,0,.4);
+    border-radius: 20px; overflow:hidden; margin-top: 12px;
+  }
+  .progress-fill {
+    height:100%; border-radius:20px; width:0;
+    transition: width 1.4s cubic-bezier(.2,.9,.3,1);
+    background: linear-gradient(90deg, var(--primary), var(--primary-dim));
+    box-shadow: 0 0 10px var(--primary-glow);
+  }
+  .progress-fill.green  { background: linear-gradient(90deg, #34d399, #10b981); box-shadow: 0 0 10px rgba(52,211,153,.4); }
+  .progress-fill.yellow { background: linear-gradient(90deg, #fbbf24, #f59e0b); box-shadow: 0 0 10px rgba(251,191,36,.4); }
+
+  /* Content columns */
+  .content-columns {
+    display:grid;
+    grid-template-columns: 1fr 340px;
+    gap: 18px; align-items: start;
+  }
+  @media (max-width: 1100px) { .content-columns { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+  }
+  .panel-head {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom: 16px;
+  }
+  .panel-title {
+    font-size:.92rem; font-weight:700;
+    display:flex; align-items:center; gap:8px;
+    letter-spacing:.2px;
+  }
+  .panel-sub {
+    font-size:.75rem; color: var(--text-dim);
+  }
+
+  /* ============================================================
+     COMMAND BAR + TERMINAL  ← the requested feature
+     ============================================================ */
+  .terminal-panel { padding-bottom: 16px; }
+
+  .command-bar {
+    display:flex; gap:8px; margin-bottom: 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    align-items:center;
+    transition: border-color .2s;
+  }
+  .command-bar:focus-within {
+    border-color: var(--border-active);
+  }
+  .cmd-prefix {
+    font-family: var(--font-mono);
+    color: var(--primary);
+    font-weight:700; font-size:.85rem;
+    padding-left: 6px;
+    user-select:none;
+  }
+  .cmd-input {
+    flex:1; background: transparent; border:none;
+    color: var(--text); font-family: var(--font-mono);
+    font-size:.85rem; outline:none; padding: 6px 4px;
+  }
+  .cmd-input::placeholder { color: var(--text-dim); }
+
+  .cmd-btn {
+    padding: 8px 16px; border-radius: 8px; border:none;
+    font-size:.78rem; font-weight:700; cursor:pointer;
+    transition: .18s; font-family: var(--font-sans);
+    display:flex; align-items:center; gap:5px; white-space:nowrap;
+  }
+  .cmd-btn-send {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    color:#fff;
+    box-shadow: 0 3px 12px var(--primary-glow);
+  }
+  .cmd-btn-send:hover { filter: brightness(1.12); }
+  .cmd-btn-send:active { transform: scale(.97); }
+
+  .cmd-btn-ctrlc {
+    background: rgba(248,113,113,.12);
+    border: 1px solid rgba(248,113,113,.30);
+    color: var(--danger);
+  }
+  .cmd-btn-ctrlc:hover { background: rgba(248,113,113,.22); }
+
+  /* Terminal container */
+  #terminal-container {
+    height: 380px;
+    background: #0a060d;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 4px 8px 12px;
+    overflow: hidden;
+  }
+  #terminal-container .xterm { height:100%; }
+  #terminal-container .xterm-viewport::-webkit-scrollbar { width:6px; }
+  #terminal-container .xterm-viewport::-webkit-scrollbar-thumb {
+    background: rgba(255,61,110,.35); border-radius:3px;
+  }
+
+  /* Server control buttons (below terminal) */
+  .server-controls {
+    display:flex; gap:8px; margin-top: 14px; flex-wrap:wrap;
+  }
+  .srv-btn {
+    flex:1; min-width:100px;
+    padding: 11px 14px; border-radius: 9px; border:none;
+    font-weight:700; font-size:.8rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    transition: .18s; color:#fff; font-family: var(--font-sans);
+  }
+  .srv-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+  .srv-btn:active { transform: translateY(0); }
+  .srv-start   { background: linear-gradient(135deg, #34d399, #10b981); }
+  .srv-stop    { background: linear-gradient(135deg, #f87171, #dc2626); }
+  .srv-restart { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+  /* ============================================================
+     FILE MANAGER (sidebar panel)
+     ============================================================ */
+  .file-list { list-style:none; }
+  .file-item {
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 9px 11px; border-radius: 8px;
+    font-size:.82rem; margin-bottom: 3px;
+    cursor:pointer; transition: .15s;
+  }
+  .file-item:hover { background: rgba(255,61,110,.06); }
+  .file-item .f-name { display:flex; align-items:center; gap:9px; }
+  .file-item .f-size { color: var(--text-dim); font-size:.72rem; font-family: var(--font-mono); }
+
+  /* Specs strip */
+  .specs-strip {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; margin-top: 22px;
+  }
+  .spec-box {
+    background: linear-gradient(160deg, rgba(255,61,110,.05), rgba(139,92,246,.04));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px; text-align:center;
+    transition: border-color .2s;
+  }
+  .spec-box:hover { border-color: rgba(255,61,110,.30); }
+  .spec-box .s-num {
+    font-size:1.35rem; font-weight:800;
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text; background-clip:text;
+    -webkit-text-fill-color: transparent;
+  }
+  .spec-box .s-lbl {
+    font-size:.65rem; text-transform:uppercase; letter-spacing:1px;
+    color: var(--text-dim); font-weight:700; margin-top:2px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed; top: 22px; left:50%;
+    transform: translate(-50%, -130%);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--success);
+    padding: 13px 22px; border-radius: 11px;
+    font-size:.85rem; z-index: 999;
+    transition: transform .4s cubic-bezier(.4,1.3,.5,1);
+    box-shadow: 0 12px 40px rgba(0,0,0,.6);
+    max-width: 90vw;
+  }
+  .toast.show { transform: translate(-50%, 0); }
+  .toast.error { border-left-color: var(--danger); }
+
+  /* Responsive */
+  @media (max-width: 820px) {
+    .app-shell { grid-template-columns: 1fr; }
+    .sidebar {
+      position: static; height:auto;
+      flex-direction: row; flex-wrap:wrap;
+      gap: 8px; padding: 14px;
+    }
+    .sidebar-brand { border:none; padding:0 8px 0 0; margin:0; }
+    .nav-group { display:flex; gap:4px; margin:0; flex-wrap:wrap; }
+    .nav-label, .sidebar-footer { display:none; }
+    .main-content { padding: 18px 16px 30px; }
+    #terminal-container { height: 300px; }
+  }
+  @media (max-width: 600px) {
+    .auth-card { padding: 32px 22px 28px; }
+    .brand-block h1 { font-size:1.3rem; }
+    .command-bar { flex-wrap: wrap; }
+    .cmd-input { min-width: 120px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-canvas"></div>
+<div class="bg-grid"></div>
+
+<!-- ==========================================================
+     TOAST
+     ========================================================== -->
+<div class="toast" id="toast">Welcome back.</div>
+
+<!-- ==========================================================
+     AUTH PAGE
+     ========================================================== -->
+<section class="page active" id="authPage">
+  <div class="auth-card">
+    <div class="brand-block">
+      <div class="brand-mark">⛩️</div>
+      <h1>SUKUNA HOSTING</h1>
+      <p>Professional Bot &amp; Application Hosting</p>
+    </div>
+
+    <div class="auth-tabs">
+      <div class="tab-pill" id="tabPill"></div>
+      <button class="auth-tab active" data-tab="login">Sign In</button>
+      <button class="auth-tab" data-tab="signup">Create Account</button>
+    </div>
+
+    <!-- LOGIN -->
+    <form id="loginForm" autocomplete="off">
+      <div class="field">
+        <input type="text" id="loginUser" placeholder=" " required />
+        <label>Username or Email</label>
+      </div>
+      <div class="field">
+        <input type="password" id="loginPass" placeholder=" " required />
+        <label>Password</label>
+      </div>
+      <div class="auth-error" id="loginError"></div>
+      <button type="submit" class="btn-primary">Sign In</button>
+      <div class="auth-footer">
+        No account? <a href="#" onclick="switchAuthTab('signup');return false;">Create one</a>
+      </div>
+    </form>
+
+    <!-- SIGNUP -->
+    <form id="signupForm" autocomplete="off" style="display:none">
+      <div class="field">
+        <input type="text" id="signUser" placeholder=" " required minlength="3" />
+        <label>Username</label>
+      </div>
+      <div class="field">
+        <input type="email" id="signEmail" placeholder=" " required />
+        <label>Email Address</label>
+      </div>
+      <div class="field">
+        <input type="password" id="signPass" placeholder=" " required minlength="6" />
+        <label>Password (min 6 chars)</label>
+      </div>
+      <div class="auth-error" id="signError"></div>
+      <button type="submit" class="btn-primary">Create Account</button>
+      <div class="auth-footer">
+        Already registered? <a href="#" onclick="switchAuthTab('login');return false;">Sign in</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ==========================================================
+     DASHBOARD
+     ========================================================== -->
+<section class="page" id="dashboard">
+  <div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="mark">⛩️</div> SUKUNA
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Main</div>
+        <div class="nav-item active"><span class="ico">▣</span> Dashboard</div>
+        <div class="nav-item"><span class="ico">▤</span> Servers</div>
+        <div class="nav-item"><span class="ico">⌨</span> Console</div>
+        <div class="nav-item"><span class="ico">📁</span> Files</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Account</div>
+        <div class="nav-item"><span class="ico">⚙</span> Settings</div>
+        <div class="nav-item"><span class="ico">◈</span> Billing</div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-row">
+          <div class="avatar" id="sideAvatar">U</div>
+          <div>
+            <div class="uname" id="sideUserName">user</div>
+            <div class="urole">Cursed King Plan</div>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <div class="page-header">
+        <div>
+          <h2>Server Overview</h2>
+          <p>Monitor resources, manage processes, and interact with your server in real time.</p>
+        </div>
+        <div class="header-badge">
+          <span class="pulse-dot"></span> Live · 24/7
+        </div>
+      </div>
+
+      <!-- Plan banner -->
+      <div class="plan-banner">
+        <div>
+          <h3>Cursed King Plan</h3>
+          <p>Dedicated resources · No downtime · Priority support</p>
+        </div>
+        <div class="plan-tag">Active</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">CPU Limit</span>
+            <span class="stat-icon">⚡</span>
+          </div>
+          <div class="stat-number" id="cpuVal">0% <small>/ 300%</small></div>
+          <div class="stat-desc">3 dedicated cores</div>
+          <div class="progress-track"><div class="progress-fill" id="cpuFill"></div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Memory</span>
+            <span class="stat-icon">🧠</span>
+          </div>
+          <div class="stat-number" id="ramVal">0 MB <small>/ 8 GB</small></div>
+          <div class="stat-desc">RAM usage</div>
+          <div class="progress-track"><div class="progress-fill yellow" id="ramFill"></div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Storage</span>
+            <span class="stat-icon">💾</span>
+          </div>
+          <div class="stat-number" id="diskVal">0 GB <small>/ 20 GB</small></div>
+          <div class="stat-desc">NVMe SSD used</div>
+          <div class="progress-track"><div class="progress-fill green" id="diskFill"></div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Uptime</span>
+            <span class="stat-icon">🕒</span>
+          </div>
+          <div class="stat-number" id="uptimeVal">0h 0m</div>
+          <div class="stat-desc">Since last restart</div>
+          <div class="progress-track"><div class="progress-fill green" style="width:100%"></div></div>
+        </div>
+      </div>
+
+      <!-- Terminal + Files -->
+      <div class="content-columns">
+
+        <!-- TERMINAL PANEL -->
+        <div class="panel terminal-panel">
+          <div class="panel-head">
+            <div class="panel-title">💀 Terminal</div>
+            <div class="panel-sub">Interactive shell · xterm.js</div>
+          </div>
+
+          <!-- ▼ COMMAND BAR ABOVE TERMINAL (requested) ▼ -->
+          <div class="command-bar">
+            <span class="cmd-prefix">$</span>
+            <input
+              type="text"
+              id="cmdInput"
+              class="cmd-input"
+              placeholder="Type a command and press Enter or Send…"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="cmd-btn cmd-btn-send" id="cmdSendBtn">Send ➤</button>
+            <button class="cmd-btn cmd-btn-ctrlc" id="cmdCtrlCBtn">Ctrl+C</button>
+          </div>
+
+          <!-- TERMINAL -->
+          <div id="terminal-container"></div>
+
+          <!-- Server controls -->
+          <div class="server-controls">
+            <button class="srv-btn srv-start" onclick="serverStart()">▶ Start</button>
+            <button class="srv-btn srv-stop" onclick="serverStop()">⏹ Stop</button>
+            <button class="srv-btn srv-restart" onclick="serverRestart()">🔄 Restart</button>
+          </div>
+        </div>
+
+        <!-- FILE MANAGER -->
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">📂 Files</div>
+            <div class="panel-sub">/home/container</div>
+          </div>
+          <ul class="file-list">
+            <li class="file-item"><span class="f-name">📁 app/</span><span class="f-size">--</span></li>
+            <li class="file-item"><span class="f-name">📄 main.py</span><span class="f-size">4.5 KB</span></li>
+            <li class="file-item"><span class="f-name">📄 requirements.txt</span><span class="f-size">1.2 KB</span></li>
+            <li class="file-item"><span class="f-name">📄 config.json</span><span class="f-size">0.8 KB</span></li>
+            <li class="file-item"><span class="f-name">📄 .env</span><span class="f-size">0.3 KB</span></li>
+            <li class="file-item"><span class="f-name">📁 logs/</span><span class="f-size">--</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Specs -->
+      <div class="specs-strip">
+        <div class="spec-box"><div class="s-num">24/7</div><div class="s-lbl">Uptime</div></div>
+        <div class="spec-box"><div class="s-num">8 GB</div><div class="s-lbl">RAM</div></div>
+        <div class="spec-box"><div class="s-num">20 GB</div><div class="s-lbl">NVMe Storage</div></div>
+        <div class="spec-box"><div class="s-num">300%</div><div class="s-lbl">CPU</div></div>
+      </div>
+
+    </main>
+  </div>
+</section>
+
+<script>
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastTimer;
+function toast(msg, isError = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.toggle('error', isError);
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+/* ============================================================
+   AUTH — TABS
+   ============================================================ */
+const tabPill    = document.getElementById('tabPill');
+const loginForm  = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
+
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(b =>
+    b.classList.toggle('active', b.dataset.tab === tab)
+  );
+  if (tab === 'login') {
+    tabPill.style.transform = 'translateX(0)';
+    loginForm.style.display  = 'block';
+    signupForm.style.display = 'none';
+  } else {
+    tabPill.style.transform = 'translateX(100%)';
+    loginForm.style.display  = 'none';
+    signupForm.style.display = 'block';
+  }
+}
+document.querySelectorAll('.auth-tab').forEach(b =>
+  b.addEventListener('click', () => switchAuthTab(b.dataset.tab))
+);
+
+/* ============================================================
+   AUTH — LOCAL STORAGE
+   ============================================================ */
+const USERS_KEY = 'sukuna_pro_users';
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); }
+  catch { return {}; }
+}
+function saveUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+
+// Seed demo account
+(function seed() {
+  const u = getUsers();
+  if (!u['demon']) {
+    u['demon'] = { email: 'demon@sukuna.io', password: 'sukuna123', display: 'Demon' };
+    saveUsers(u);
+  }
+})();
+
+/* Sign up */
+signupForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const err = document.getElementById('signError');
+  const name  = document.getElementById('signUser').value.trim();
+  const email = document.getElementById('signEmail').value.trim().toLowerCase();
+  const pass  = document.getElementById('signPass').value;
+
+  err.classList.remove('show'); err.textContent = '';
+
+  if (name.length < 3) {
+    err.textContent = 'Username must be at least 3 characters.';
+    err.classList.add('show'); return;
+  }
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    err.textContent = 'Enter a valid email address.';
+    err.classList.add('show'); return;
+  }
+  if (pass.length < 6) {
+    err.textContent = 'Password must be at least 6 characters.';
+    err.classList.add('show'); return;
+  }
+
+  const users = getUsers();
+  if (users[name.toLowerCase()]) {
+    err.textContent = 'That username is already taken.';
+    err.classList.add('show'); return;
+  }
+
+  users[name.toLowerCase()] = { email, password: pass, display: name };
+  saveUsers(users);
+
+  toast('Account created. Welcome, ' + name);
+  signupForm.reset();
+  switchAuthTab('login');
+  document.getElementById('loginUser').value = name;
+});
+
+/* Login */
+loginForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const err = document.getElementById('loginError');
+  const id  = document.getElementById('loginUser').value.trim();
+  const pw  = document.getElementById('loginPass').value;
+
+  err.classList.remove('show'); err.textContent = '';
+
+  const users = getUsers();
+  const key = id.toLowerCase();
+  let account = users[key];
+  if (!account) {
+    account = Object.values(users).find(
+      x => x.email && x.email.toLowerCase() === key
+    );
+  }
+
+  if (!account || account.password !== pw) {
+    err.textContent = 'Invalid username or password.';
+    err.classList.add('show');
+    return;
+  }
+
+  localStorage.setItem('sukuna_pro_session', JSON.stringify({
+    username: account.display || key,
+    email: account.email,
+    loginAt: Date.now()
+  }));
+  enterDashboard();
+});
+
+/* ============================================================
+   PAGE NAVIGATION
+   ============================================================ */
+function enterDashboard() {
+  const session = JSON.parse(localStorage.getItem('sukuna_pro_session') || 'null');
+  if (!session) return;
+
+  const initial = (session.username[0] || 'U').toUpperCase();
+  document.getElementById('sideUserName').textContent = session.username;
+  document.getElementById('sideAvatar').textContent   = initial;
+
+  document.getElementById('authPage').classList.remove('active');
+  document.getElementById('dashboard').classList.add('active');
+
+  initDashboard();
+}
+
+function logout() {
+  localStorage.removeItem('sukuna_pro_session');
+  stopUptime();
+  if (term) term.dispose();
+  term = null;
+
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('authPage').classList.add('active');
+  document.getElementById('loginForm').reset();
+  toast('Signed out.');
+}
+
+/* ============================================================
+   xterm.js TERMINAL
+   ============================================================ */
+let term = null;
+let fitAddon = null;
+let isRunning = true;
+let uptimeSec = 0;
+let uptimeTimer = null;
+let statsTimer = null;
+
+const TERM_THEME = {
+  background:   '#0a060d',
+  foreground:   '#d8cfd4',
+  cursor:       '#ff3d6e',
+  cursorAccent: '#0a060d',
+  selectionBackground: 'rgba(255,61,110,.30)',
+  black:        '#1a121c',
+  red:          '#f87171',
+  green:        '#34d399',
+  yellow:       '#fbbf24',
+  blue:         '#60a5fa',
+  magenta:      '#c084fc',
+  cyan:         '#22d3ee',
+  white:        '#e5dfe3',
+  brightBlack:  '#6e5a66',
+  brightRed:    '#fca5a5',
+  brightGreen:  '#6ee7b7',
+  brightYellow: '#fcd34d',
+  brightBlue:   '#93c5fd',
+  brightMagenta:'#d8b4fe',
+  brightCyan:   '#67e8f9',
+  brightWhite:  '#f8f4f6'
+};
+
+function initTerminal() {
+  const container = document.getElementById('terminal-container');
+  if (!container || typeof Terminal === 'undefined') return;
+
+  if (term) { term.dispose(); term = null; }
+  container.innerHTML = '';
+
+  term = new Terminal({
+    cursorBlink: true,
+    cursorStyle: 'bar',
+    fontSize: 13,
+    fontFamily: "'JetBrains Mono', 'Fira Code', 'Courier New', monospace",
+    lineHeight: 1.45,
+    theme: TERM_THEME,
+    scrollback: 2000,
+    allowProposedApi: true,
+    convertEol: true
+  });
+
+  fitAddon = new FitAddon.FitAddon();
+  term.loadAddon(fitAddon);
+  term.open(container);
+  setTimeout(() => { try { fitAddon.fit(); } catch(e){} }, 60);
+
+  // Welcome banner
+  term.writeln('\x1b[1;38;2;255;61;110m╔══════════════════════════════════════════════╗\x1b[0m');
+  term.writeln('\x1b[1;38;2;255;61;110m║\x1b[0m  \x1b[1m⛩  SUKUNA HOSTING · TERMINAL\x1b[0m              \x1b[1;38;2;255;61;110m║\x1b[0m');
+  term.writeln('\x1b[1;38;2;255;61;110m║\x1b[0m  \x1b[38;2;166;139;152mContainer ready · /home/container\x1b[0m       \x1b[1;38;2;255;61;110m║\x1b[0m');
+  term.writeln('\x1b[1;38;2;255;61;110m╚══════════════════════════════════════════════╝\x1b[0m');
+  term.writeln('');
+  term.writeln('\x1b[38;2;52;211;153m●\x1b[0m Server started successfully.');
+  term.writeln('\x1b[38;2;166;139;152m  Type a command above or directly here. Try "help".\x1b[0m');
+  term.writeln('');
+  writePrompt();
+
+  // Typing directly into terminal
+  term.onData(data => {
+    if (data === '\r') {
+      const line = currentLine.trim();
+      term.writeln('');
+      if (line) runCommand(line);
+      currentLine = '';
+      if (term) writePrompt();
+    } else if (data === '\u007f') {
+      if (currentLine.length > 0) {
+        currentLine = currentLine.slice(0, -1);
+        term.write('\b \b');
+      }
+    } else if (data >= ' ' && data <= '~') {
+      currentLine += data;
+      term.write(data);
+    }
+  });
+
+  // Resize observer
+  if (window.ResizeObserver) {
+    const ro = new ResizeObserver(() => {
+      try { fitAddon.fit(); } catch(e){}
+    });
+    ro.observe(container);
+  }
+}
+
+let currentLine = '';
+
+function writePrompt() {
+  if (!term) return;
+  term.write('\x1b[1;38;2;255;61;110m❯\x1b[0m ');
+}
+
+/* ============================================================
+   COMMAND ENGINE
+   ============================================================ */
+function runCommand(raw) {
+  if (!term) return;
+  const cmd = raw.trim();
+  if (!cmd) return;
+
+  // Echo the command
+  term.writeln('\x1b[38;2;110;90;102m$ ' + cmd + '\x1b[0m');
+
+  const parts = cmd.split(/\s+/);
+  const base  = parts[0].toLowerCase();
+
+  switch (base) {
+    case 'help':
+      term.writeln('\x1b[38;2;34;211;238mAvailable commands:\x1b[0m');
+      term.writeln('  \x1b[1mhelp\x1b[0m        Show this help');
+      term.writeln('  \x1b[1mls\x1b[0m          List files');
+      term.writeln('  \x1b[1mpwd\x1b[0m         Print working directory');
+      term.writeln('  \x1b[1mwhoami\x1b[0m      Current user');
+      term.writeln('  \x1b[1mdate\x1b[0m        Current date/time');
+      term.writeln('  \x1b[1muptime\x1b[0m      Server uptime');
+      term.writeln('  \x1b[1mfree -m\x1b[0m     Memory usage');
+      term.writeln('  \x1b[1mdf -h\x1b[0m       Disk usage');
+      term.writeln('  \x1b[1mps\x1b[0m          Running processes');
+      term.writeln('  \x1b[1mclear\x1b[0m       Clear terminal');
+      term.writeln('  \x1b[1mneofetch\x1b[0m    System info');
+      break;
+
+    case 'ls':
+      term.writeln('\x1b[38;2;96;165;250mapp/\x1b[0m  main.py  requirements.txt  config.json  .env  logs/');
+      break;
+
+    case 'pwd':
+      term.writeln('/home/container');
+      break;
+
+    case 'whoami':
+      term.writeln('container');
+      break;
+
+    case 'date':
+      term.writeln(new Date().toString());
+      break;
+
+    case 'uptime': {
+      const h = Math.floor(uptimeSec / 3600);
+      const m = Math.floor((uptimeSec % 3600) / 60);
+      const s = uptimeSec % 60;
+      term.writeln(`up ${h}h ${m}m ${s}s`);
+      break;
+    }
+
+    case 'free':
+      term.writeln('              total        used        free');
+      term.writeln('Mem:        8192 MB     1240 MB     6952 MB');
+      term.writeln('Swap:       2048 MB        0 MB     2048 MB');
+      break;
+
+    case 'df':
+      term.writeln('Filesystem      Size  Used Avail Use% Mounted on');
+      term.writeln('/dev/nvme0n1     20G  3.2G   17G  16% /');
+      break;
+
+    case 'ps':
+      term.writeln('  PID TTY          TIME CMD');
+      term.writeln('    1 ?        00:00:02 python main.py');
+      term.writeln('   42 ?        00:00:00 bash');
+      term.writeln('   58 ?        00:00:00 ps');
+      break;
+
+    case 'clear':
+      term.clear();
+      break;
+
+    case 'neofetch':
+      term.writeln('\x1b[1;38;2;255;61;110m');
+      term.writeln('       ⛩  ⛩       \x1b[0m container@sukuna');
+      term.writeln('\x1b[1;38;2;255;61;110m      ⛩⛩⛩⛩⛩      \x1b[0m ---------------');
+      term.writeln('\x1b[1;38;2;255;61;110m     ⛩⛩ ⛩ ⛩⛩     \x1b[0m OS: Sukuna Linux x86_64');
+      term.writeln('\x1b[1;38;2;255;61;110m    ⛩⛩  ⛩  ⛩⛩    \x1b[0m Kernel: 6.1.0-cursed');
+      term.writeln('\x1b[1;38;2;255;61;110m   ⛩⛩⛩⛩⛩⛩⛩⛩⛩   \x1b[0m Shell: bash 5.2');
+      term.writeln('\x1b[1;38;2;255;61;110m  ⛩⛩⛩⛩⛩⛩⛩⛩⛩⛩⛩  \x1b[0m CPU: 3 vCPU @ 300%');
+      term.writeln('\x1b[1;38;2;255;61;110m ⛩⛩⛩       ⛩⛩⛩ \x1b[0m Memory: 1240MiB / 8192MiB');
+      term.writeln('\x1b[1;38;2;255;61;110m⛩⛩⛩         ⛩⛩⛩\x1b[0m Disk: 3.2G / 20G');
+      term.writeln('');
+      break;
+
+    default:
+      term.writeln(`\x1b[38;2;248;113;113mbash: ${base}: command not found\x1b[0m`);
+      term.writeln('\x1b[38;2;110;90;102mType "help" for available commands.\x1b[0m');
+  }
+}
+
+/* ============================================================
+   COMMAND BAR HANDLERS  (above the terminal)
+   ============================================================ */
+function setupCommandBar() {
+  const input   = document.getElementById('cmdInput');
+  const sendBtn = document.getElementById('cmdSendBtn');
+  const ctrlBtn = document.getElementById('cmdCtrlCBtn');
+
+  function send() {
+    const val = input.value.trim();
+    if (!val || !term) return;
+    // Echo the command in the terminal
+    term.writeln('\x1b[38;2;110;90;102m$ ' + val + '\x1b[0m');
+    runCommand(val);
+    input.value = '';
+    // Write a fresh prompt
+    writePrompt();
+    input.focus();
+  }
+
+  sendBtn.addEventListener('click', send);
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      send();
+    }
+  });
+
+  ctrlBtn.addEventListener('click', () => {
+    if (!term) return;
+    term.writeln('^C');
+    term.writeln('\x1b[38;2;248;113;113mProcess interrupted.\x1b[0m');
+    currentLine = '';
+    writePrompt();
+    toast('SIGINT sent');
+  });
+}
+
+/* ============================================================
+   DASHBOARD INIT
+   ============================================================ */
+function initDashboard() {
+  initTerminal();
+  setupCommandBar();
+
+  isRunning = true;
+  uptimeSec = 0;
+  startUptime();
+  startStats();
+}
+
+function startUptime() {
+  stopUptime();
+  uptimeTimer = setInterval(() => {
+    if (!isRunning) return;
+    uptimeSec++;
+    const h = Math.floor(uptimeSec / 3600);
+    const m = Math.floor((uptimeSec % 3600) / 60);
+    document.getElementById('uptimeVal').textContent = `${h}h ${m}m`;
+  }, 1000);
+}
+function stopUptime() { clearInterval(uptimeTimer); uptimeTimer = null; }
+
+function startStats() {
+  clearInterval(statsTimer);
+
+  const cpuFill  = document.getElementById('cpuFill');
+  const ramFill  = document.getElementById('ramFill');
+  const diskFill = document.getElementById('diskFill');
+
+  const tick = () => {
+    if (!isRunning) {
+      document.getElementById('cpuVal').innerHTML  = '0% <small>/ 300%</small>';
+      document.getElementById('ramVal').innerHTML  = '0 MB <small>/ 8 GB</small>';
+      cpuFill.style.width  = '0%';
+      ramFill.style.width  = '0%';
+      return;
+    }
+
+    const cpu = Math.floor(10 + Math.random() * 90);
+    document.getElementById('cpuVal').innerHTML = `${cpu}% <small>/ 300%</small>`;
+    cpuFill.style.width = (cpu / 300 * 100).toFixed(1) + '%';
+
+    const ram = Math.floor(400 + Math.random() * 1800);
+    document.getElementById('ramVal').innerHTML = `${ram} MB <small>/ 8 GB</small>`;
+    ramFill.style.width = (ram / 8192 * 100).toFixed(1) + '%';
+
+    const disk = (2.5 + Math.random() * 3.5).toFixed(1);
+    document.getElementById('diskVal').innerHTML = `${disk} GB <small>/ 20 GB</small>`;
+    diskFill.style.width = (disk / 20 * 100).toFixed(1) + '%';
+  };
+
+  tick();
+  statsTimer = setInterval(tick, 2200);
+}
+
+/* ============================================================
+   SERVER CONTROLS
+   ============================================================ */
+function serverStart() {
+  if (isRunning) {
+    toast('Server is already running.', true);
+    if (term) term.writeln('\x1b[38;2;251;191;36m[!] Server already running.\x1b[0m');
+    return;
+  }
+  isRunning = true;
+  if (term) {
+    term.writeln('\x1b[38;2;96;165;250m[~] Starting server...\x1b[0m');
+    setTimeout(() => term.writeln('\x1b[38;2;52;211;153m[✓] Server online.\x1b[0m'), 700);
+  }
+  toast('Server started');
+  startUptime();
+  startStats();
+}
+
+function serverStop() {
+  if (!isRunning) { toast('Server is already stopped.', true); return; }
+  isRunning = false;
+  if (term) {
+    term.writeln('\x1b[38;2;251;191;36m[~] Stopping server...\x1b[0m');
+    setTimeout(() => term.writeln('\x1b[38;2;248;113;113m[✗] Process terminated.\x1b[0m'), 500);
+  }
+  toast('Server stopped');
+  stopUptime();
+}
+
+function serverRestart() {
+  if (term) term.writeln('\x1b[38;2;251;191;36m[~] Restarting server...\x1b[0m');
+  isRunning = false;
+  stopUptime();
+
+  setTimeout(() => {
+    isRunning = true;
+    if (term) {
+      term.writeln('\x1b[38;2;96;165;250m[~] Allocating resources...\x1b[0m');
+      setTimeout(() => term.writeln('\x1b[38;2;52;211;153m[✓] Server online again.\x1b[0m'), 800);
+    }
+    toast('Server restarted');
+    startUptime();
+    startStats();
+  }, 1200);
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', () => {
+  const session = JSON.parse(localStorage.getItem('sukuna_pro_session') || 'null');
+  if (session) enterDashboard();
+});
+</script>
+</body>
+</html>
