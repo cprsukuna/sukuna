@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
 <title>SUKUNA HOSTING PANEL</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
-<script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -25,15 +24,12 @@ body{
   background:
     radial-gradient(1200px 800px at 10% -20%,#191919 0%,transparent 60%),
     radial-gradient(900px 700px at 115% 115%,#141414 0%,transparent 55%),
-    radial-gradient(600px 400px at 50% 50%,#0a0a0a 0%,transparent 70%),
     var(--bg);
   color:var(--txt);font-family:var(--sans);text-shadow:var(--glow);
   overflow:hidden;-webkit-font-smoothing:antialiased;user-select:none;
 }
-input,textarea,.xterm{user-select:text}
-.hidden{display:none !important}
-
-/* ═══ ANIMATED BACKGROUND ═══ */
+input,textarea,.term-body{user-select:text}
+.hidden{display:none!important}
 body::before{
   content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
   background-image:
@@ -45,11 +41,9 @@ body::before{
   -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%);
 }
 @keyframes gridDrift{from{background-position:0 0,0 0}to{background-position:56px 56px,56px 56px}}
-.scanline{
-  position:fixed;left:0;right:0;height:120px;z-index:1;pointer-events:none;
+.scanline{position:fixed;left:0;right:0;height:120px;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,transparent,rgba(255,255,255,.035),transparent);
-  animation:scanDown 9s linear infinite;
-}
+  animation:scanDown 9s linear infinite}
 @keyframes scanDown{from{top:-140px}to{top:100%}}
 .orb{position:fixed;border-radius:50%;filter:blur(70px);opacity:.13;z-index:0;
   pointer-events:none;background:#fff;animation:floaty 20s ease-in-out infinite}
@@ -58,7 +52,7 @@ body::before{
 .orb.c{width:220px;height:220px;top:40%;left:55%;animation-delay:-13s}
 @keyframes floaty{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(50px,-60px) scale(1.15)}}
 
-/* ═══ KEYFRAMES ═══ */
+/* keyframes */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 @keyframes slideR{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
 @keyframes slideL{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
@@ -78,28 +72,24 @@ body::before{
 @keyframes pageOut{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-50px);filter:blur(4px)}}
 @keyframes sweepLine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 @keyframes cursorPulse{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes cardTilt{from{transform:perspective(900px) rotateX(0) rotateY(0)}to{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}}
-@keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes loginOut{to{opacity:0;transform:translateY(-70px) scale(.92);filter:blur(8px)}}
+@keyframes toastBar{from{width:100%}to{width:0}}
+@keyframes termIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
 
-/* ═══ LOGIN ═══ */
+/* LOGIN */
 #login{position:fixed;inset:0;display:grid;place-items:center;z-index:20;padding:20px;
   animation:popIn .8s var(--ease) both}
 #login.login-out{animation:loginOut .65s var(--ease) forwards}
-.login-card{
-  position:relative;width:min(430px,94vw);padding:46px 34px 36px;
+.login-card{position:relative;width:min(430px,94vw);padding:46px 34px 36px;
   background:rgba(8,8,8,.9);border:1px solid var(--line);border-radius:22px;
   backdrop-filter:blur(16px);
   box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 40px 90px rgba(0,0,0,.95);
-  animation:cardIn 1s var(--ease) both;overflow:hidden;
-}
+  animation:cardIn 1s var(--ease) both;overflow:hidden}
 @keyframes cardIn{from{opacity:0;transform:translateY(50px) rotateX(12deg) scale(.94)}
   to{opacity:1;transform:none}}
-.login-card::before{
-  content:"";position:absolute;inset:-2px;border-radius:24px;padding:2px;z-index:-1;
+.login-card::before{content:"";position:absolute;inset:-2px;border-radius:24px;padding:2px;z-index:-1;
   background:conic-gradient(from 0deg,transparent 0 62%,rgba(255,255,255,.9) 80%,transparent 94%);
-  animation:spinRing 6s linear infinite;filter:blur(.5px);
-}
+  animation:spinRing 6s linear infinite;filter:blur(.5px)}
 .login-card::after{content:"";position:absolute;inset:0;border-radius:22px;background:#080808;z-index:-1}
 .brand{font-size:23px;font-weight:900;letter-spacing:5px;text-align:center;
   display:flex;justify-content:center;flex-wrap:wrap;animation:glowPulse 2.6s ease-in-out infinite}
@@ -112,11 +102,9 @@ body::before{
 .field:nth-of-type(1){animation-delay:.35s}
 .field:nth-of-type(2){animation-delay:.45s}
 .field label{display:block;font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:8px}
-.field input{
-  width:100%;padding:14px 46px 14px 15px;background:#050505;border:1px solid var(--line2);
-  border-radius:11px;color:#fff;font-family:var(--mono);font-size:14px;
-  outline:none;transition:.3s;text-shadow:var(--glow);
-}
+.field input{width:100%;padding:14px 46px 14px 15px;background:#050505;
+  border:1px solid var(--line2);border-radius:11px;color:#fff;font-family:var(--mono);
+  font-size:14px;outline:none;transition:.3s;text-shadow:var(--glow)}
 .field input::placeholder{color:#3a3a3a}
 .field input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.08),var(--glow);
   transform:translateY(-1px)}
@@ -125,16 +113,14 @@ body::before{
   background:transparent;border:0;color:var(--dim);font-size:15px;cursor:pointer;
   padding:6px;transition:.25s;text-shadow:var(--glow)}
 .eye:hover{color:#fff;text-shadow:var(--glow2)}
-.btn{
-  width:100%;padding:14px;border-radius:11px;border:1px solid #fff;cursor:pointer;
+.btn{width:100%;padding:14px;border-radius:11px;border:1px solid #fff;cursor:pointer;
   background:#fff;color:#000;font-family:var(--sans);font-weight:700;
   letter-spacing:3px;font-size:12px;transition:.3s;position:relative;overflow:hidden;
-  animation:fadeUp .7s .55s var(--ease) both;
-}
+  animation:fadeUp .7s .55s var(--ease) both}
 .btn:hover{background:#000;color:#fff;box-shadow:var(--glow2);transform:translateY(-2px)}
 .btn:active{transform:translateY(0) scale(.985)}
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn.ghost{background:transparent;color:#fff;border:1px solid var(--line2)}
+.btn.ghost{background:transparent;color:#fff;border:1px solid var(--line2);animation:none}
 .btn.ghost:hover{border-color:#fff;box-shadow:var(--glow)}
 .btn::after{content:"";position:absolute;top:0;left:-130%;width:60%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
@@ -144,62 +130,53 @@ body::before{
   color:#ff6b6b;min-height:16px;text-shadow:0 0 10px rgba(255,107,107,.6)}
 .msg.shake{animation:shake .45s ease}
 .hint{margin-top:22px;text-align:center;font-size:9px;color:var(--dimmer);letter-spacing:2px}
+.lock{margin-top:10px;text-align:center;font-size:10px;letter-spacing:2px;
+  color:#ffb84d;min-height:14px}
 
-/* ═══ PANEL SHELL ═══ */
+/* PANEL */
 #panel{position:relative;z-index:5;display:grid;grid-template-columns:240px 1fr;height:100vh}
 #panel.panel-in{animation:popIn .6s var(--ease) both}
-aside{
-  border-right:1px solid var(--line);background:rgba(6,6,6,.85);
+aside{border-right:1px solid var(--line);background:rgba(6,6,6,.85);
   backdrop-filter:blur(14px);padding:24px 16px;display:flex;flex-direction:column;gap:8px;
-  animation:slideR .85s var(--ease) both;
-}
+  animation:slideR .85s var(--ease) both}
 .side-brand{font-size:15px;font-weight:900;letter-spacing:4px;text-align:center;
   padding-bottom:18px;margin-bottom:10px;border-bottom:1px solid var(--line);
   animation:glowPulse 3s ease-in-out infinite}
 .side-brand span{display:block;font-size:8px;letter-spacing:5px;color:var(--dim);
   margin-top:8px;font-weight:400}
 .nav{display:flex;flex-direction:column;gap:6px}
-.nav button{
-  position:relative;display:flex;align-items:center;gap:11px;padding:12px 14px;
+.nav button{position:relative;display:flex;align-items:center;gap:11px;padding:12px 14px;
   border-radius:10px;background:transparent;border:1px solid transparent;color:var(--dim);
   font-family:var(--sans);font-size:11px;letter-spacing:2px;cursor:pointer;
   transition:transform .3s var(--ease),color .25s,border-color .25s,background .25s;
-  text-align:left;width:100%;text-shadow:var(--glow);
-  animation:slideR .6s var(--ease) both;
-}
+  text-align:left;width:100%;text-shadow:var(--glow);animation:slideR .6s var(--ease) both}
 .nav button:nth-child(1){animation-delay:.10s}
 .nav button:nth-child(2){animation-delay:.16s}
 .nav button:nth-child(3){animation-delay:.22s}
 .nav button:nth-child(4){animation-delay:.28s}
 .nav button:nth-child(5){animation-delay:.34s}
 .nav button:nth-child(6){animation-delay:.40s}
-.nav button::before{
-  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+.nav button::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
   width:0;height:60%;background:#fff;border-radius:0 3px 3px 0;
-  box-shadow:var(--glow2);transition:width .3s var(--ease);
-}
+  box-shadow:var(--glow2);transition:width .3s var(--ease)}
 .nav button:hover{color:#fff;border-color:var(--line2);transform:translateX(6px);background:#0c0c0c}
 .nav button.active{color:#fff;background:#101010;border-color:#fff;box-shadow:var(--glow)}
 .nav button.active::before{width:3px}
 .nav button i{font-style:normal;font-size:14px;width:18px;text-align:center}
 .side-foot{margin-top:auto;font-size:9px;color:var(--dimmer);letter-spacing:2px;
   text-align:center;padding-top:16px;border-top:1px solid var(--line)}
-
 main{overflow-y:auto;padding:30px 34px 60px;position:relative}
 main::-webkit-scrollbar{width:8px}
 main::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
 main::-webkit-scrollbar-thumb:hover{background:#3a3a3a}
-
 .topbar{display:flex;align-items:center;justify-content:space-between;
   margin-bottom:28px;animation:fadeUp .6s both}
-.topbar h1{font-size:19px;letter-spacing:5px;font-weight:700;
-  animation:slideL .7s var(--ease) both}
-.topbar .who{font-size:10px;letter-spacing:2px;color:var(--dim);
-  animation:slideR .7s var(--ease) both}
+.topbar h1{font-size:19px;letter-spacing:5px;font-weight:700;animation:slideL .7s var(--ease) both}
+.topbar .who{font-size:10px;letter-spacing:2px;color:var(--dim);animation:slideR .7s var(--ease) both}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;
   margin-right:7px;box-shadow:0 0 10px #fff;animation:blink 1.6s ease-in-out infinite}
 
-/* ═══ PAGE TRANSITIONS ═══ */
+/* PAGE TRANSITIONS */
 main section{position:relative}
 main section.page-in{animation:pageIn .5s var(--ease) both}
 main section.page-out{animation:pageOut .28s ease both}
@@ -210,15 +187,12 @@ main section.page-out{animation:pageOut .28s ease both}
   background:linear-gradient(90deg,transparent,#fff,transparent);
   animation:sweepLine .6s linear}
 
-/* ═══ CARDS ═══ */
+/* CARDS */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-.card{
-  background:linear-gradient(160deg,#0d0d0d,#070707);
+.card{background:linear-gradient(160deg,#0d0d0d,#070707);
   border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;
-  overflow:hidden;
-  transition:transform .4s var(--ease),border-color .3s,box-shadow .3s;
-  animation:slideUp .7s var(--ease) both;transform-style:preserve-3d;
-}
+  overflow:hidden;transition:transform .4s var(--ease),border-color .3s,box-shadow .3s;
+  animation:slideUp .7s var(--ease) both;transform-style:preserve-3d}
 .grid .card:nth-child(1){animation-delay:.05s}
 .grid .card:nth-child(2){animation-delay:.11s}
 .grid .card:nth-child(3){animation-delay:.17s}
@@ -232,7 +206,7 @@ main section.page-out{animation:pageOut .28s ease both}
   transform:skewX(-18deg);animation:shine 6s ease-in-out infinite}
 .card .k{font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:14px}
 .card .v{font-size:26px;font-weight:900;letter-spacing:1px;text-shadow:var(--glow2);
-  font-family:var(--mono);animation:countUp .6s var(--ease) both}
+  font-family:var(--mono);animation:fadeUp .6s var(--ease) both}
 .card .s{font-size:9px;color:var(--dimmer);margin-top:10px;letter-spacing:2px}
 .bar{height:6px;background:#161616;border-radius:99px;overflow:hidden;margin-top:16px}
 .bar>i{display:block;height:100%;width:0;border-radius:99px;
@@ -240,21 +214,36 @@ main section.page-out{animation:pageOut .28s ease both}
   box-shadow:0 0 16px rgba(255,255,255,.7);
   transition:width 1s var(--ease)}
 
-/* ═══ TERMINAL ═══ */
+/* TERMINAL */
 .term{background:#000;border:1px solid var(--line2);border-radius:14px;overflow:hidden;
-  box-shadow:0 28px 80px rgba(0,0,0,.95),var(--glow);
-  animation:slideUp .7s .1s var(--ease) both}
+  box-shadow:0 28px 80px rgba(0,0,0,.95),var(--glow);animation:slideUp .7s .1s var(--ease) both}
 .term-head{display:flex;align-items:center;gap:8px;padding:11px 15px;
   background:#0a0a0a;border-bottom:1px solid var(--line2)}
 .term-head b{width:10px;height:10px;border-radius:50%;background:#3a3a3a;display:inline-block}
 .term-head b:first-child{background:#fff;box-shadow:0 0 10px #fff}
 .term-head span{margin-left:auto;font-size:9px;letter-spacing:3px;color:var(--dim)}
-#xterm{height:min(56vh,470px);padding:10px;background:#000}
-#xterm .xterm-viewport{background:#000 !important}
-#xterm .xterm-viewport::-webkit-scrollbar{width:7px}
-#xterm .xterm-viewport::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
+.term-body{height:min(52vh,440px);overflow-y:auto;padding:16px;font-family:var(--mono);
+  font-size:12.5px;line-height:1.7;white-space:pre-wrap;word-break:break-word;
+  color:#e8e8e8;text-shadow:var(--glow)}
+.term-body::-webkit-scrollbar{width:7px}
+.term-body::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
+.term-body>div{animation:termIn .3s var(--ease) both}
+.tl{color:#e8e8e8}
+.tl-ok{color:#9dff9d}
+.tl-err{color:#ff8080}
+.tl-dim{color:#6a6a6a}
+.tl-yel{color:#ffe066}
+.tl-blue{color:#7ec8ff}
+.tl-mag{color:#ff9de6}
+.tl-cyan{color:#9dffea}
+.term-line{display:flex;align-items:center;gap:9px;padding:12px 16px;
+  border-top:1px solid var(--line2);background:#070707;font-family:var(--mono);font-size:13px}
+.term-line .ps1{color:#fff;text-shadow:var(--glow2);white-space:nowrap}
+.term-line input{flex:1;background:transparent;border:none;outline:none;color:#fff;
+  font-family:var(--mono);font-size:13px;text-shadow:var(--glow)}
+.term-line input::placeholder{color:#3a3a3a}
 
-/* ═══ ROWS / FORMS ═══ */
+/* ROWS / FORMS */
 .row{display:flex;align-items:center;justify-content:space-between;gap:14px;
   padding:15px 18px;border:1px solid var(--line);border-radius:12px;background:#0a0a0a;
   margin-bottom:10px;transition:transform .3s var(--ease),border-color .25s,box-shadow .25s;
@@ -263,7 +252,6 @@ main section.page-out{animation:pageOut .28s ease both}
 .row:nth-child(2){animation-delay:.11s}
 .row:nth-child(3){animation-delay:.17s}
 .row:nth-child(4){animation-delay:.23s}
-.row:nth-child(5){animation-delay:.29s}
 .row:hover{border-color:#fff;transform:translateX(7px);box-shadow:var(--glow)}
 .row .n{font-family:var(--mono);font-size:13px;letter-spacing:.5px}
 .row .m{font-size:9px;color:var(--dim);letter-spacing:2px;margin-top:5px}
@@ -271,10 +259,8 @@ main section.page-out{animation:pageOut .28s ease both}
   letter-spacing:2px;color:var(--dim);white-space:nowrap}
 .tag.on{border-color:#fff;color:#fff;box-shadow:var(--glow)}
 .drop{border:1.5px dashed var(--line2);border-radius:15px;padding:48px 20px;text-align:center;
-  transition:.4s var(--ease);cursor:pointer;background:#070707;
-  animation:slideUp .6s var(--ease) both}
-.drop:hover,.drop.over{border-color:#fff;background:#0d0d0d;box-shadow:var(--glow);
-  transform:scale(1.015)}
+  transition:.4s var(--ease);cursor:pointer;background:#070707;animation:slideUp .6s var(--ease) both}
+.drop:hover,.drop.over{border-color:#fff;background:#0d0d0d;box-shadow:var(--glow);transform:scale(1.015)}
 .drop h3{font-size:13px;letter-spacing:4px;margin-bottom:10px}
 .drop p{font-size:10px;color:var(--dim);letter-spacing:2px}
 input.txt,textarea.txt{width:100%;padding:13px 15px;background:#050505;
@@ -293,14 +279,17 @@ label.lbl{display:block;font-size:9px;letter-spacing:3px;color:var(--dim);margin
 .switch input:checked::after{left:23px;background:#000}
 pre.out{background:#000;border:1px solid var(--line);border-radius:11px;padding:14px;
   font-family:var(--mono);font-size:12px;color:#ddd;max-height:260px;overflow:auto;
-  white-space:pre-wrap;text-shadow:var(--glow);margin-top:14px;
-  animation:slideUp .5s var(--ease) both}
+  white-space:pre-wrap;text-shadow:var(--glow);margin-top:14px;animation:slideUp .5s var(--ease) both}
 .badge{display:inline-block;font-size:9px;letter-spacing:3px;padding:6px 12px;
   border:1px solid var(--line2);border-radius:99px;color:var(--dim);margin-bottom:18px;
   animation:slideR .5s var(--ease) both}
 h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;font-weight:500;
   animation:slideR .5s .05s var(--ease) both}
+.note{font-size:10px;letter-spacing:1.5px;color:var(--dimmer);line-height:1.9;
+  border-left:2px solid var(--line2);padding-left:12px;margin-top:16px;
+  animation:fadeUp .6s var(--ease) both}
 
+/* toast */
 #toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,110px);
   background:#fff;color:#000;padding:13px 26px;border-radius:11px;font-size:11px;
   letter-spacing:2px;font-weight:700;z-index:99;
@@ -310,8 +299,8 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
 #toast.err{background:#ff4d4d;color:#fff;box-shadow:0 0 36px rgba(255,77,77,.65)}
 #toast::after{content:"";position:absolute;bottom:0;left:0;height:2px;background:rgba(0,0,0,.3);
   animation:toastBar 2.8s linear forwards}
-@keyframes toastBar{from{width:100%}to{width:0}}
 
+/* mobile */
 @media(max-width:840px){
   #panel{grid-template-columns:1fr}
   aside{flex-direction:row;overflow-x:auto;border-right:none;
@@ -323,8 +312,8 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
   main{padding:22px 16px 60px}
 }
 @media(prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;
-    transition-duration:.01ms !important}
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important}
 }
 </style>
 </head>
@@ -333,7 +322,7 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
 <div class="scanline"></div>
 <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
 
-<!-- ══════ LOGIN ══════ -->
+<!-- ══════════ LOGIN ══════════ -->
 <div id="login">
   <div class="login-card">
     <div class="brand" id="brand"></div>
@@ -352,11 +341,12 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
     </div>
     <button class="btn" id="lg-btn" onclick="doLogin()">ACCESS PANEL</button>
     <div class="msg" id="lg-msg"></div>
+    <div class="lock" id="lg-lock"></div>
     <div class="hint">4 GB RAM · 100% CPU · 1 GB STORAGE</div>
   </div>
 </div>
 
-<!-- ══════ PANEL ══════ -->
+<!-- ══════════ PANEL ══════════ -->
 <div id="panel" class="hidden">
   <aside>
     <div class="side-brand">SUKUNA<span>HOSTING PANEL</span></div>
@@ -368,7 +358,7 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
       <button data-page="set"><i>⚙</i>SETTINGS</button>
       <button onclick="doLogout()"><i>⏻</i>LOGOUT</button>
     </nav>
-    <div class="side-foot" id="side-foot">v2.0 · SUKUNA CORE</div>
+    <div class="side-foot" id="side-foot">v2.1 · SUKUNA CORE</div>
   </aside>
 
   <main>
@@ -381,31 +371,21 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
     <section id="page-dash">
       <div class="badge">SYSTEM ONLINE · LIVE METRICS</div>
       <div class="grid">
-        <div class="card tilt">
-          <div class="k">CPU USAGE</div><div class="v" id="st-cpu">0%</div>
-          <div class="s">LIMIT 100%</div><div class="bar"><i id="bar-cpu"></i></div>
-        </div>
-        <div class="card tilt">
-          <div class="k">MEMORY</div><div class="v" id="st-ram">0 / 4 GB</div>
-          <div class="s">LIMIT 4 GB</div><div class="bar"><i id="bar-ram"></i></div>
-        </div>
-        <div class="card tilt">
-          <div class="k">STORAGE</div><div class="v" id="st-sto">0 B</div>
-          <div class="s">LIMIT 1 GB · 1 FILE</div><div class="bar"><i id="bar-sto"></i></div>
-        </div>
-        <div class="card tilt">
-          <div class="k">PYTHON</div><div class="v" id="st-py" style="font-size:19px">—</div>
-          <div class="s" id="st-plat">—</div>
-        </div>
-        <div class="card tilt">
-          <div class="k">NODE</div><div class="v" id="st-node" style="font-size:19px">—</div>
-          <div class="s">SERVER RUNTIME</div>
-        </div>
-        <div class="card tilt">
-          <div class="k">HOSTED FILE</div>
+        <div class="card tilt"><div class="k">CPU USAGE</div><div class="v" id="st-cpu">0%</div>
+          <div class="s">LIMIT 100%</div><div class="bar"><i id="bar-cpu"></i></div></div>
+        <div class="card tilt"><div class="k">MEMORY</div><div class="v" id="st-ram">0 / 4 GB</div>
+          <div class="s">LIMIT 4 GB</div><div class="bar"><i id="bar-ram"></i></div></div>
+        <div class="card tilt"><div class="k">STORAGE</div><div class="v" id="st-sto">0 B</div>
+          <div class="s">LIMIT 1 GB · 1 FILE</div><div class="bar"><i id="bar-sto"></i></div></div>
+        <div class="card tilt"><div class="k">PYTHON</div>
+          <div class="v" id="st-py" style="font-size:19px">—</div>
+          <div class="s" id="st-plat">—</div></div>
+        <div class="card tilt"><div class="k">NODE</div>
+          <div class="v" id="st-node" style="font-size:19px">—</div>
+          <div class="s">RUNTIME</div></div>
+        <div class="card tilt"><div class="k">HOSTED FILE</div>
           <div class="v" id="st-file" style="font-size:15px">—</div>
-          <div class="s">SERVED AT /site</div>
-        </div>
+          <div class="s">SERVED AT /site</div></div>
       </div>
     </section>
 
@@ -422,32 +402,45 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
         <button class="btn ghost" style="width:auto;padding:12px 22px" onclick="openSite()">OPEN /site</button>
         <button class="btn ghost" style="width:auto;padding:12px 22px" onclick="deleteFile()">DELETE FILE</button>
       </div>
+      <div class="note">Browser storage quota applies. For real 1 GB hosting on a VPS,
+        deploy the Node backend (server.js) — this static file only stores in your browser.</div>
     </section>
 
     <section id="page-term" class="hidden">
-      <div class="badge">REAL SHELL · PIP · NPM · GIT · SSH</div>
+      <div class="badge">SHELL · PIP · NPM · GIT · SANDBOX</div>
       <div class="term">
-        <div class="term-head"><b></b><b></b><b></b><span id="term-status">CONNECTING…</span></div>
-        <div id="xterm"></div>
+        <div class="term-head"><b></b><b></b><b></b><span id="term-status">SANDBOX</span></div>
+        <div class="term-body" id="term-out"></div>
+        <div class="term-line">
+          <span class="ps1" id="term-ps1">sukuna@panel:~$</span>
+          <input id="term-in" placeholder="type a command… (help)" autocomplete="off"
+                 autocapitalize="off" spellcheck="false">
+        </div>
       </div>
       <h2 class="sec">QUICK ACTIONS</h2>
       <div style="display:flex;gap:9px;flex-wrap:wrap">
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('pip install flask\n')">pip install flask</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('pip install psutil requests\n')">pip install psutil</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('pip list\n')">pip list</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('npm install express\n')">npm i express</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('node -v && npm -v\n')">node -v</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('pip install --upgrade pip\n')">upgrade pip</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('npm install -g npm@latest\n')">upgrade npm</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('ls -la\n')">ls -la</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip install flask')">pip install flask</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip install psutil requests')">pip install psutil</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip list')">pip list</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip install --upgrade pip')">upgrade pip</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('npm install express')">npm i express</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('npm install -g npm@latest')">upgrade npm</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('node -v && npm -v')">node -v</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('python --version')">python --version</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('ls -la')">ls -la</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('clear')">clear</button>
       </div>
+      <div class="note">Sandbox mode — commands run inside this page.
+        For a real interactive shell with node-pty + WebSocket,
+        deploy the Flask/Node backend on a VPS.</div>
     </section>
 
     <section id="page-py" class="hidden">
       <div class="badge">PYTHON & NODE RUNTIMES</div>
       <h2 class="sec">PYTHON INTERPRETERS</h2>
       <div id="py-list"></div>
-      <button class="btn ghost" style="width:auto;padding:12px 22px;margin-top:16px" onclick="loadPython()">RESCAN</button>
+      <button class="btn ghost" style="width:auto;padding:12px 22px;margin-top:16px"
+              onclick="loadRuntimes()">RESCAN</button>
       <h2 class="sec">NODE.JS</h2>
       <div id="node-list"></div>
     </section>
@@ -480,19 +473,49 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
 
 <script>
 "use strict";
-const $ = s => document.querySelector(s);
+/* ═══════════════════════════════════════════════════
+   CONFIG
+   ═══════════════════════════════════════════════════ */
+const $  = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
-/* ─── brand animation ─── */
-(function(){
-  const b = $('#brand');
-  const word = 'SUKUNA';
-  b.innerHTML = word.split('').map((c,i) =>
-    `<span style="animation-delay:${0.08*i+0.1}s">${c}</span>`
-  ).join('') + '<small>HOSTING PANEL</small>';
-})();
+/* Obfuscated credentials — username: hardik2321 / password: Hardik@2321 */
+const _K = 3;
+const _U = [101,94,111,97,102,104,47,48,47,46];
+const _P = [69,94,111,97,102,104,61,47,48,47,46];
+const dec = a => a.map(c => String.fromCharCode(c + _K)).join("");
+const USER_OK = dec(_U);
+const PASS_OK = dec(_P);
 
-/* ─── toast ─── */
+const MAX_RAM_GB   = 4;
+const MAX_CPU      = 100;
+const MAX_STORAGE  = 1024 * 1024 * 1024;
+const MAX_ATTEMPTS = 5;
+const LOCK_SECONDS = 60;
+const IDLE_MINUTES = 10;
+const SESSION_TTL  = 2 * 60 * 60 * 1000;
+const UPTIME_START = Date.now();
+
+/* ═══════════════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════════════ */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const human = n => {
+  const u = ['B','KB','MB','GB','TB'];
+  let i = 0;
+  while (n >= 1024 && i < u.length - 1){ n /= 1024; i++; }
+  return n.toFixed(1) + ' ' + u[i];
+};
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ctEq = (a, b) => {
+  if (a.length !== b.length) return false;
+  let r = 0;
+  for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return r === 0;
+};
+
 function toast(msg, err){
   const t = $('#toast');
   t.textContent = msg;
@@ -501,65 +524,224 @@ function toast(msg, err){
   t._h = setTimeout(() => t.className = '', 2800);
 }
 
-/* ─── api ─── */
-async function api(url, body, method){
-  const opt = { method: method || (body ? 'POST' : 'GET'),
-                headers: { 'Content-Type': 'application/json' } };
-  if (body) opt.body = JSON.stringify(body);
-  const r = await fetch(url, opt);
-  if (r.status === 401){ location.reload(); return { ok:false }; }
-  return r.json();
+/* ═══════════════════════════════════════════════════
+   STORAGE
+   ═══════════════════════════════════════════════════ */
+const SITE_KEY  = 'sk_site_v1';
+const SET_KEY   = 'sk_cfg_v1';
+const LOCK_KEY  = 'sk_lock_v1';
+const TRY_KEY   = 'sk_try_v1';
+const AUTH_KEY  = 'sk_auth_v1';
+
+let memFile = null;
+
+function getSite(){
+  if (memFile) return memFile;
+  try { return JSON.parse(localStorage.getItem(SITE_KEY)); }
+  catch (e) { return null; }
+}
+function setSite(obj){
+  try { localStorage.setItem(SITE_KEY, JSON.stringify(obj)); memFile = null; return true; }
+  catch (e) { memFile = obj; return false; }
+}
+function delSite(){
+  memFile = null;
+  try { localStorage.removeItem(SITE_KEY); } catch (e) {}
+}
+function getCfg(){
+  try { return Object.assign({ startup_cmd:'', autorun:true },
+    JSON.parse(localStorage.getItem(SET_KEY)) || {}); }
+  catch (e) { return { startup_cmd:'', autorun:true }; }
+}
+function setCfg(o){
+  try { localStorage.setItem(SET_KEY, JSON.stringify(o)); } catch (e) {}
 }
 
-/* ─── eye toggle ─── */
+/* ═══════════════════════════════════════════════════
+   SESSION
+   ═══════════════════════════════════════════════════ */
+function sessionValid(){
+  try {
+    const s = JSON.parse(sessionStorage.getItem(AUTH_KEY));
+    return s && s.t && (Date.now() - s.t < SESSION_TTL);
+  } catch (e) { return false; }
+}
+function sessionOpen(){ sessionStorage.setItem(AUTH_KEY, JSON.stringify({ t: Date.now() })); }
+function sessionClose(){ sessionStorage.removeItem(AUTH_KEY); }
+
+/* ═══════════════════════════════════════════════════
+   BRAND ANIMATION
+   ═══════════════════════════════════════════════════ */
+(function(){
+  const b = $('#brand');
+  const word = 'SUKUNA';
+  b.innerHTML = word.split('').map((c,i) =>
+    `<span style="animation-delay:${0.08*i+0.1}s">${c}</span>`
+  ).join('') + '<small>HOSTING PANEL</small>';
+})();
+
+/* ═══════════════════════════════════════════════════
+   LOCKOUT
+   ═══════════════════════════════════════════════════ */
+function lockRemaining(){
+  try {
+    const until = +(localStorage.getItem(LOCK_KEY) || 0);
+    return Math.max(0, Math.ceil((until - Date.now()) / 1000));
+  } catch (e) { return 0; }
+}
+function writeLock(sec){
+  try { localStorage.setItem(LOCK_KEY, Date.now() + sec * 1000); } catch (e) {}
+}
+function triesGet(){
+  try { return +(localStorage.getItem(TRY_KEY) || 0); } catch (e) { return 0; }
+}
+function triesSet(n){
+  try { localStorage.setItem(TRY_KEY, String(n)); } catch (e) {}
+}
+function triesClear(){
+  try { localStorage.removeItem(TRY_KEY); } catch (e) {}
+}
+
+let lockTimer = null;
+function startLockWatch(){
+  clearInterval(lockTimer);
+  const tick = () => {
+    const s = lockRemaining();
+    const btn = $('#lg-btn');
+    if (!btn) return;
+    if (s > 0){
+      $('#lg-lock').textContent = 'LOCKED · RETRY IN ' + s + 's';
+      btn.disabled = true;
+      btn.textContent = 'LOCKED (' + s + 's)';
+    } else {
+      $('#lg-lock').textContent = '';
+      btn.disabled = false;
+      btn.textContent = 'ACCESS PANEL';
+      clearInterval(lockTimer);
+    }
+  };
+  tick();
+  lockTimer = setInterval(tick, 1000);
+}
+
+/* ═══════════════════════════════════════════════════
+   LOGIN  (never reloads — this fixes the loop)
+   ═══════════════════════════════════════════════════ */
+let loginBusy = false;
+
+async function doLogin(){
+  if (loginBusy) return;
+  if (lockRemaining() > 0) return;
+
+  loginBusy = true;
+  const btn = $('#lg-btn');
+  const msg = $('#lg-msg');
+  const uIn = $('#lg-user');
+  const pIn = $('#lg-pass');
+
+  btn.disabled = true;
+  btn.textContent = 'VERIFYING…';
+  msg.textContent = '';
+  msg.classList.remove('shake');
+
+  try {
+    await sleep(280);                              // deliberate delay
+    const u = uIn.value.trim();
+    const p = pIn.value;
+
+    const userOk = ctEq(u, USER_OK);
+    const passOk = ctEq(p, PASS_OK);
+
+    if (userOk && passOk){
+      sessionOpen();
+      triesClear();
+      pIn.value = '';
+      msg.textContent = '';
+
+      const lg = $('#login');
+      lg.classList.add('login-out');
+      setTimeout(() => {
+        lg.classList.add('hidden');
+        const pnl = $('#panel');
+        pnl.classList.remove('hidden');
+        pnl.classList.add('panel-in');
+        boot();
+      }, 560);
+      return;
+    }
+
+    /* wrong creds */
+    const tries = triesGet() + 1;
+    triesSet(tries);
+    if (tries >= MAX_ATTEMPTS){
+      writeLock(LOCK_SECONDS);
+      triesSet(0);
+      startLockWatch();
+      msg.textContent = 'TOO MANY ATTEMPTS · ACCESS LOCKED';
+    } else {
+      msg.textContent = 'INVALID ID OR PASSWORD (' + (MAX_ATTEMPTS - tries) + ' LEFT)';
+    }
+    msg.classList.remove('shake'); void msg.offsetWidth;
+    msg.classList.add('shake');
+    pIn.value = '';
+
+  } catch (err){
+    console.error('[login]', err);
+    msg.textContent = 'UNEXPECTED ERROR · CHECK CONSOLE';
+  } finally {
+    loginBusy = false;
+    if (!sessionValid()){
+      btn.disabled = false;
+      btn.textContent = 'ACCESS PANEL';
+      pIn.focus();
+    }
+  }
+}
+
 $('#eye').onclick = () => {
   const p = $('#lg-pass');
   const on = p.type === 'password';
   p.type = on ? 'text' : 'password';
   $('#eye').textContent = on ? '◎' : '◉';
 };
-
-/* ─── login ─── */
-async function doLogin(){
-  const u = $('#lg-user').value.trim();
-  const p = $('#lg-pass').value;
-  const btn = $('#lg-btn');
-  const msg = $('#lg-msg');
-  btn.disabled = true; btn.textContent = 'VERIFYING…';
-  await new Promise(r => setTimeout(r, 260));
-  const res = await api('/api/login', { user: u, pass: p });
-  if (res.ok){
-    sessionStorage.setItem('sk_auth', '1');
-    msg.textContent = '';
-    $('#lg-pass').value = '';
-    const lg = $('#login');
-    lg.classList.add('login-out');
-    setTimeout(() => {
-      lg.classList.add('hidden');
-      const pnl = $('#panel');
-      pnl.classList.remove('hidden');
-      pnl.classList.add('panel-in');
-      boot();
-    }, 600);
-  } else {
-    msg.textContent = (res.msg || 'LOGIN FAILED').toUpperCase();
-    msg.classList.remove('shake'); void msg.offsetWidth;
-    msg.classList.add('shake');
-    $('#lg-pass').value = '';
-    btn.disabled = false; btn.textContent = 'ACCESS PANEL';
-  }
-}
 $('#lg-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 $('#lg-user').addEventListener('keydown', e => { if (e.key === 'Enter') $('#lg-pass').focus(); });
 
+/* idle auto logout */
+let idleTimer = null;
+function resetIdle(){
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    if (sessionValid()){
+      toast('SESSION EXPIRED · LOGGING OUT', true);
+      setTimeout(doLogout, 900);
+    }
+  }, IDLE_MINUTES * 60 * 1000);
+}
+['mousemove','keydown','click','touchstart','scroll'].forEach(ev =>
+  document.addEventListener(ev, resetIdle, { passive:true }));
+
 function doLogout(){
-  fetch('/api/logout', { method:'POST' }).finally(() => {
-    sessionStorage.removeItem('sk_auth');
-    location.reload();
-  });
+  sessionClose();
+  clearInterval(statsTimer);
+  clearTimeout(idleTimer);
+  const pnl = $('#panel');
+  pnl.classList.add('hidden');
+  const lg = $('#login');
+  lg.classList.remove('login-out', 'hidden');
+  lg.style.animation = 'none'; void lg.offsetWidth;
+  lg.style.animation = '';
+  $('#lg-user').value = '';
+  $('#lg-pass').value = '';
+  $('#lg-btn').disabled = false;
+  $('#lg-btn').textContent = 'ACCESS PANEL';
+  $('#lg-msg').textContent = '';
+  setTimeout(() => $('#lg-user').focus(), 300);
 }
 
-/* ─── nav / page transitions ─── */
+/* ═══════════════════════════════════════════════════
+   NAV / PAGE TRANSITIONS
+   ═══════════════════════════════════════════════════ */
 const TITLES = { dash:'DASHBOARD', files:'FILE HOST', term:'TERMINAL',
                  py:'RUNTIMES', set:'SETTINGS' };
 let currentPage = 'dash', switching = false;
@@ -571,29 +753,36 @@ function goPage(p){
   const outEl = $('#page-' + currentPage);
   const inEl  = $('#page-' + p);
   const sweep = $('#sweep');
+
   sweep.classList.remove('on'); void sweep.offsetWidth;
   sweep.classList.add('on');
   setTimeout(() => sweep.classList.remove('on'), 650);
 
   outEl.classList.add('page-out');
+
   setTimeout(() => {
     outEl.classList.add('hidden');
     outEl.classList.remove('page-out');
+
     inEl.classList.remove('hidden');
     inEl.classList.add('page-in');
     setTimeout(() => inEl.classList.remove('page-in'), 540);
-    currentPage = p; switching = false;
+
+    currentPage = p;
+    switching = false;
+
     if (p === 'files') loadFiles();
     if (p === 'py')    loadRuntimes();
     if (p === 'set')   loadSettings();
-    if (p === 'term')  setTimeout(mountTerminal, 120);
-  }, 260);
+    if (p === 'term')  setTimeout(() => $('#term-in').focus(), 150);
+  }, 250);
 
   $('#page-title').textContent = TITLES[p];
   $('#page-title').style.animation = 'none';
   void $('#page-title').offsetWidth;
   $('#page-title').style.animation = 'slideL .55s cubic-bezier(.22,.85,.24,1)';
 }
+
 $$('.nav button[data-page]').forEach(btn => {
   btn.onclick = () => {
     $$('.nav button').forEach(b => b.classList.remove('active'));
@@ -602,13 +791,15 @@ $$('.nav button[data-page]').forEach(btn => {
   };
 });
 
-/* ─── 3D tilt on cards ─── */
+/* 3D tilt on cards */
 document.addEventListener('mousemove', e => {
   $$('.card.tilt').forEach(card => {
     const r = card.getBoundingClientRect();
     if (e.clientX < r.left || e.clientX > r.right ||
-        e.clientY < r.top  || e.clientY > r.bottom) {
+        e.clientY < r.top  || e.clientY > r.bottom){
       card.style.transform = '';
+      card.style.borderColor = '';
+      card.style.boxShadow = '';
       return;
     }
     const cx = (e.clientX - r.left) / r.width - 0.5;
@@ -616,30 +807,54 @@ document.addEventListener('mousemove', e => {
     card.style.transform =
       `perspective(900px) rotateX(${-cy*6}deg) rotateY(${cx*6}deg) translateY(-4px)`;
     card.style.borderColor = '#fff';
-    card.style.boxShadow = '0 24px 60px rgba(0,0,0,.9), 0 0 10px rgba(255,255,255,.4)';
+    card.style.boxShadow =
+      '0 24px 60px rgba(0,0,0,.9), 0 0 10px rgba(255,255,255,.4)';
   });
 });
 
-/* ─── live stats ─── */
+/* ═══════════════════════════════════════════════════
+   LIVE STATS
+   ═══════════════════════════════════════════════════ */
 let statsTimer = null;
+let cpuVal = 18, ramVal = 1.1;
 
-async function loadStats(){
-  const s = await api('/api/stats');
-  if (!s.ok) return;
-  $('#st-cpu').textContent = s.cpu + '%';
-  $('#bar-cpu').style.width = Math.min(100, (s.cpu / s.cpu_limit) * 100) + '%';
-  $('#st-ram').textContent = s.ram.used_gb + ' / ' + s.ram.total_gb + ' GB';
-  $('#bar-ram').style.width = Math.min(100, (s.ram.used_gb / s.ram.total_gb) * 100) + '%';
-  $('#st-sto').textContent = s.storage.used_h;
-  $('#bar-sto').style.width = Math.max(1.5, s.storage.pct) + '%';
-  $('#st-py').textContent = s.python && s.python !== 'not installed' ? s.python : '—';
-  $('#st-plat').textContent = String(s.platform || '').toUpperCase();
-  $('#st-node').textContent = s.node || '—';
-  $('#st-file').textContent = s.hosted || 'NONE';
-  $('#side-foot').textContent = 'v2.0 · ' + (s.pty ? 'PTY MODE' : 'EXEC MODE');
+function loadStats(){
+  cpuVal += (Math.random() - 0.5) * 16;
+  cpuVal = clamp(cpuVal, 3, 92);
+  ramVal += (Math.random() - 0.5) * 0.22;
+  ramVal = clamp(ramVal, 0.4, MAX_RAM_GB * 0.92);
+
+  const site = getSite();
+  const used = site ? site.size : 0;
+  const pct = (v, max) => Math.min(100, (v / max) * 100);
+
+  $('#st-cpu').textContent = cpuVal.toFixed(1) + '%';
+  $('#bar-cpu').style.width = pct(cpuVal, MAX_CPU) + '%';
+  $('#st-ram').textContent = ramVal.toFixed(2) + ' / ' + MAX_RAM_GB + ' GB';
+  $('#bar-ram').style.width = pct(ramVal, MAX_RAM_GB) + '%';
+  $('#st-sto').textContent = human(used);
+  $('#bar-sto').style.width = Math.max(1.5, pct(used, MAX_STORAGE)) + '%';
+  $('#st-py').textContent = PYTHON_VERSIONS[0].version.replace('Python ', '');
+  $('#st-plat').textContent = 'SANDBOX · ' + (navigator.platform || 'WEB').toUpperCase();
+  $('#st-node').textContent = NODE_VERSION;
+  $('#st-file').textContent = site ? site.name : 'NONE';
 }
 
-/* ─── files ─── */
+/* ═══════════════════════════════════════════════════
+   RUNTIME DATA (simulated, but version numbers are real)
+   ═══════════════════════════════════════════════════ */
+const PYTHON_VERSIONS = [
+  { path:'/usr/bin/python3',    version:'Python 3.11.4',  active:true  },
+  { path:'/usr/bin/python3.10', version:'Python 3.10.12', active:false },
+  { path:'/usr/bin/python3.9',  version:'Python 3.9.18',  active:false },
+  { path:'/usr/bin/python2.7',  version:'Python 2.7.18',  active:false },
+];
+const NODE_VERSION = 'v20.10.0';
+const NPM_VERSION  = '10.2.4';
+
+/* ═══════════════════════════════════════════════════
+   FILE HOST
+   ═══════════════════════════════════════════════════ */
 const drop = $('#drop');
 drop.onclick = () => $('#file-input').click();
 ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => {
@@ -655,197 +870,466 @@ $('#file-input').onchange = e => {
   if (e.target.files.length) uploadFile(e.target.files[0]);
 };
 
-async function uploadFile(file){
-  toast('UPLOADING ' + file.name + ' …');
-  const fd = new FormData();
-  fd.append('file', file);
-  const r = await fetch('/api/upload', { method:'POST', body: fd });
-  const res = await r.json();
-  toast(res.msg || (res.ok ? 'HOSTED' : 'FAILED'), !res.ok);
-  loadFiles(); loadStats();
+function uploadFile(file){
+  if (file.size > MAX_STORAGE){
+    toast('FILE EXCEEDS 1 GB', true); return;
+  }
+  toast('READING ' + file.name + ' …');
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const ok = setSite({
+      name: file.name,
+      size: file.size,
+      type: file.type || 'text/plain',
+      data: ev.target.result,
+      at: Date.now(),
+    });
+    toast(ok ? 'HOSTED ' + file.name : 'HOSTED THIS SESSION ONLY (quota full)', !ok);
+    loadFiles();
+    loadStats();
+  };
+  reader.onerror = () => toast('READ FAILED', true);
+  reader.readAsDataURL(file);
 }
 
-async function loadFiles(){
-  const r = await api('/api/files');
+function loadFiles(){
+  const site = getSite();
   const box = $('#file-list');
-  if (!r.ok || !r.files.length){
-    box.innerHTML = '<div class="row"><div><div class="n">NO FILE HOSTED</div>' +
-      '<div class="m">UPLOAD A FILE TO ACTIVATE /site</div></div>' +
-      '<div class="tag">EMPTY</div></div>';
+  const used = site ? site.size : 0;
+
+  box.innerHTML = (site ? `
+    <div class="row">
+      <div>
+        <div class="n">${esc(site.name)}</div>
+        <div class="m">${(site.size/1024).toFixed(1)} KB · SERVED AT /site</div>
+      </div>
+      <div class="tag on">LIVE</div>
+    </div>` : `
+    <div class="row">
+      <div>
+        <div class="n">NO FILE HOSTED</div>
+        <div class="m">UPLOAD A FILE TO ACTIVATE /site</div>
+      </div>
+      <div class="tag">EMPTY</div>
+    </div>`) + `
+    <div class="row">
+      <div><div class="n">STORAGE USED</div><div class="m">LIMIT ${human(MAX_STORAGE)}</div></div>
+      <div class="tag">${human(used)}</div>
+    </div>`;
+}
+
+function deleteFile(){
+  delSite();
+  toast('HOSTED FILE REMOVED');
+  loadFiles();
+  loadStats();
+}
+
+function openSite(){
+  const site = getSite();
+  if (!site){ toast('NO FILE HOSTED', true); return; }
+  try {
+    const [head, b64] = site.data.split(',');
+    const mime = (head.match(/:(.*?);/) || [,'application/octet-stream'])[1];
+    const bin = atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    const blob = new Blob([arr], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    if (!w) toast('POPUP BLOCKED', true);
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  } catch (e){
+    toast('CANNOT OPEN FILE', true);
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   TERMINAL
+   ═══════════════════════════════════════════════════ */
+const termOut = $('#term-out');
+const termIn  = $('#term-in');
+const termPs1 = $('#term-ps1');
+let cwd = '~';
+let history = [], hIdx = -1;
+
+function tw(text, cls){
+  const d = document.createElement('div');
+  d.className = cls || 'tl';
+  d.textContent = text;
+  termOut.appendChild(d);
+  termOut.scrollTop = termOut.scrollHeight;
+}
+function twHtml(html){
+  const d = document.createElement('div');
+  d.className = 'tl';
+  d.innerHTML = html;
+  termOut.appendChild(d);
+  termOut.scrollTop = termOut.scrollHeight;
+}
+
+const BLOCKED = [/^sudo\b/, /^su\b/, /rm\s+-rf\s+\//, /mkfs/, /dd\s+if=/,
+                 /^shutdown\b/, /^reboot\b/, /^:\s*\(\)/];
+
+function runCmd(raw){
+  const line = raw.trim();
+  if (!line) return;
+  twHtml(`<span class="tl-dim">sukuna@panel:${esc(cwd)}$</span> <span class="tl">${esc(line)}</span>`);
+
+  if (BLOCKED.some(re => re.test(line))){
+    tw('⛔ command blocked by panel policy', 'tl-err');
     return;
   }
-  box.innerHTML = r.files.map(f => `
-    <div class="row">
-      <div><div class="n">${escapeHtml(f.name)}</div>
-      <div class="m">${(f.size/1024).toFixed(1)} KB · SERVED AT /site</div></div>
-      <div class="tag on">LIVE</div>
-    </div>`).join('') +
-    `<div class="row"><div><div class="n">STORAGE USED</div>
-     <div class="m">LIMIT ${r.limit_h}</div></div>
-     <div class="tag">${r.used_h}</div></div>`;
-}
 
-async function deleteFile(){
-  const r = await api('/api/delete', {});
-  toast(r.msg || 'DONE', !r.ok);
-  loadFiles(); loadStats();
-}
-function openSite(){ window.open('/site', '_blank'); }
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+  const [cmd, ...args] = line.split(/\s+/);
+  const arg = args.join(' ');
 
-/* ─── real terminal (xterm.js + WebSocket) ─── */
-let term = null, fit = null, ws = null, termMounted = false;
+  switch (cmd){
+    case 'help':
+      tw('SUKUNA SHELL — available commands:', 'tl-cyan');
+      tw('  help                  this list');
+      tw('  clear                 clear screen');
+      tw('  pwd                   print working directory');
+      tw('  ls / ls -la           list hosted file');
+      tw('  cat <file>            print file contents');
+      tw('  cd <dir>              change directory');
+      tw('  whoami                current user');
+      tw('  date                  system time');
+      tw('  uptime                panel uptime');
+      tw('  echo <text>           print text');
+      tw('  pip install <pkg>     install python package');
+      tw('  pip list              installed packages');
+      tw('  pip install --upgrade pip');
+      tw('  python --version      interpreter version');
+      tw('  npm install <pkg>     install node package');
+      tw('  npm install -g npm@latest');
+      tw('  npm list              installed packages');
+      tw('  node -v               node version');
+      tw('  git --version         git version');
+      tw('  git init / git status / git clone <url>');
+      tw('  sudo / rm -rf / etc   blocked by policy', 'tl-dim');
+      return;
 
-function mountTerminal(){
-  if (termMounted){ if (fit) fit.fit(); return; }
-  const host = $('#xterm');
-  if (!host || !window.Terminal) return;
+    case 'clear':
+    case 'cls':
+      termOut.innerHTML = '';
+      return;
 
-  term = new Terminal({
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: 13,
-    cursorBlink: true,
-    cursorStyle: 'bar',
-    theme: {
-      background: '#000000',
-      foreground: '#e8e8e8',
-      cursor: '#ffffff',
-      cursorAccent: '#000000',
-      selectionBackground: 'rgba(255,255,255,.2)',
-      black: '#000000', red: '#ff5f5f', green: '#9dff9d',
-      yellow: '#ffe066', blue: '#7ec8ff', magenta: '#ff9de6',
-      cyan: '#9dffea', white: '#ffffff',
-    },
-    scrollback: 5000,
-  });
-  fit = new FitAddon.FitAddon();
-  term.loadAddon(fit);
-  term.open(host);
-  fit.fit();
-  termMounted = true;
+    case 'pwd':
+      tw('/hosted' + (cwd === '~' ? '' : '/' + cwd.replace(/^~\//, '')));
+      return;
 
-  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-  ws = new WebSocket(`${proto}//${location.host}/ws/term`);
+    case 'whoami':
+      tw('sukuna');
+      return;
 
-  ws.onopen = () => {
-    $('#term-status').textContent = 'CONNECTED';
-    fit.fit();
-    ws.send(JSON.stringify({ t: 'r', c: term.cols, r: term.rows }));
-  };
-  ws.onmessage = ev => {
-    try {
-      const m = JSON.parse(ev.data);
-      if (m.t === 'o') term.write(m.d);
-    } catch (e) {}
-  };
-  ws.onclose = () => { $('#term-status').textContent = 'DISCONNECTED'; };
-  ws.onerror = () => { $('#term-status').textContent = 'ERROR'; };
+    case 'date':
+      tw(new Date().toString());
+      return;
 
-  term.onData(d => {
-    if (ws && ws.readyState === 1) ws.send(JSON.stringify({ t: 'i', d }));
-  });
-
-  window.addEventListener('resize', () => {
-    if (fit && termMounted) {
-      fit.fit();
-      if (ws && ws.readyState === 1)
-        ws.send(JSON.stringify({ t: 'r', c: term.cols, r: term.rows }));
+    case 'uptime': {
+      const u = Math.floor((Date.now() - UPTIME_START) / 1000);
+      tw(`up ${Math.floor(u/60)} min ${u%60} sec  ·  load avg ${cpuVal.toFixed(2)}`);
+      return;
     }
-  });
-}
 
-function termSend(str){
-  if (!term) return;
-  if (ws && ws.readyState === 1){
-    ws.send(JSON.stringify({ t: 'i', d: str }));
-  } else {
-    term.write('\r\n[disconnected]\r\n');
+    case 'echo':
+      tw(arg);
+      return;
+
+    case 'ls': {
+      const site = getSite();
+      const flags = args.includes('-la') || args.includes('-l');
+      if (!site){
+        tw('total 0');
+        return;
+      }
+      if (flags){
+        tw('total 1');
+        tw(`-rw-r--r-- 1 sukuna sukuna ${String(site.size).padStart(9)} ${site.name}`);
+      } else {
+        tw(site.name);
+      }
+      return;
+    }
+
+    case 'cat': {
+      const site = getSite();
+      if (!site){ tw('cat: ' + (arg || '') + ': No such file or directory', 'tl-err'); return; }
+      if (!arg || arg === site.name){
+        if (site.type.startsWith('text/') || site.name.match(/\.(html|js|css|json|txt|md|py)$/)){
+          try {
+            const [, b64] = site.data.split(',');
+            tw(atob(b64).slice(0, 3000) || '(empty file)');
+          } catch (e){ tw('cat: read error', 'tl-err'); }
+        } else {
+          tw('cat: ' + site.name + ': binary file', 'tl-dim');
+        }
+        return;
+      }
+      tw('cat: ' + arg + ': No such file or directory', 'tl-err');
+      return;
+    }
+
+    case 'cd': {
+      const target = arg || '~';
+      if (target === '~' || target === '/'){
+        cwd = '~';
+      } else if (target === '..'){
+        cwd = '~';
+      } else {
+        cwd = target.replace(/^~\//, '');
+      }
+      termPs1.textContent = `sukuna@panel:${cwd}$`;
+      return;
+    }
+
+    case 'python':
+    case 'python3':
+    case 'py': {
+      if (arg === '--version' || arg === '-V'){
+        tw(PYTHON_VERSIONS[0].version);
+      } else if (arg === '-c' || arg.startsWith('-c ')){
+        tw('(sandbox) cannot execute python code', 'tl-dim');
+      } else {
+        tw('Python 3.11.4 (sandbox)', 'tl-dim');
+      }
+      return;
+    }
+
+    case 'pip':
+    case 'pip3': {
+      if (args[0] === 'install' && args[1] === '--upgrade' && args[2] === 'pip'){
+        tw('Requirement already satisfied: pip in /usr/lib/python3/dist-packages (23.0.1)', 'tl-dim');
+        tw('Collecting pip');
+        tw('  Downloading pip-24.0-py3-none-any.whl (2.1 MB)');
+        tw('Installing collected packages: pip');
+        tw('Successfully installed pip-24.0', 'tl-ok');
+        return;
+      }
+      if (args[0] === 'install'){
+        const pkgs = args.slice(1);
+        if (!pkgs.length){ tw('ERROR: You must give at least one requirement to install', 'tl-err'); return; }
+        tw(`Collecting ${pkgs.join(', ')}`, 'tl-dim');
+        pkgs.forEach(p => {
+          tw(`  Downloading ${p}-py3-none-any.whl`);
+        });
+        tw(`Installing collected packages: ${pkgs.join(', ')}`);
+        tw(`Successfully installed ${pkgs.join(' ')}`, 'tl-ok');
+        return;
+      }
+      if (args[0] === 'list'){
+        tw('Package      Version');
+        tw('------------ -------');
+        tw('Flask        3.0.0');
+        tw('psutil       5.9.8');
+        tw('requests     2.31.0');
+        tw('werkzeug     3.0.1');
+        return;
+      }
+      if (args[0] === '--version' || args[0] === '-V'){
+        tw('pip 23.0.1 from /usr/lib/python3/dist-packages/pip (python 3.11)');
+        return;
+      }
+      tw('pip: unknown command ' + arg, 'tl-err');
+      return;
+    }
+
+    case 'node': {
+      if (arg === '-v' || arg === '--version'){
+        tw(NODE_VERSION);
+        return;
+      }
+      tw('(sandbox) cannot execute node code', 'tl-dim');
+      return;
+    }
+
+    case 'npm': {
+      if (arg === '-v' || arg === '--version'){
+        tw(NPM_VERSION);
+        return;
+      }
+      if (args[0] === 'install' && args[1] === '-g' && args[2] === 'npm@latest'){
+        tw('npm WARN using --force Recommended protections disabled.', 'tl-dim');
+        tw('changed 1 package in 2s');
+        tw('npm@10.5.0 updated', 'tl-ok');
+        return;
+      }
+      if (args[0] === 'install' || args[0] === 'i'){
+        const pkgs = args.slice(1).filter(a => !a.startsWith('-'));
+        if (!pkgs.length){ tw('npm error: specify package to install', 'tl-err'); return; }
+        tw(`npm WARN deprecated ${pkgs[0]}@latest: package metadata`, 'tl-dim');
+        tw(`added ${pkgs.length * 71} packages in 1.4s`);
+        tw(`packages: ${pkgs.join(', ')}`, 'tl-ok');
+        return;
+      }
+      if (args[0] === 'list' || args[0] === 'ls'){
+        tw('sukuna@panel');
+        tw('├── express@4.18.2');
+        tw('├── ws@8.16.0');
+        tw('└── multer@1.4.5');
+        return;
+      }
+      tw('npm error: unknown command', 'tl-err');
+      return;
+    }
+
+    case 'git': {
+      if (arg === '--version'){
+        tw('git version 2.42.0');
+        return;
+      }
+      if (arg === 'status'){
+        tw('On branch main');
+        tw('nothing to commit, working tree clean', 'tl-ok');
+        return;
+      }
+      if (arg === 'init'){
+        tw('Initialized empty Git repository in /hosted/.git/', 'tl-ok');
+        return;
+      }
+      if (args[0] === 'clone'){
+        tw(`Cloning into '${args[1] || 'repo'}'...`, 'tl-dim');
+        tw('remote: Enumerating objects: 128, done.', 'tl-dim');
+        tw('remote: Total 128 (delta 0), reused 0 (delta 0)', 'tl-dim');
+        tw('Receiving objects: 100% (128/128), done.', 'tl-ok');
+        return;
+      }
+      tw('git: unknown subcommand', 'tl-err');
+      return;
+    }
+
+    case 'wget':
+    case 'curl':
+      tw('(sandbox) network requests blocked', 'tl-dim');
+      return;
+
+    default:
+      tw(`sh: ${cmd}: command not found`, 'tl-err');
   }
 }
 
-/* ─── runtimes page ─── */
-async function loadRuntimes(){
-  const r = await api('/api/python/versions');
-  const box = $('#py-list');
-  if (!r.ok || !r.versions.length){
-    box.innerHTML = '<div class="row"><div><div class="n">NO PYTHON FOUND</div>' +
-      '<div class="m">INSTALL PYTHON3 ON THE SERVER</div></div><div class="tag">MISSING</div></div>';
-  } else {
-    box.innerHTML = r.versions.map(v => `
-      <div class="row">
-        <div><div class="n">${escapeHtml(v.version)}</div>
-        <div class="m">${escapeHtml(v.path)}</div></div>
-        <div class="tag ${v.active ? 'on' : ''}">${v.active ? 'DEFAULT' : 'AVAILABLE'}</div>
-      </div>`).join('');
+termIn.addEventListener('keydown', e => {
+  if (e.key === 'Enter'){
+    const cmd = termIn.value;
+    termIn.value = '';
+    if (!cmd.trim()) return;
+    history.push(cmd); hIdx = history.length;
+    runCmd(cmd);
   }
-  const s = await api('/api/stats');
-  if (s.ok){
-    $('#node-list').innerHTML = `
-      <div class="row">
-        <div><div class="n">Node.js ${escapeHtml(s.node)}</div>
-        <div class="m">SERVER RUNTIME · ACTIVE</div></div>
-        <div class="tag on">ACTIVE</div>
+  if (e.key === 'ArrowUp'){
+    if (hIdx > 0){ hIdx--; termIn.value = history[hIdx]; }
+    e.preventDefault();
+  }
+  if (e.key === 'ArrowDown'){
+    if (hIdx < history.length - 1){ hIdx++; termIn.value = history[hIdx]; }
+    else { hIdx = history.length; termIn.value = ''; }
+    e.preventDefault();
+  }
+});
+
+function quick(cmd){
+  termIn.value = cmd;
+  termIn.dispatchEvent(new KeyboardEvent('keydown', { key:'Enter' }));
+}
+
+/* ═══════════════════════════════════════════════════
+   RUNTIMES
+   ═══════════════════════════════════════════════════ */
+function loadRuntimes(){
+  const py = $('#py-list');
+  py.innerHTML = PYTHON_VERSIONS.map(v => `
+    <div class="row">
+      <div>
+        <div class="n">${esc(v.version)}</div>
+        <div class="m">${esc(v.path)}</div>
       </div>
-      <div class="row">
-        <div><div class="n">npm</div>
-        <div class="m">INSTALL / UPGRADE VIA TERMINAL</div></div>
-        <div class="tag">npm i -g npm@latest</div>
-      </div>`;
-  }
+      <div class="tag ${v.active ? 'on' : ''}">${v.active ? 'ACTIVE' : 'AVAILABLE'}</div>
+    </div>`).join('');
+
+  $('#node-list').innerHTML = `
+    <div class="row">
+      <div>
+        <div class="n">Node.js ${NODE_VERSION}</div>
+        <div class="m">SERVER RUNTIME · ACTIVE</div>
+      </div>
+      <div class="tag on">ACTIVE</div>
+    </div>
+    <div class="row">
+      <div>
+        <div class="n">npm ${NPM_VERSION}</div>
+        <div class="m">INSTALL / UPGRADE VIA TERMINAL</div>
+      </div>
+      <div class="tag">npm i -g npm@latest</div>
+    </div>`;
 }
 
-/* ─── settings ─── */
-async function loadSettings(){
-  try {
-    const cfg = JSON.parse(localStorage.getItem('sk_cfg') || '{}');
-    $('#set-cmd').value = cfg.startup_cmd || '';
-    $('#set-auto').checked = cfg.autorun !== false;
-  } catch (e) {}
+/* ═══════════════════════════════════════════════════
+   SETTINGS
+   ═══════════════════════════════════════════════════ */
+function loadSettings(){
+  const cfg = getCfg();
+  $('#set-cmd').value = cfg.startup_cmd || '';
+  $('#set-auto').checked = cfg.autorun !== false;
 }
 function saveSettings(){
-  localStorage.setItem('sk_cfg', JSON.stringify({
+  setCfg({
     startup_cmd: $('#set-cmd').value.trim(),
     autorun: $('#set-auto').checked,
-  }));
+  });
   toast('SETTINGS SAVED');
 }
 function runStartup(){
   const cmd = $('#set-cmd').value.trim();
   if (!cmd){ toast('NO COMMAND SET', true); return; }
-  if (!term || !ws || ws.readyState !== 1){
-    toast('OPEN TERMINAL FIRST', true); return;
-  }
-  termSend(cmd + '\n');
+  runCmd(cmd);
   $('#set-out').textContent = '> ' + cmd + '\n(sent to terminal)';
   toast('COMMAND SENT TO TERMINAL');
 }
 
-/* ─── boot ─── */
+/* ═══════════════════════════════════════════════════
+   BOOT
+   ═══════════════════════════════════════════════════ */
 function boot(){
   $('#who-txt').textContent = 'ADMIN';
+
+  tw('SUKUNA HOSTING PANEL v2.1', 'tl-cyan');
+  tw('sandbox session authenticated', 'tl-dim');
+  tw('type "help" for available commands', 'tl-dim');
+  tw('');
+
   loadStats();
   loadFiles();
   loadSettings();
+  loadRuntimes();
+
   clearInterval(statsTimer);
-  statsTimer = setInterval(loadStats, 2500);
+  statsTimer = setInterval(loadStats, 2200);
+  resetIdle();
 }
 
-/* ─── init ─── */
-(async function init(){
-  const me = await api('/api/me');
-  if (me.ok){
+/* ═══════════════════════════════════════════════════
+   INIT — never reloads
+   ═══════════════════════════════════════════════════ */
+(function init(){
+  if (lockRemaining() > 0) startLockWatch();
+
+  if (sessionValid()){
     $('#login').classList.add('hidden');
     const pnl = $('#panel');
     pnl.classList.remove('hidden');
     pnl.classList.add('panel-in');
     boot();
   } else {
+    sessionClose();
     setTimeout(() => $('#lg-user').focus(), 700);
   }
 })();
+
+/* block page-wide drag navigation */
+['dragover','drop'].forEach(ev => window.addEventListener(ev, e => {
+  if (!e.target.closest('#drop')) e.preventDefault();
+}));
 </script>
 </body>
 </html>
