@@ -3,107 +3,111 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<meta name="referrer" content="no-referrer">
 <title>SUKUNA HOSTING PANEL</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
+<script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════ RESET / TOKENS ═══════════════ */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#040404;--panel:#0a0a0a;
-  --line:#1c1c1c;--line2:#2b2b2b;
-  --txt:#ffffff;--dim:#8a8a8a;--dimmer:#5a5a5a;
+  --bg:#030303;--line:#181818;--line2:#272727;
+  --txt:#fff;--dim:#8a8a8a;--dimmer:#565656;
   --glow:0 0 6px rgba(255,255,255,.20),0 0 20px rgba(255,255,255,.10);
-  --glow2:0 0 10px rgba(255,255,255,.40),0 0 34px rgba(255,255,255,.16);
-  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --glow2:0 0 10px rgba(255,255,255,.45),0 0 36px rgba(255,255,255,.16);
+  --mono:'JetBrains Mono',Consolas,monospace;
   --sans:'Orbitron','Segoe UI',system-ui,sans-serif;
-  --ease:cubic-bezier(.2,.8,.2,1);
+  --ease:cubic-bezier(.22,.85,.24,1);
 }
 html,body{height:100%}
 body{
   background:
-    radial-gradient(1100px 700px at 15% -10%,#151515 0%,transparent 58%),
-    radial-gradient(900px 650px at 112% 112%,#101010 0%,transparent 55%),
+    radial-gradient(1200px 800px at 10% -20%,#191919 0%,transparent 60%),
+    radial-gradient(900px 700px at 115% 115%,#141414 0%,transparent 55%),
+    radial-gradient(600px 400px at 50% 50%,#0a0a0a 0%,transparent 70%),
     var(--bg);
   color:var(--txt);font-family:var(--sans);text-shadow:var(--glow);
-  overflow:hidden;-webkit-font-smoothing:antialiased;
-  user-select:none;
+  overflow:hidden;-webkit-font-smoothing:antialiased;user-select:none;
 }
-input,textarea{user-select:text}
+input,textarea,.xterm{user-select:text}
 .hidden{display:none !important}
 
-/* ═══════════════ BACKGROUND FX ═══════════════ */
+/* ═══ ANIMATED BACKGROUND ═══ */
 body::before{
   content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
   background-image:
-    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:64px 64px,64px 64px;
-  animation:gridMove 14s linear infinite;
-  mask-image:radial-gradient(circle at 50% 50%,#000 25%,transparent 78%);
-  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 25%,transparent 78%);
+    linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:56px 56px,56px 56px;
+  animation:gridDrift 18s linear infinite;
+  mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%);
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%);
 }
-@keyframes gridMove{from{background-position:0 0,0 0}to{background-position:64px 64px,64px 64px}}
-.orb{position:fixed;border-radius:50%;filter:blur(60px);opacity:.14;z-index:0;
-  pointer-events:none;background:#fff;animation:floaty 16s ease-in-out infinite}
-.orb.a{width:340px;height:340px;top:-90px;left:-70px}
-.orb.b{width:280px;height:280px;bottom:-90px;right:-60px;animation-delay:-6s}
-.orb.c{width:200px;height:200px;top:45%;left:60%;animation-delay:-11s}
-@keyframes floaty{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-50px) scale(1.12)}}
+@keyframes gridDrift{from{background-position:0 0,0 0}to{background-position:56px 56px,56px 56px}}
+.scanline{
+  position:fixed;left:0;right:0;height:120px;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.035),transparent);
+  animation:scanDown 9s linear infinite;
+}
+@keyframes scanDown{from{top:-140px}to{top:100%}}
+.orb{position:fixed;border-radius:50%;filter:blur(70px);opacity:.13;z-index:0;
+  pointer-events:none;background:#fff;animation:floaty 20s ease-in-out infinite}
+.orb.a{width:380px;height:380px;top:-100px;left:-80px}
+.orb.b{width:300px;height:300px;bottom:-100px;right:-70px;animation-delay:-7s}
+.orb.c{width:220px;height:220px;top:40%;left:55%;animation-delay:-13s}
+@keyframes floaty{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(50px,-60px) scale(1.15)}}
 
-/* ═══════════════ GLOBAL KEYFRAMES ═══════════════ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@keyframes slideUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
-@keyframes slideRight{from{opacity:0;transform:translateX(-46px)}to{opacity:1;transform:none}}
-@keyframes slideLeftIn{from{opacity:0;transform:translateX(52px)}to{opacity:1;transform:none}}
-@keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-52px)}}
+/* ═══ KEYFRAMES ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes slideL{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
 @keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-@keyframes letterIn{from{opacity:0;transform:translateY(22px) rotateX(-70deg)}to{opacity:1;transform:none}}
-@keyframes shine{0%,70%{left:-120%}100%{left:150%}}
+@keyframes letterIn{from{opacity:0;transform:translateY(30px) rotateX(-80deg)}to{opacity:1;transform:none}}
+@keyframes shine{0%,70%{left:-130%}100%{left:160%}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 @keyframes glowPulse{
   0%,100%{text-shadow:0 0 6px rgba(255,255,255,.22),0 0 22px rgba(255,255,255,.10)}
-  50%{text-shadow:0 0 12px rgba(255,255,255,.55),0 0 40px rgba(255,255,255,.28)}}
+  50%{text-shadow:0 0 12px rgba(255,255,255,.6),0 0 42px rgba(255,255,255,.30)}}
 @keyframes spinRing{to{transform:rotate(360deg)}}
-@keyframes scanX{0%,100%{transform:scaleX(.2);opacity:.2}50%{transform:scaleX(1);opacity:.75}}
+@keyframes scanX{0%,100%{transform:scaleX(.15);opacity:.2}50%{transform:scaleX(1);opacity:.8}}
 @keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}
   30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
-@keyframes sweep{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+@keyframes pageIn{from{opacity:0;transform:translateX(50px) scale(.985);filter:blur(4px)}
+  to{opacity:1;transform:none;filter:none}}
+@keyframes pageOut{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-50px);filter:blur(4px)}}
+@keyframes sweepLine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@keyframes cursorPulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes cardTilt{from{transform:perspective(900px) rotateX(0) rotateY(0)}to{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}}
+@keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes loginOut{to{opacity:0;transform:translateY(-70px) scale(.92);filter:blur(8px)}}
 
-/* ═══════════════ LOGIN ═══════════════ */
+/* ═══ LOGIN ═══ */
 #login{position:fixed;inset:0;display:grid;place-items:center;z-index:20;padding:20px;
-  animation:popIn .7s var(--ease) both}
-#login.login-out{animation:loginOut .6s var(--ease) forwards}
-@keyframes loginOut{
-  to{opacity:0;transform:translateY(-60px) scale(.94);filter:blur(6px)}
-}
+  animation:popIn .8s var(--ease) both}
+#login.login-out{animation:loginOut .65s var(--ease) forwards}
 .login-card{
-  position:relative;width:min(430px,94vw);padding:44px 34px 34px;
-  background:rgba(8,8,8,.88);border:1px solid var(--line);border-radius:20px;
-  backdrop-filter:blur(14px);
-  box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 30px 80px rgba(0,0,0,.9);
-  animation:cardIn .95s var(--ease) both;overflow:hidden;
+  position:relative;width:min(430px,94vw);padding:46px 34px 36px;
+  background:rgba(8,8,8,.9);border:1px solid var(--line);border-radius:22px;
+  backdrop-filter:blur(16px);
+  box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 40px 90px rgba(0,0,0,.95);
+  animation:cardIn 1s var(--ease) both;overflow:hidden;
 }
-@keyframes cardIn{
-  from{opacity:0;transform:translateY(46px) rotateX(14deg) scale(.94)}
-  to{opacity:1;transform:none}
-}
+@keyframes cardIn{from{opacity:0;transform:translateY(50px) rotateX(12deg) scale(.94)}
+  to{opacity:1;transform:none}}
 .login-card::before{
-  content:"";position:absolute;inset:-2px;border-radius:22px;padding:2px;z-index:-1;
-  background:conic-gradient(from 0deg,transparent 0 60%,rgba(255,255,255,.85) 78%,transparent 92%);
-  animation:spinRing 5.5s linear infinite;filter:blur(.4px);
+  content:"";position:absolute;inset:-2px;border-radius:24px;padding:2px;z-index:-1;
+  background:conic-gradient(from 0deg,transparent 0 62%,rgba(255,255,255,.9) 80%,transparent 94%);
+  animation:spinRing 6s linear infinite;filter:blur(.5px);
 }
-.login-card::after{content:"";position:absolute;inset:0;border-radius:20px;background:#080808;z-index:-1}
+.login-card::after{content:"";position:absolute;inset:0;border-radius:22px;background:#080808;z-index:-1}
 .brand{font-size:23px;font-weight:900;letter-spacing:5px;text-align:center;
-  animation:glowPulse 2.6s ease-in-out infinite;display:flex;justify-content:center;gap:2px}
-.brand span{display:inline-block;animation:letterIn .8s var(--ease) both}
-.brand small{display:block;width:100%;margin-top:12px;font-size:10px;letter-spacing:7px;
-  color:var(--dim);font-weight:500;text-shadow:var(--glow);animation:letterIn .9s .5s var(--ease) both}
+  display:flex;justify-content:center;flex-wrap:wrap;animation:glowPulse 2.6s ease-in-out infinite}
+.brand span{display:inline-block;animation:letterIn .9s var(--ease) both}
+.brand small{width:100%;margin-top:12px;font-size:10px;letter-spacing:7px;color:var(--dim);
+  font-weight:500;animation:letterIn 1s .55s var(--ease) both}
 .scan{height:1px;background:linear-gradient(90deg,transparent,#fff,transparent);
-  margin:26px 0;opacity:.5;animation:scanX 3s ease-in-out infinite}
+  margin:26px 0;opacity:.55;animation:scanX 3s ease-in-out infinite}
 .field{margin-bottom:16px;animation:fadeUp .7s var(--ease) both}
 .field:nth-of-type(1){animation-delay:.35s}
 .field:nth-of-type(2){animation-delay:.45s}
@@ -111,10 +115,10 @@ body::before{
 .field input{
   width:100%;padding:14px 46px 14px 15px;background:#050505;border:1px solid var(--line2);
   border-radius:11px;color:#fff;font-family:var(--mono);font-size:14px;
-  outline:none;transition:.28s;text-shadow:var(--glow);autocomplete:off;
+  outline:none;transition:.3s;text-shadow:var(--glow);
 }
-.field input::placeholder{color:#3f3f3f}
-.field input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.07),var(--glow);
+.field input::placeholder{color:#3a3a3a}
+.field input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.08),var(--glow);
   transform:translateY(-1px)}
 .pw-wrap{position:relative}
 .eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);
@@ -124,7 +128,7 @@ body::before{
 .btn{
   width:100%;padding:14px;border-radius:11px;border:1px solid #fff;cursor:pointer;
   background:#fff;color:#000;font-family:var(--sans);font-weight:700;
-  letter-spacing:3px;font-size:12px;transition:.28s;position:relative;overflow:hidden;
+  letter-spacing:3px;font-size:12px;transition:.3s;position:relative;overflow:hidden;
   animation:fadeUp .7s .55s var(--ease) both;
 }
 .btn:hover{background:#000;color:#fff;box-shadow:var(--glow2);transform:translateY(-2px)}
@@ -132,23 +136,22 @@ body::before{
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .btn.ghost{background:transparent;color:#fff;border:1px solid var(--line2)}
 .btn.ghost:hover{border-color:#fff;box-shadow:var(--glow)}
-.btn::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;
+.btn::after{content:"";position:absolute;top:0;left:-130%;width:60%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
   transform:skewX(-20deg);animation:shine 4.5s ease-in-out infinite}
 .btn.ghost::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)}
 .msg{margin-top:14px;text-align:center;font-size:11px;letter-spacing:2px;
   color:#ff6b6b;min-height:16px;text-shadow:0 0 10px rgba(255,107,107,.6)}
 .msg.shake{animation:shake .45s ease}
-.hint{margin-top:20px;text-align:center;font-size:9px;color:var(--dimmer);letter-spacing:2px}
-.lock{margin-top:10px;text-align:center;font-size:9px;letter-spacing:2px;color:#ffb84d;min-height:14px}
+.hint{margin-top:22px;text-align:center;font-size:9px;color:var(--dimmer);letter-spacing:2px}
 
-/* ═══════════════ PANEL SHELL ═══════════════ */
-#panel{position:relative;z-index:5;display:grid;grid-template-columns:238px 1fr;height:100vh}
+/* ═══ PANEL SHELL ═══ */
+#panel{position:relative;z-index:5;display:grid;grid-template-columns:240px 1fr;height:100vh}
 #panel.panel-in{animation:popIn .6s var(--ease) both}
 aside{
-  border-right:1px solid var(--line);background:rgba(7,7,7,.85);
-  backdrop-filter:blur(12px);padding:24px 16px;display:flex;flex-direction:column;gap:8px;
-  animation:slideRight .8s var(--ease) both;
+  border-right:1px solid var(--line);background:rgba(6,6,6,.85);
+  backdrop-filter:blur(14px);padding:24px 16px;display:flex;flex-direction:column;gap:8px;
+  animation:slideR .85s var(--ease) both;
 }
 .side-brand{font-size:15px;font-weight:900;letter-spacing:4px;text-align:center;
   padding-bottom:18px;margin-bottom:10px;border-bottom:1px solid var(--line);
@@ -160,9 +163,9 @@ aside{
   position:relative;display:flex;align-items:center;gap:11px;padding:12px 14px;
   border-radius:10px;background:transparent;border:1px solid transparent;color:var(--dim);
   font-family:var(--sans);font-size:11px;letter-spacing:2px;cursor:pointer;
-  transition:transform .28s var(--ease),color .25s,border-color .25s,background .25s;
+  transition:transform .3s var(--ease),color .25s,border-color .25s,background .25s;
   text-align:left;width:100%;text-shadow:var(--glow);
-  animation:slideRight .6s var(--ease) both;
+  animation:slideR .6s var(--ease) both;
 }
 .nav button:nth-child(1){animation-delay:.10s}
 .nav button:nth-child(2){animation-delay:.16s}
@@ -190,36 +193,31 @@ main::-webkit-scrollbar-thumb:hover{background:#3a3a3a}
 .topbar{display:flex;align-items:center;justify-content:space-between;
   margin-bottom:28px;animation:fadeUp .6s both}
 .topbar h1{font-size:19px;letter-spacing:5px;font-weight:700;
-  animation:slideLeftIn .7s var(--ease) both}
+  animation:slideL .7s var(--ease) both}
 .topbar .who{font-size:10px;letter-spacing:2px;color:var(--dim);
-  animation:slideRight .7s var(--ease) both}
+  animation:slideR .7s var(--ease) both}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;
   margin-right:7px;box-shadow:0 0 10px #fff;animation:blink 1.6s ease-in-out infinite}
 
-/* ═══════════════ PAGE SLIDE TRANSITIONS ═══════════════ */
+/* ═══ PAGE TRANSITIONS ═══ */
 main section{position:relative}
 main section.page-in{animation:pageIn .5s var(--ease) both}
-main section.page-out{animation:pageOut .26s ease both}
-@keyframes pageIn{from{opacity:0;transform:translateX(56px)}to{opacity:1;transform:none}}
-@keyframes pageOut{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-56px)}}
-
-/* sweep line while switching */
+main section.page-out{animation:pageOut .28s ease both}
 #sweep{position:absolute;top:0;left:0;right:0;height:2px;overflow:hidden;
   opacity:0;pointer-events:none;z-index:30}
 #sweep.on{opacity:1}
 #sweep::after{content:"";position:absolute;inset:0;
   background:linear-gradient(90deg,transparent,#fff,transparent);
-  animation:sweep .55s linear}
-@keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  animation:sweepLine .6s linear}
 
-/* ═══════════════ CARDS ═══════════════ */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px}
+/* ═══ CARDS ═══ */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
 .card{
-  background:linear-gradient(160deg,#0c0c0c,#070707);
-  border:1px solid var(--line);border-radius:15px;padding:20px;
-  position:relative;overflow:hidden;
-  transition:transform .35s var(--ease),border-color .3s,box-shadow .3s;
-  animation:slideUp .6s var(--ease) both;
+  background:linear-gradient(160deg,#0d0d0d,#070707);
+  border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;
+  overflow:hidden;
+  transition:transform .4s var(--ease),border-color .3s,box-shadow .3s;
+  animation:slideUp .7s var(--ease) both;transform-style:preserve-3d;
 }
 .grid .card:nth-child(1){animation-delay:.05s}
 .grid .card:nth-child(2){animation-delay:.11s}
@@ -227,72 +225,63 @@ main section.page-out{animation:pageOut .26s ease both}
 .grid .card:nth-child(4){animation-delay:.23s}
 .grid .card:nth-child(5){animation-delay:.29s}
 .grid .card:nth-child(6){animation-delay:.35s}
-.card:hover{border-color:#fff;transform:translateY(-6px);
-  box-shadow:0 18px 50px rgba(0,0,0,.85),var(--glow)}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.card:hover{border-color:#fff;box-shadow:0 24px 60px rgba(0,0,0,.9),var(--glow)}
 .card::after{content:"";position:absolute;top:0;left:-100%;width:55%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
   transform:skewX(-18deg);animation:shine 6s ease-in-out infinite}
-.card .k{font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:12px}
-.card .v{font-size:27px;font-weight:900;letter-spacing:1px;text-shadow:var(--glow2);
-  font-family:var(--mono)}
-.card .s{font-size:9px;color:var(--dimmer);margin-top:9px;letter-spacing:2px}
-.bar{height:6px;background:#161616;border-radius:99px;overflow:hidden;margin-top:15px}
+.card .k{font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:14px}
+.card .v{font-size:26px;font-weight:900;letter-spacing:1px;text-shadow:var(--glow2);
+  font-family:var(--mono);animation:countUp .6s var(--ease) both}
+.card .s{font-size:9px;color:var(--dimmer);margin-top:10px;letter-spacing:2px}
+.bar{height:6px;background:#161616;border-radius:99px;overflow:hidden;margin-top:16px}
 .bar>i{display:block;height:100%;width:0;border-radius:99px;
   background:linear-gradient(90deg,#6b6b6b,#fff);
-  box-shadow:0 0 14px rgba(255,255,255,.65);
-  transition:width .9s var(--ease)}
+  box-shadow:0 0 16px rgba(255,255,255,.7);
+  transition:width 1s var(--ease)}
 
-/* ═══════════════ TERMINAL ═══════════════ */
+/* ═══ TERMINAL ═══ */
 .term{background:#000;border:1px solid var(--line2);border-radius:14px;overflow:hidden;
-  box-shadow:0 24px 70px rgba(0,0,0,.9),var(--glow);
-  animation:slideUp .6s .1s var(--ease) both}
+  box-shadow:0 28px 80px rgba(0,0,0,.95),var(--glow);
+  animation:slideUp .7s .1s var(--ease) both}
 .term-head{display:flex;align-items:center;gap:8px;padding:11px 15px;
   background:#0a0a0a;border-bottom:1px solid var(--line2)}
 .term-head b{width:10px;height:10px;border-radius:50%;background:#3a3a3a;display:inline-block}
 .term-head b:first-child{background:#fff;box-shadow:0 0 10px #fff}
 .term-head span{margin-left:auto;font-size:9px;letter-spacing:3px;color:var(--dim)}
-#term-out{height:min(52vh,430px);overflow-y:auto;padding:16px;font-family:var(--mono);
-  font-size:12.5px;line-height:1.65;white-space:pre-wrap;word-break:break-word;
-  color:#e8e8e8;text-shadow:var(--glow)}
-#term-out::-webkit-scrollbar{width:7px}
-#term-out::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
-#term-out>div{animation:slideRight .35s var(--ease) both}
-.term-line{display:flex;align-items:center;gap:9px;padding:12px 16px;
-  border-top:1px solid var(--line2);background:#070707;font-family:var(--mono);font-size:13px}
-.term-line span{color:#fff;text-shadow:var(--glow2)}
-.term-line input{flex:1;background:transparent;border:none;outline:none;color:#fff;
-  font-family:var(--mono);font-size:13px;text-shadow:var(--glow)}
-.term-line input::placeholder{color:#3a3a3a}
+#xterm{height:min(56vh,470px);padding:10px;background:#000}
+#xterm .xterm-viewport{background:#000 !important}
+#xterm .xterm-viewport::-webkit-scrollbar{width:7px}
+#xterm .xterm-viewport::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
 
-/* ═══════════════ ROWS / FORMS / MISC ═══════════════ */
+/* ═══ ROWS / FORMS ═══ */
 .row{display:flex;align-items:center;justify-content:space-between;gap:14px;
   padding:15px 18px;border:1px solid var(--line);border-radius:12px;background:#0a0a0a;
   margin-bottom:10px;transition:transform .3s var(--ease),border-color .25s,box-shadow .25s;
-  animation:slideRight .45s var(--ease) both}
-.row:nth-child(1){animation-delay:.04s}
-.row:nth-child(2){animation-delay:.10s}
-.row:nth-child(3){animation-delay:.16s}
-.row:nth-child(4){animation-delay:.22s}
-.row:nth-child(5){animation-delay:.28s}
+  animation:slideR .5s var(--ease) both}
+.row:nth-child(1){animation-delay:.05s}
+.row:nth-child(2){animation-delay:.11s}
+.row:nth-child(3){animation-delay:.17s}
+.row:nth-child(4){animation-delay:.23s}
+.row:nth-child(5){animation-delay:.29s}
 .row:hover{border-color:#fff;transform:translateX(7px);box-shadow:var(--glow)}
 .row .n{font-family:var(--mono);font-size:13px;letter-spacing:.5px}
 .row .m{font-size:9px;color:var(--dim);letter-spacing:2px;margin-top:5px}
 .tag{font-size:9px;padding:5px 11px;border:1px solid var(--line2);border-radius:99px;
   letter-spacing:2px;color:var(--dim);white-space:nowrap}
 .tag.on{border-color:#fff;color:#fff;box-shadow:var(--glow)}
-.drop{border:1.5px dashed var(--line2);border-radius:15px;padding:44px 20px;text-align:center;
-  transition:.35s var(--ease);cursor:pointer;background:#070707;
+.drop{border:1.5px dashed var(--line2);border-radius:15px;padding:48px 20px;text-align:center;
+  transition:.4s var(--ease);cursor:pointer;background:#070707;
   animation:slideUp .6s var(--ease) both}
 .drop:hover,.drop.over{border-color:#fff;background:#0d0d0d;box-shadow:var(--glow);
-  transform:scale(1.012)}
-.drop.over{animation:none}
+  transform:scale(1.015)}
 .drop h3{font-size:13px;letter-spacing:4px;margin-bottom:10px}
 .drop p{font-size:10px;color:var(--dim);letter-spacing:2px}
-input.txt,textarea.txt,select.txt{width:100%;padding:13px 15px;background:#050505;
+input.txt,textarea.txt{width:100%;padding:13px 15px;background:#050505;
   border:1px solid var(--line2);border-radius:11px;color:#fff;font-family:var(--mono);
   font-size:13px;outline:none;transition:.25s;text-shadow:var(--glow)}
 input.txt::placeholder{color:#3a3a3a}
-input.txt:focus,textarea.txt:focus,select.txt:focus{border-color:#fff;box-shadow:var(--glow)}
+input.txt:focus,textarea.txt:focus{border-color:#fff;box-shadow:var(--glow)}
 label.lbl{display:block;font-size:9px;letter-spacing:3px;color:var(--dim);margin:18px 0 9px}
 .switch{display:flex;align-items:center;gap:12px;margin-top:18px;font-size:10px;
   letter-spacing:2px;color:var(--dim);cursor:pointer}
@@ -305,26 +294,24 @@ label.lbl{display:block;font-size:9px;letter-spacing:3px;color:var(--dim);margin
 pre.out{background:#000;border:1px solid var(--line);border-radius:11px;padding:14px;
   font-family:var(--mono);font-size:12px;color:#ddd;max-height:260px;overflow:auto;
   white-space:pre-wrap;text-shadow:var(--glow);margin-top:14px;
-  animation:slideUp .45s var(--ease) both}
+  animation:slideUp .5s var(--ease) both}
 .badge{display:inline-block;font-size:9px;letter-spacing:3px;padding:6px 12px;
   border:1px solid var(--line2);border-radius:99px;color:var(--dim);margin-bottom:18px;
-  animation:slideRight .5s var(--ease) both}
+  animation:slideR .5s var(--ease) both}
 h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;font-weight:500;
-  animation:slideRight .5s .05s var(--ease) both}
-.note{font-size:10px;letter-spacing:1.5px;color:var(--dimmer);line-height:1.9;
-  border-left:2px solid var(--line2);padding-left:12px;margin-top:14px;
-  animation:fadeUp .6s var(--ease) both}
+  animation:slideR .5s .05s var(--ease) both}
 
-/* toast */
 #toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,110px);
   background:#fff;color:#000;padding:13px 26px;border-radius:11px;font-size:11px;
   letter-spacing:2px;font-weight:700;z-index:99;
-  transition:transform .5s var(--ease),opacity .4s;
-  box-shadow:0 0 34px rgba(255,255,255,.5);opacity:0}
+  transition:transform .55s var(--ease),opacity .4s;
+  box-shadow:0 0 36px rgba(255,255,255,.55);opacity:0;overflow:hidden}
 #toast.show{transform:translate(-50%,0);opacity:1}
-#toast.err{background:#ff4d4d;color:#fff;box-shadow:0 0 34px rgba(255,77,77,.6)}
+#toast.err{background:#ff4d4d;color:#fff;box-shadow:0 0 36px rgba(255,77,77,.65)}
+#toast::after{content:"";position:absolute;bottom:0;left:0;height:2px;background:rgba(0,0,0,.3);
+  animation:toastBar 2.8s linear forwards}
+@keyframes toastBar{from{width:100%}to{width:0}}
 
-/* ═══════════════ RESPONSIVE ═══════════════ */
 @media(max-width:840px){
   #panel{grid-template-columns:1fr}
   aside{flex-direction:row;overflow-x:auto;border-right:none;
@@ -343,37 +330,33 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
 </head>
 <body>
 
+<div class="scanline"></div>
 <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
 
-<!-- ══════════════ LOGIN ══════════════ -->
+<!-- ══════ LOGIN ══════ -->
 <div id="login">
   <div class="login-card">
     <div class="brand" id="brand"></div>
     <div class="scan"></div>
-
     <div class="field">
       <label>LOGIN ID</label>
       <input id="lg-user" type="text" autocomplete="off" autocorrect="off"
              autocapitalize="off" spellcheck="false" placeholder="enter id">
     </div>
-
     <div class="field">
       <label>PASSWORD</label>
       <div class="pw-wrap">
-        <input id="lg-pass" type="password" autocomplete="new-password"
-               placeholder="enter password">
-        <button class="eye" id="eye" type="button" aria-label="show password">◉</button>
+        <input id="lg-pass" type="password" autocomplete="new-password" placeholder="enter password">
+        <button class="eye" id="eye" type="button">◉</button>
       </div>
     </div>
-
     <button class="btn" id="lg-btn" onclick="doLogin()">ACCESS PANEL</button>
     <div class="msg" id="lg-msg"></div>
-    <div class="lock" id="lg-lock"></div>
-    <div class="hint">4 GB RAM &nbsp;·&nbsp; 100% CPU &nbsp;·&nbsp; 1 GB STORAGE</div>
+    <div class="hint">4 GB RAM · 100% CPU · 1 GB STORAGE</div>
   </div>
 </div>
 
-<!-- ══════════════ PANEL ══════════════ -->
+<!-- ══════ PANEL ══════ -->
 <div id="panel" class="hidden">
   <aside>
     <div class="side-brand">SUKUNA<span>HOSTING PANEL</span></div>
@@ -381,11 +364,11 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
       <button data-page="dash" class="active"><i>◈</i>DASHBOARD</button>
       <button data-page="files"><i>▤</i>FILE HOST</button>
       <button data-page="term"><i>▸</i>TERMINAL</button>
-      <button data-page="py"><i>◐</i>PYTHON</button>
+      <button data-page="py"><i>◐</i>RUNTIMES</button>
       <button data-page="set"><i>⚙</i>SETTINGS</button>
       <button onclick="doLogout()"><i>⏻</i>LOGOUT</button>
     </nav>
-    <div class="side-foot">v1.0 · SUKUNA CORE</div>
+    <div class="side-foot" id="side-foot">v2.0 · SUKUNA CORE</div>
   </aside>
 
   <main>
@@ -395,31 +378,30 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
       <div class="who"><span class="dot"></span><span id="who-txt">ADMIN</span></div>
     </div>
 
-    <!-- DASHBOARD -->
     <section id="page-dash">
       <div class="badge">SYSTEM ONLINE · LIVE METRICS</div>
       <div class="grid">
-        <div class="card">
+        <div class="card tilt">
           <div class="k">CPU USAGE</div><div class="v" id="st-cpu">0%</div>
           <div class="s">LIMIT 100%</div><div class="bar"><i id="bar-cpu"></i></div>
         </div>
-        <div class="card">
+        <div class="card tilt">
           <div class="k">MEMORY</div><div class="v" id="st-ram">0 / 4 GB</div>
           <div class="s">LIMIT 4 GB</div><div class="bar"><i id="bar-ram"></i></div>
         </div>
-        <div class="card">
+        <div class="card tilt">
           <div class="k">STORAGE</div><div class="v" id="st-sto">0 B</div>
           <div class="s">LIMIT 1 GB · 1 FILE</div><div class="bar"><i id="bar-sto"></i></div>
         </div>
-        <div class="card">
-          <div class="k">RUNTIME</div><div class="v" id="st-py">—</div>
+        <div class="card tilt">
+          <div class="k">PYTHON</div><div class="v" id="st-py" style="font-size:19px">—</div>
           <div class="s" id="st-plat">—</div>
         </div>
-        <div class="card">
-          <div class="k">UPTIME</div><div class="v" id="st-up">0s</div>
-          <div class="s">PANEL SESSION</div>
+        <div class="card tilt">
+          <div class="k">NODE</div><div class="v" id="st-node" style="font-size:19px">—</div>
+          <div class="s">SERVER RUNTIME</div>
         </div>
-        <div class="card">
+        <div class="card tilt">
           <div class="k">HOSTED FILE</div>
           <div class="v" id="st-file" style="font-size:15px">—</div>
           <div class="s">SERVED AT /site</div>
@@ -427,7 +409,6 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
       </div>
     </section>
 
-    <!-- FILE HOST -->
     <section id="page-files" class="hidden">
       <div class="badge">SINGLE FILE STATIC HOST · MAX 1 GB</div>
       <div class="drop" id="drop">
@@ -441,54 +422,41 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
         <button class="btn ghost" style="width:auto;padding:12px 22px" onclick="openSite()">OPEN /site</button>
         <button class="btn ghost" style="width:auto;padding:12px 22px" onclick="deleteFile()">DELETE FILE</button>
       </div>
-      <div class="note">Browser storage quota applies. For true 1 GB hosting run the
-        Flask backend on a VPS / Render / Railway instead of static hosting.</div>
     </section>
 
-    <!-- TERMINAL -->
     <section id="page-term" class="hidden">
-      <div class="badge">SHELL · PIP · NPM · GIT</div>
+      <div class="badge">REAL SHELL · PIP · NPM · GIT · SSH</div>
       <div class="term">
-        <div class="term-head"><b></b><b></b><b></b><span>SUKUNA@SHELL</span></div>
-        <div id="term-out"></div>
-        <div class="term-line">
-          <span id="term-cwd">~</span>
-          <input id="term-in" placeholder="type a command… (help)"
-                 autocomplete="off" autocapitalize="off" spellcheck="false">
-        </div>
+        <div class="term-head"><b></b><b></b><b></b><span id="term-status">CONNECTING…</span></div>
+        <div id="xterm"></div>
       </div>
       <h2 class="sec">QUICK ACTIONS</h2>
       <div style="display:flex;gap:9px;flex-wrap:wrap">
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip install flask')">pip install flask</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip install psutil requests')">pip install psutil</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip list')">pip list</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('npm install express')">npm i express</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('node -v')">node -v</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('ls -la')">ls -la</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('pip install flask\n')">pip install flask</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('pip install psutil requests\n')">pip install psutil</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('pip list\n')">pip list</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('npm install express\n')">npm i express</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('node -v && npm -v\n')">node -v</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('pip install --upgrade pip\n')">upgrade pip</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('npm install -g npm@latest\n')">upgrade npm</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="termSend('ls -la\n')">ls -la</button>
       </div>
-      <div class="note">Commands run inside this browser page. Real shell execution
-        requires the Flask backend on a server.</div>
     </section>
 
-    <!-- PYTHON -->
     <section id="page-py" class="hidden">
-      <div class="badge">INTERPRETER CONFIGURATION</div>
+      <div class="badge">PYTHON & NODE RUNTIMES</div>
+      <h2 class="sec">PYTHON INTERPRETERS</h2>
       <div id="py-list"></div>
-      <button class="btn ghost" style="width:auto;padding:12px 22px;margin-top:16px"
-              onclick="loadPython()">REFRESH</button>
-      <div class="note">Interpreter detection needs server-side access.
-        Set the runtime path in Settings — the Flask backend version
-        detects every installed Python automatically.</div>
+      <button class="btn ghost" style="width:auto;padding:12px 22px;margin-top:16px" onclick="loadPython()">RESCAN</button>
+      <h2 class="sec">NODE.JS</h2>
+      <div id="node-list"></div>
     </section>
 
-    <!-- SETTINGS -->
     <section id="page-set" class="hidden">
       <div class="badge">PANEL CONFIGURATION</div>
       <div class="card" style="animation:none">
         <label class="lbl">STARTUP COMMAND (CMD STARTUP)</label>
         <input class="txt" id="set-cmd" placeholder="e.g. python -m http.server 9000 --directory hosted">
-        <label class="lbl">PYTHON RUNTIME PATH</label>
-        <input class="txt" id="set-py" placeholder="e.g. /usr/bin/python3">
         <label class="switch">
           <input type="checkbox" id="set-auto" checked>
           RUN AUTOMATICALLY WHEN PANEL STARTS
@@ -512,33 +480,19 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
 
 <script>
 "use strict";
-/* ═══════════════════════════════════════════════
-   CREDENTIALS — offset-encoded, never stored as text.
-   username : hardik2321
-   password : Hardik@2321
-   Change by re-encoding: "yourtext".split('').map(c=>c.charCodeAt(0)-3)
-   ═══════════════════════════════════════════════ */
-const _K = 3;
-const _U = [101,94,111,97,102,104,47,48,47,46];
-const _P = [69,94,111,97,102,104,61,47,48,47,46];
-const dec = a => a.map(c => String.fromCharCode(c + _K)).join("");
-
-const USER_OK = dec(_U);
-const PASS_OK = dec(_P);
-
-/* ═══════════════ CONFIG ═══════════════ */
-const MAX_RAM_GB   = 4;
-const MAX_CPU      = 100;
-const MAX_STORAGE  = 1024 * 1024 * 1024;
-const MAX_ATTEMPTS = 5;
-const LOCK_SECONDS = 60;
-const IDLE_MINUTES = 10;
-const UPTIME_START = Date.now();
-
-/* ═══════════════ DOM HELPERS ═══════════════ */
-const $  = s => document.querySelector(s);
+const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
+/* ─── brand animation ─── */
+(function(){
+  const b = $('#brand');
+  const word = 'SUKUNA';
+  b.innerHTML = word.split('').map((c,i) =>
+    `<span style="animation-delay:${0.08*i+0.1}s">${c}</span>`
+  ).join('') + '<small>HOSTING PANEL</small>';
+})();
+
+/* ─── toast ─── */
 function toast(msg, err){
   const t = $('#toast');
   t.textContent = msg;
@@ -546,51 +500,18 @@ function toast(msg, err){
   clearTimeout(t._h);
   t._h = setTimeout(() => t.className = '', 2800);
 }
-function human(n){
-  const u = ['B','KB','MB','GB','TB'];
-  let i = 0;
-  while (n >= 1024 && i < u.length - 1){ n /= 1024; i++; }
-  return n.toFixed(1) + ' ' + u[i];
-}
-const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
 
-/* ═══════════════ STORAGE ═══════════════ */
-const FKEY = 'sk_site_v1';
-const SKEY = 'sk_cfg_v1';
-let memFile = null;   // session-only fallback when quota is exceeded
-
-function getFile(){
-  if (memFile) return memFile;
-  try { return JSON.parse(localStorage.getItem(FKEY)); } catch(e){ return null; }
-}
-function setFile(obj){
-  try { localStorage.setItem(FKEY, JSON.stringify(obj)); memFile = null; return true; }
-  catch(e){ memFile = obj; return false; }
-}
-function clearFile(){
-  memFile = null;
-  try { localStorage.removeItem(FKEY); } catch(e){}
-}
-function getCfg(){
-  try { return Object.assign({ startup_cmd:'', py_path:'python3', autorun:true },
-           JSON.parse(localStorage.getItem(SKEY)) || {}); }
-  catch(e){ return { startup_cmd:'', py_path:'python3', autorun:true }; }
-}
-function setCfg(o){
-  try { localStorage.setItem(SKEY, JSON.stringify(o)); } catch(e){}
+/* ─── api ─── */
+async function api(url, body, method){
+  const opt = { method: method || (body ? 'POST' : 'GET'),
+                headers: { 'Content-Type': 'application/json' } };
+  if (body) opt.body = JSON.stringify(body);
+  const r = await fetch(url, opt);
+  if (r.status === 401){ location.reload(); return { ok:false }; }
+  return r.json();
 }
 
-/* ═══════════════ LOGIN ═══════════════ */
-/* brand letters animate in one by one */
-(function buildBrand(){
-  const b = $('#brand');
-  const word = 'SUKUNA';
-  b.innerHTML = word.split('').map((c,i) =>
-    `<span style="animation-delay:${0.08 * i + 0.1}s">${c}</span>`
-  ).join('') + '<small>HOSTING PANEL</small>';
-})();
-
-/* password eye */
+/* ─── eye toggle ─── */
 $('#eye').onclick = () => {
   const p = $('#lg-pass');
   const on = p.type === 'password';
@@ -598,51 +519,19 @@ $('#eye').onclick = () => {
   $('#eye').textContent = on ? '◎' : '◉';
 };
 
-/* brute-force lockout */
-function lockRemaining(){
-  const until = +(sessionStorage.getItem('sk_lock') || 0);
-  return Math.max(0, Math.ceil((until - Date.now()) / 1000));
-}
-let lockTimer = null;
-function startLockWatch(){
-  clearInterval(lockTimer);
-  const tick = () => {
-    const s = lockRemaining();
-    const btn = $('#lg-btn');
-    if (s > 0){
-      $('#lg-lock').textContent = 'LOCKED · RETRY IN ' + s + 's';
-      btn.disabled = true;
-      btn.textContent = 'LOCKED (' + s + 's)';
-    } else {
-      $('#lg-lock').textContent = '';
-      btn.disabled = false;
-      btn.textContent = 'ACCESS PANEL';
-      sessionStorage.removeItem('sk_tries');
-      clearInterval(lockTimer);
-    }
-  };
-  tick();
-  lockTimer = setInterval(tick, 1000);
-}
-
+/* ─── login ─── */
 async function doLogin(){
-  if (lockRemaining() > 0) return;
-
   const u = $('#lg-user').value.trim();
   const p = $('#lg-pass').value;
-  const msg = $('#lg-msg');
   const btn = $('#lg-btn');
-
-  btn.disabled = true;
-  btn.textContent = 'VERIFYING…';
-  await new Promise(r => setTimeout(r, 320));  // deliberate delay
-
-  if (u === USER_OK && p === PASS_OK){
+  const msg = $('#lg-msg');
+  btn.disabled = true; btn.textContent = 'VERIFYING…';
+  await new Promise(r => setTimeout(r, 260));
+  const res = await api('/api/login', { user: u, pass: p });
+  if (res.ok){
     sessionStorage.setItem('sk_auth', '1');
-    sessionStorage.removeItem('sk_tries');
     msg.textContent = '';
     $('#lg-pass').value = '';
-
     const lg = $('#login');
     lg.classList.add('login-out');
     setTimeout(() => {
@@ -651,58 +540,29 @@ async function doLogin(){
       pnl.classList.remove('hidden');
       pnl.classList.add('panel-in');
       boot();
-    }, 560);
+    }, 600);
   } else {
-    const tries = +(sessionStorage.getItem('sk_tries') || 0) + 1;
-    sessionStorage.setItem('sk_tries', tries);
-
-    if (tries >= MAX_ATTEMPTS){
-      sessionStorage.setItem('sk_lock', Date.now() + LOCK_SECONDS * 1000);
-      sessionStorage.setItem('sk_tries', 0);
-      startLockWatch();
-      msg.textContent = 'TOO MANY ATTEMPTS · ACCESS LOCKED';
-    } else {
-      msg.textContent = 'INVALID ID OR PASSWORD (' +
-        (MAX_ATTEMPTS - tries) + ' LEFT)';
-    }
+    msg.textContent = (res.msg || 'LOGIN FAILED').toUpperCase();
     msg.classList.remove('shake'); void msg.offsetWidth;
     msg.classList.add('shake');
     $('#lg-pass').value = '';
-    btn.disabled = false;
-    btn.textContent = 'ACCESS PANEL';
+    btn.disabled = false; btn.textContent = 'ACCESS PANEL';
   }
 }
-
 $('#lg-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 $('#lg-user').addEventListener('keydown', e => { if (e.key === 'Enter') $('#lg-pass').focus(); });
 
-/* idle auto-logout */
-let idleTimer = null;
-function resetIdle(){
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => {
-    if (sessionStorage.getItem('sk_auth') === '1'){
-      toast('SESSION EXPIRED · LOGGING OUT', true);
-      setTimeout(doLogout, 900);
-    }
-  }, IDLE_MINUTES * 60 * 1000);
-}
-['mousemove','keydown','click','touchstart','scroll'].forEach(ev =>
-  document.addEventListener(ev, resetIdle, { passive:true }));
-
 function doLogout(){
-  sessionStorage.removeItem('sk_auth');
-  clearInterval(statsTimer);
-  clearTimeout(idleTimer);
-  location.reload();
+  fetch('/api/logout', { method:'POST' }).finally(() => {
+    sessionStorage.removeItem('sk_auth');
+    location.reload();
+  });
 }
 
-/* ═══════════════ NAVIGATION (SLIDE) ═══════════════ */
+/* ─── nav / page transitions ─── */
 const TITLES = { dash:'DASHBOARD', files:'FILE HOST', term:'TERMINAL',
-                 py:'PYTHON', set:'SETTINGS' };
-const ORDER  = ['dash','files','term','py','set'];
-let currentPage = 'dash';
-let switching = false;
+                 py:'RUNTIMES', set:'SETTINGS' };
+let currentPage = 'dash', switching = false;
 
 function goPage(p){
   if (p === currentPage || switching) return;
@@ -711,36 +571,29 @@ function goPage(p){
   const outEl = $('#page-' + currentPage);
   const inEl  = $('#page-' + p);
   const sweep = $('#sweep');
-
   sweep.classList.remove('on'); void sweep.offsetWidth;
   sweep.classList.add('on');
-  setTimeout(() => sweep.classList.remove('on'), 600);
+  setTimeout(() => sweep.classList.remove('on'), 650);
 
   outEl.classList.add('page-out');
-
   setTimeout(() => {
     outEl.classList.add('hidden');
     outEl.classList.remove('page-out');
-
     inEl.classList.remove('hidden');
     inEl.classList.add('page-in');
     setTimeout(() => inEl.classList.remove('page-in'), 540);
-
-    currentPage = p;
-    switching = false;
-
+    currentPage = p; switching = false;
     if (p === 'files') loadFiles();
-    if (p === 'py')    loadPython();
+    if (p === 'py')    loadRuntimes();
     if (p === 'set')   loadSettings();
-    if (p === 'term')  setTimeout(() => $('#term-in').focus(), 150);
-  }, 250);
+    if (p === 'term')  setTimeout(mountTerminal, 120);
+  }, 260);
 
   $('#page-title').textContent = TITLES[p];
   $('#page-title').style.animation = 'none';
   void $('#page-title').offsetWidth;
-  $('#page-title').style.animation = 'slideLeftIn .55s cubic-bezier(.2,.8,.2,1)';
+  $('#page-title').style.animation = 'slideL .55s cubic-bezier(.22,.85,.24,1)';
 }
-
 $$('.nav button[data-page]').forEach(btn => {
   btn.onclick = () => {
     $$('.nav button').forEach(b => b.classList.remove('active'));
@@ -749,50 +602,46 @@ $$('.nav button[data-page]').forEach(btn => {
   };
 });
 
-/* ═══════════════ LIVE STATS ═══════════════ */
+/* ─── 3D tilt on cards ─── */
+document.addEventListener('mousemove', e => {
+  $$('.card.tilt').forEach(card => {
+    const r = card.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right ||
+        e.clientY < r.top  || e.clientY > r.bottom) {
+      card.style.transform = '';
+      return;
+    }
+    const cx = (e.clientX - r.left) / r.width - 0.5;
+    const cy = (e.clientY - r.top)  / r.height - 0.5;
+    card.style.transform =
+      `perspective(900px) rotateX(${-cy*6}deg) rotateY(${cx*6}deg) translateY(-4px)`;
+    card.style.borderColor = '#fff';
+    card.style.boxShadow = '0 24px 60px rgba(0,0,0,.9), 0 0 10px rgba(255,255,255,.4)';
+  });
+});
+
+/* ─── live stats ─── */
 let statsTimer = null;
-let cpuVal = 18, ramVal = 1.1;
 
-function fileUsed(){
-  const f = getFile();
-  return f ? f.size : 0;
+async function loadStats(){
+  const s = await api('/api/stats');
+  if (!s.ok) return;
+  $('#st-cpu').textContent = s.cpu + '%';
+  $('#bar-cpu').style.width = Math.min(100, (s.cpu / s.cpu_limit) * 100) + '%';
+  $('#st-ram').textContent = s.ram.used_gb + ' / ' + s.ram.total_gb + ' GB';
+  $('#bar-ram').style.width = Math.min(100, (s.ram.used_gb / s.ram.total_gb) * 100) + '%';
+  $('#st-sto').textContent = s.storage.used_h;
+  $('#bar-sto').style.width = Math.max(1.5, s.storage.pct) + '%';
+  $('#st-py').textContent = s.python && s.python !== 'not installed' ? s.python : '—';
+  $('#st-plat').textContent = String(s.platform || '').toUpperCase();
+  $('#st-node').textContent = s.node || '—';
+  $('#st-file').textContent = s.hosted || 'NONE';
+  $('#side-foot').textContent = 'v2.0 · ' + (s.pty ? 'PTY MODE' : 'EXEC MODE');
 }
 
-function loadStats(){
-  /* smooth random walk for CPU + RAM */
-  cpuVal += (Math.random() - 0.5) * 16;
-  cpuVal = clamp(cpuVal, 3, 92);
-  ramVal += (Math.random() - 0.5) * 0.22;
-  ramVal = clamp(ramVal, 0.4, MAX_RAM_GB * 0.92);
-
-  const used  = fileUsed();
-  const pctOf = (v, max) => Math.min(100, (v / max) * 100);
-
-  $('#st-cpu').textContent = cpuVal.toFixed(1) + '%';
-  $('#bar-cpu').style.width = pctOf(cpuVal, MAX_CPU) + '%';
-
-  $('#st-ram').textContent = ramVal.toFixed(2) + ' / ' + MAX_RAM_GB + ' GB';
-  $('#bar-ram').style.width = pctOf(ramVal, MAX_RAM_GB) + '%';
-
-  $('#st-sto').textContent = human(used);
-  $('#bar-sto').style.width = Math.max(1.5, pctOf(used, MAX_STORAGE)) + '%';
-
-  const cfg = getCfg();
-  $('#st-py').textContent   = cfg.py_path || 'python3';
-  $('#st-plat').textContent = (navigator.platform || 'BROWSER').toUpperCase();
-
-  const u = Math.floor((Date.now() - UPTIME_START) / 1000);
-  const h = Math.floor(u / 3600), m = Math.floor((u % 3600) / 60), s = u % 60;
-  $('#st-up').textContent = (h ? h + 'h ' : '') + (m ? m + 'm ' : '') + s + 's';
-
-  const f = getFile();
-  $('#st-file').textContent = f ? f.name : 'NONE';
-}
-
-/* ═══════════════ FILE HOST ═══════════════ */
+/* ─── files ─── */
 const drop = $('#drop');
 drop.onclick = () => $('#file-input').click();
-
 ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => {
   e.preventDefault(); drop.classList.add('over');
 }));
@@ -806,309 +655,197 @@ $('#file-input').onchange = e => {
   if (e.target.files.length) uploadFile(e.target.files[0]);
 };
 
-function uploadFile(file){
-  if (file.size > MAX_STORAGE){
-    toast('FILE EXCEEDS 1 GB', true); return;
-  }
-  toast('READING ' + file.name + ' …');
-
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const stored = setFile({
-      name: file.name,
-      size: file.size,
-      type: file.type || 'text/plain',
-      data: ev.target.result,
-      at: Date.now()
-    });
-    toast(stored
-      ? 'HOSTED ' + file.name
-      : 'HOSTED FOR THIS SESSION ONLY (quota full)', !stored);
-    loadFiles();
-    loadStats();
-  };
-  reader.onerror = () => toast('READ FAILED', true);
-  reader.readAsDataURL(file);
+async function uploadFile(file){
+  toast('UPLOADING ' + file.name + ' …');
+  const fd = new FormData();
+  fd.append('file', file);
+  const r = await fetch('/api/upload', { method:'POST', body: fd });
+  const res = await r.json();
+  toast(res.msg || (res.ok ? 'HOSTED' : 'FAILED'), !res.ok);
+  loadFiles(); loadStats();
 }
 
-function loadFiles(){
-  const f = getFile();
+async function loadFiles(){
+  const r = await api('/api/files');
   const box = $('#file-list');
-  const used = f ? f.size : 0;
-
-  box.innerHTML = (f ? `
+  if (!r.ok || !r.files.length){
+    box.innerHTML = '<div class="row"><div><div class="n">NO FILE HOSTED</div>' +
+      '<div class="m">UPLOAD A FILE TO ACTIVATE /site</div></div>' +
+      '<div class="tag">EMPTY</div></div>';
+    return;
+  }
+  box.innerHTML = r.files.map(f => `
     <div class="row">
-      <div>
-        <div class="n">${escapeHtml(f.name)}</div>
-        <div class="m">${(f.size/1024).toFixed(1)} KB · SERVED AT /site</div>
-      </div>
+      <div><div class="n">${escapeHtml(f.name)}</div>
+      <div class="m">${(f.size/1024).toFixed(1)} KB · SERVED AT /site</div></div>
       <div class="tag on">LIVE</div>
-    </div>` : `
-    <div class="row">
-      <div>
-        <div class="n">NO FILE HOSTED</div>
-        <div class="m">UPLOAD A FILE TO ACTIVATE /site</div>
-      </div>
-      <div class="tag">EMPTY</div>
-    </div>`) + `
-    <div class="row">
-      <div><div class="n">STORAGE USED</div><div class="m">LIMIT ${human(MAX_STORAGE)}</div></div>
-      <div class="tag">${human(used)}</div>
-    </div>`;
+    </div>`).join('') +
+    `<div class="row"><div><div class="n">STORAGE USED</div>
+     <div class="m">LIMIT ${r.limit_h}</div></div>
+     <div class="tag">${r.used_h}</div></div>`;
 }
 
+async function deleteFile(){
+  const r = await api('/api/delete', {});
+  toast(r.msg || 'DONE', !r.ok);
+  loadFiles(); loadStats();
+}
+function openSite(){ window.open('/site', '_blank'); }
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c =>
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-function deleteFile(){
-  clearFile();
-  toast('HOSTED FILE REMOVED');
-  loadFiles();
-  loadStats();
-}
+/* ─── real terminal (xterm.js + WebSocket) ─── */
+let term = null, fit = null, ws = null, termMounted = false;
 
-function dataURLtoBlob(du){
-  const [head, b64] = du.split(',');
-  const mime = (head.match(/:(.*?);/) || [,'application/octet-stream'])[1];
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-  return new Blob([arr], { type: mime });
-}
+function mountTerminal(){
+  if (termMounted){ if (fit) fit.fit(); return; }
+  const host = $('#xterm');
+  if (!host || !window.Terminal) return;
 
-function openSite(){
-  const f = getFile();
-  if (!f){ toast('NO FILE HOSTED', true); return; }
-  const url = URL.createObjectURL(dataURLtoBlob(f.data));
-  const w = window.open(url, '_blank');
-  if (!w) toast('POPUP BLOCKED', true);
-  setTimeout(() => URL.revokeObjectURL(url), 60000);
-}
-
-/* ═══════════════ TERMINAL ═══════════════ */
-const termOut = $('#term-out');
-const termIn  = $('#term-in');
-let history = [], hIndex = -1, cwd = '~';
-
-function termWrite(text, color){
-  const div = document.createElement('div');
-  div.textContent = text;
-  if (color) div.style.color = color;
-  termOut.appendChild(div);
-  termOut.scrollTop = termOut.scrollHeight;
-}
-
-function runCmd(cmd){
-  const c = cmd.trim();
-  if (!c) return;
-  termWrite('sukuna@panel:' + cwd + '$ ' + c, '#ffffff');
-
-  /* built-ins */
-  if (c === 'clear' || c === 'cls'){ termOut.innerHTML = ''; return; }
-
-  if (c === 'help'){
-    termWrite(
-      'SUKUNA SHELL — available commands\n' +
-      '  help                 this list\n' +
-      '  clear                clear screen\n' +
-      '  pwd                  current directory\n' +
-      '  ls / ls -la          list hosted file\n' +
-      '  cd <dir>             change directory\n' +
-      '  whoami               current user\n' +
-      '  date                 system time\n' +
-      '  uptime               panel uptime\n' +
-      '  echo <text>          print text\n' +
-      '  pip install <pkg>    install python package\n' +
-      '  pip list             installed packages\n' +
-      '  python --version     interpreter version\n' +
-      '  npm install <pkg>    install node package\n' +
-      '  node -v              node version\n' +
-      '  git --version        git version\n' +
-      '  sudo / rm -rf        blocked by policy');
-    return;
-  }
-
-  if (/^(sudo|su|rm\s+-rf|mkfs|dd\s+if=)/.test(c)){
-    termWrite('⛔ permission denied — command blocked by panel policy', '#ff8080');
-    return;
-  }
-
-  if (c === 'pwd'){ termWrite('/hosted'); return; }
-  if (c === 'whoami'){ termWrite('sukuna'); return; }
-  if (c === 'date'){ termWrite(new Date().toString()); return; }
-  if (c === 'uptime'){
-    const u = Math.floor((Date.now() - UPTIME_START) / 1000);
-    termWrite('up ' + Math.floor(u/60) + ' min ' + (u%60) + ' sec');
-    return;
-  }
-  if (/^cd(\s|$)/.test(c)){
-    const target = c.slice(2).trim() || '~';
-    cwd = target === '/' ? '/' : (target === '~' ? '~' : target);
-    $('#term-cwd').textContent = cwd;
-    termWrite('cwd -> ' + cwd);
-    return;
-  }
-  if (/^ls(\s+-la?)?$/.test(c)){
-    const f = getFile();
-    termWrite(f
-      ? 'total 1\n-rw-r--r-- 1 sukuna sukuna ' +
-        String(f.size).padStart(9) + ' ' + f.name
-      : 'total 0\n(no file hosted)');
-    return;
-  }
-  if (/^echo\s+/.test(c)){ termWrite(c.replace(/^echo\s+/, '')); return; }
-
-  if (/^pip(3)?\s+install\s+/.test(c)){
-    const pkgs = c.replace(/^pip(3)?\s+install\s+/, '').split(/\s+/);
-    termWrite('Collecting ' + pkgs.join(', '));
-    termWrite('  Downloading ' + pkgs[0] + '-py3-none-any.whl');
-    termWrite('Installing collected packages: ' + pkgs.join(', '));
-    termWrite('Successfully installed ' + pkgs.join(' '), '#9dff9d');
-    return;
-  }
-  if (/^pip(3)?\s+list$/.test(c)){
-    termWrite('Package      Version\n' +
-              '------------ -------\n' +
-              'Flask        3.0.0\n' +
-              'psutil       5.9.8\n' +
-              'requests     2.31.0\n' +
-              'werkzeug     3.0.1');
-    return;
-  }
-  if (/^python(3)?\s+(--?version|-V)$/.test(c)){
-    const cfg = getCfg();
-    termWrite('Python 3.11.4  (' + (cfg.py_path || 'python3') + ')');
-    return;
-  }
-  if (/^npm\s+(install|i)\s+/.test(c)){
-    const pkgs = c.replace(/^npm\s+(install|i)\s+/, '').split(/\s+/);
-    termWrite('added ' + (pkgs.length * 71) + ' packages in 1.3s');
-    termWrite('packages: ' + pkgs.join(', '), '#9dff9d');
-    return;
-  }
-  if (c === 'node -v'){ termWrite('v20.10.0'); return; }
-  if (c === 'npm -v'){ termWrite('10.2.4'); return; }
-  if (c === 'git --version'){ termWrite('git version 2.42.0'); return; }
-
-  termWrite('sh: ' + c.split(' ')[0] + ': command not found', '#ff8080');
-}
-
-termIn.addEventListener('keydown', e => {
-  if (e.key === 'Enter'){
-    const cmd = termIn.value;
-    termIn.value = '';
-    if (!cmd.trim()) return;
-    history.push(cmd); hIndex = history.length;
-    runCmd(cmd);
-  }
-  if (e.key === 'ArrowUp'){
-    if (hIndex > 0){ hIndex--; termIn.value = history[hIndex]; }
-    e.preventDefault();
-  }
-  if (e.key === 'ArrowDown'){
-    if (hIndex < history.length - 1){ hIndex++; termIn.value = history[hIndex]; }
-    else { hIndex = history.length; termIn.value = ''; }
-    e.preventDefault();
-  }
-});
-
-function quick(cmd){
-  termIn.value = cmd;
-  termIn.dispatchEvent(new KeyboardEvent('keydown', { key:'Enter' }));
-}
-
-/* ═══════════════ PYTHON PAGE ═══════════════ */
-function loadPython(){
-  const cfg = getCfg();
-  const box = $('#py-list');
-  box.innerHTML = `
-    <div class="row">
-      <div>
-        <div class="n">${escapeHtml(cfg.py_path || 'python3')}</div>
-        <div class="m">CONFIGURED RUNTIME · SET IN SETTINGS</div>
-      </div>
-      <div class="tag on">ACTIVE</div>
-    </div>
-    <div class="row">
-      <div>
-        <div class="n">AUTO-DETECTION</div>
-        <div class="m">SCANS ALL INSTALLED VERSIONS ON THE SERVER</div>
-      </div>
-      <div class="tag">SERVER ONLY</div>
-    </div>`;
-}
-
-/* ═══════════════ SETTINGS ═══════════════ */
-function loadSettings(){
-  const cfg = getCfg();
-  $('#set-cmd').value    = cfg.startup_cmd || '';
-  $('#set-py').value     = cfg.py_path || 'python3';
-  $('#set-auto').checked = !!cfg.autorun;
-}
-
-function saveSettings(){
-  setCfg({
-    startup_cmd: $('#set-cmd').value.trim(),
-    py_path:     $('#set-py').value.trim() || 'python3',
-    autorun:     $('#set-auto').checked
+  term = new Terminal({
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: 13,
+    cursorBlink: true,
+    cursorStyle: 'bar',
+    theme: {
+      background: '#000000',
+      foreground: '#e8e8e8',
+      cursor: '#ffffff',
+      cursorAccent: '#000000',
+      selectionBackground: 'rgba(255,255,255,.2)',
+      black: '#000000', red: '#ff5f5f', green: '#9dff9d',
+      yellow: '#ffe066', blue: '#7ec8ff', magenta: '#ff9de6',
+      cyan: '#9dffea', white: '#ffffff',
+    },
+    scrollback: 5000,
   });
-  toast('SETTINGS SAVED');
-  loadStats();
+  fit = new FitAddon.FitAddon();
+  term.loadAddon(fit);
+  term.open(host);
+  fit.fit();
+  termMounted = true;
+
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(`${proto}//${location.host}/ws/term`);
+
+  ws.onopen = () => {
+    $('#term-status').textContent = 'CONNECTED';
+    fit.fit();
+    ws.send(JSON.stringify({ t: 'r', c: term.cols, r: term.rows }));
+  };
+  ws.onmessage = ev => {
+    try {
+      const m = JSON.parse(ev.data);
+      if (m.t === 'o') term.write(m.d);
+    } catch (e) {}
+  };
+  ws.onclose = () => { $('#term-status').textContent = 'DISCONNECTED'; };
+  ws.onerror = () => { $('#term-status').textContent = 'ERROR'; };
+
+  term.onData(d => {
+    if (ws && ws.readyState === 1) ws.send(JSON.stringify({ t: 'i', d }));
+  });
+
+  window.addEventListener('resize', () => {
+    if (fit && termMounted) {
+      fit.fit();
+      if (ws && ws.readyState === 1)
+        ws.send(JSON.stringify({ t: 'r', c: term.cols, r: term.rows }));
+    }
+  });
 }
 
-function runStartup(){
-  const cfg = getCfg();
-  const out = $('#set-out');
-  if (!cfg.startup_cmd){
-    out.textContent = 'no startup command configured';
-    toast('NO COMMAND SET', true);
-    return;
+function termSend(str){
+  if (!term) return;
+  if (ws && ws.readyState === 1){
+    ws.send(JSON.stringify({ t: 'i', d: str }));
+  } else {
+    term.write('\r\n[disconnected]\r\n');
   }
-  out.textContent = '> ' + cfg.startup_cmd + '\n\n' +
-                    'command queued — executed by the panel server\n' +
-                    'timestamp: ' + new Date().toISOString();
-  toast('STARTUP COMMAND RAN');
 }
 
-/* ═══════════════ BOOT ═══════════════ */
+/* ─── runtimes page ─── */
+async function loadRuntimes(){
+  const r = await api('/api/python/versions');
+  const box = $('#py-list');
+  if (!r.ok || !r.versions.length){
+    box.innerHTML = '<div class="row"><div><div class="n">NO PYTHON FOUND</div>' +
+      '<div class="m">INSTALL PYTHON3 ON THE SERVER</div></div><div class="tag">MISSING</div></div>';
+  } else {
+    box.innerHTML = r.versions.map(v => `
+      <div class="row">
+        <div><div class="n">${escapeHtml(v.version)}</div>
+        <div class="m">${escapeHtml(v.path)}</div></div>
+        <div class="tag ${v.active ? 'on' : ''}">${v.active ? 'DEFAULT' : 'AVAILABLE'}</div>
+      </div>`).join('');
+  }
+  const s = await api('/api/stats');
+  if (s.ok){
+    $('#node-list').innerHTML = `
+      <div class="row">
+        <div><div class="n">Node.js ${escapeHtml(s.node)}</div>
+        <div class="m">SERVER RUNTIME · ACTIVE</div></div>
+        <div class="tag on">ACTIVE</div>
+      </div>
+      <div class="row">
+        <div><div class="n">npm</div>
+        <div class="m">INSTALL / UPGRADE VIA TERMINAL</div></div>
+        <div class="tag">npm i -g npm@latest</div>
+      </div>`;
+  }
+}
+
+/* ─── settings ─── */
+async function loadSettings(){
+  try {
+    const cfg = JSON.parse(localStorage.getItem('sk_cfg') || '{}');
+    $('#set-cmd').value = cfg.startup_cmd || '';
+    $('#set-auto').checked = cfg.autorun !== false;
+  } catch (e) {}
+}
+function saveSettings(){
+  localStorage.setItem('sk_cfg', JSON.stringify({
+    startup_cmd: $('#set-cmd').value.trim(),
+    autorun: $('#set-auto').checked,
+  }));
+  toast('SETTINGS SAVED');
+}
+function runStartup(){
+  const cmd = $('#set-cmd').value.trim();
+  if (!cmd){ toast('NO COMMAND SET', true); return; }
+  if (!term || !ws || ws.readyState !== 1){
+    toast('OPEN TERMINAL FIRST', true); return;
+  }
+  termSend(cmd + '\n');
+  $('#set-out').textContent = '> ' + cmd + '\n(sent to terminal)';
+  toast('COMMAND SENT TO TERMINAL');
+}
+
+/* ─── boot ─── */
 function boot(){
   $('#who-txt').textContent = 'ADMIN';
-
-  termWrite('SUKUNA HOSTING PANEL v1.0');
-  termWrite('session authenticated — welcome back');
-  termWrite('type "help" for available commands');
-  termWrite('');
-
   loadStats();
   loadFiles();
   loadSettings();
-
   clearInterval(statsTimer);
-  statsTimer = setInterval(loadStats, 2200);
-  resetIdle();
+  statsTimer = setInterval(loadStats, 2500);
 }
 
-/* ═══════════════ INIT ═══════════════ */
-(function init(){
-  if (lockRemaining() > 0) startLockWatch();
-
-  if (sessionStorage.getItem('sk_auth') === '1'){
+/* ─── init ─── */
+(async function init(){
+  const me = await api('/api/me');
+  if (me.ok){
     $('#login').classList.add('hidden');
     const pnl = $('#panel');
     pnl.classList.remove('hidden');
     pnl.classList.add('panel-in');
     boot();
   } else {
-    setTimeout(() => $('#lg-user').focus(), 600);
+    setTimeout(() => $('#lg-user').focus(), 700);
   }
 })();
-
-/* block drag-drop navigation outside the panel */
-['dragover','drop'].forEach(ev => window.addEventListener(ev, e => {
-  if (!e.target.closest('#drop')) e.preventDefault();
-}));
 </script>
 </body>
 </html>
