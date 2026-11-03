@@ -3,10 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
 <title>SUKUNA HOSTING PANEL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -20,26 +18,18 @@
   --ease:cubic-bezier(.22,.85,.24,1);
 }
 html,body{height:100%}
-body{
-  background:
-    radial-gradient(1200px 800px at 10% -20%,#191919 0%,transparent 60%),
-    radial-gradient(900px 700px at 115% 115%,#141414 0%,transparent 55%),
-    var(--bg);
+body{background:radial-gradient(1200px 800px at 10% -20%,#191919,transparent 60%),
+  radial-gradient(900px 700px at 115% 115%,#141414,transparent 55%),var(--bg);
   color:var(--txt);font-family:var(--sans);text-shadow:var(--glow);
-  overflow:hidden;-webkit-font-smoothing:antialiased;user-select:none;
-}
+  overflow:hidden;user-select:none;-webkit-font-smoothing:antialiased}
 input,textarea,.term-body{user-select:text}
 .hidden{display:none!important}
-body::before{
-  content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+body::before{content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
     linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
-  background-size:56px 56px,56px 56px;
-  animation:gridDrift 18s linear infinite;
+  background-size:56px 56px,56px 56px;animation:gridDrift 18s linear infinite;
   mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%);
-  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%);
-}
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%)}
 @keyframes gridDrift{from{background-position:0 0,0 0}to{background-position:56px 56px,56px 56px}}
 .scanline{position:fixed;left:0;right:0;height:120px;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,transparent,rgba(255,255,255,.035),transparent);
@@ -51,8 +41,6 @@ body::before{
 .orb.b{width:300px;height:300px;bottom:-100px;right:-70px;animation-delay:-7s}
 .orb.c{width:220px;height:220px;top:40%;left:55%;animation-delay:-13s}
 @keyframes floaty{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(50px,-60px) scale(1.15)}}
-
-/* keyframes */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 @keyframes slideR{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
 @keyframes slideL{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
@@ -60,63 +48,52 @@ body::before{
 @keyframes letterIn{from{opacity:0;transform:translateY(30px) rotateX(-80deg)}to{opacity:1;transform:none}}
 @keyframes shine{0%,70%{left:-130%}100%{left:160%}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-@keyframes glowPulse{
-  0%,100%{text-shadow:0 0 6px rgba(255,255,255,.22),0 0 22px rgba(255,255,255,.10)}
+@keyframes glowPulse{0%,100%{text-shadow:0 0 6px rgba(255,255,255,.22),0 0 22px rgba(255,255,255,.10)}
   50%{text-shadow:0 0 12px rgba(255,255,255,.6),0 0 42px rgba(255,255,255,.30)}}
 @keyframes spinRing{to{transform:rotate(360deg)}}
 @keyframes scanX{0%,100%{transform:scaleX(.15);opacity:.2}50%{transform:scaleX(1);opacity:.8}}
 @keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}
   30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
-@keyframes pageIn{from{opacity:0;transform:translateX(50px) scale(.985);filter:blur(4px)}
-  to{opacity:1;transform:none;filter:none}}
+@keyframes pageIn{from{opacity:0;transform:translateX(50px) scale(.985);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
 @keyframes pageOut{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-50px);filter:blur(4px)}}
 @keyframes sweepLine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-@keyframes cursorPulse{0%,100%{opacity:1}50%{opacity:.35}}
 @keyframes loginOut{to{opacity:0;transform:translateY(-70px) scale(.92);filter:blur(8px)}}
 @keyframes toastBar{from{width:100%}to{width:0}}
 @keyframes termIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
 
 /* LOGIN */
-#login{position:fixed;inset:0;display:grid;place-items:center;z-index:20;padding:20px;
-  animation:popIn .8s var(--ease) both}
+#login{position:fixed;inset:0;display:grid;place-items:center;z-index:20;padding:20px;animation:popIn .8s var(--ease) both}
 #login.login-out{animation:loginOut .65s var(--ease) forwards}
 .login-card{position:relative;width:min(430px,94vw);padding:46px 34px 36px;
   background:rgba(8,8,8,.9);border:1px solid var(--line);border-radius:22px;
-  backdrop-filter:blur(16px);
-  box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 40px 90px rgba(0,0,0,.95);
+  backdrop-filter:blur(16px);box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 40px 90px rgba(0,0,0,.95);
   animation:cardIn 1s var(--ease) both;overflow:hidden}
-@keyframes cardIn{from{opacity:0;transform:translateY(50px) rotateX(12deg) scale(.94)}
-  to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(50px) rotateX(12deg) scale(.94)}to{opacity:1;transform:none}}
 .login-card::before{content:"";position:absolute;inset:-2px;border-radius:24px;padding:2px;z-index:-1;
   background:conic-gradient(from 0deg,transparent 0 62%,rgba(255,255,255,.9) 80%,transparent 94%);
   animation:spinRing 6s linear infinite;filter:blur(.5px)}
 .login-card::after{content:"";position:absolute;inset:0;border-radius:22px;background:#080808;z-index:-1}
-.brand{font-size:23px;font-weight:900;letter-spacing:5px;text-align:center;
-  display:flex;justify-content:center;flex-wrap:wrap;animation:glowPulse 2.6s ease-in-out infinite}
+.brand{font-size:23px;font-weight:900;letter-spacing:5px;text-align:center;display:flex;justify-content:center;flex-wrap:wrap;
+  animation:glowPulse 2.6s ease-in-out infinite}
 .brand span{display:inline-block;animation:letterIn .9s var(--ease) both}
-.brand small{width:100%;margin-top:12px;font-size:10px;letter-spacing:7px;color:var(--dim);
-  font-weight:500;animation:letterIn 1s .55s var(--ease) both}
-.scan{height:1px;background:linear-gradient(90deg,transparent,#fff,transparent);
-  margin:26px 0;opacity:.55;animation:scanX 3s ease-in-out infinite}
+.brand small{width:100%;margin-top:12px;font-size:10px;letter-spacing:7px;color:var(--dim);font-weight:500;
+  animation:letterIn 1s .55s var(--ease) both}
+.scan{height:1px;background:linear-gradient(90deg,transparent,#fff,transparent);margin:26px 0;opacity:.55;
+  animation:scanX 3s ease-in-out infinite}
 .field{margin-bottom:16px;animation:fadeUp .7s var(--ease) both}
-.field:nth-of-type(1){animation-delay:.35s}
-.field:nth-of-type(2){animation-delay:.45s}
+.field:nth-of-type(1){animation-delay:.35s}.field:nth-of-type(2){animation-delay:.45s}
 .field label{display:block;font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:8px}
-.field input{width:100%;padding:14px 46px 14px 15px;background:#050505;
-  border:1px solid var(--line2);border-radius:11px;color:#fff;font-family:var(--mono);
-  font-size:14px;outline:none;transition:.3s;text-shadow:var(--glow)}
+.field input{width:100%;padding:14px 46px 14px 15px;background:#050505;border:1px solid var(--line2);
+  border-radius:11px;color:#fff;font-family:var(--mono);font-size:14px;outline:none;transition:.3s;text-shadow:var(--glow)}
 .field input::placeholder{color:#3a3a3a}
-.field input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.08),var(--glow);
-  transform:translateY(-1px)}
+.field input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.08),var(--glow);transform:translateY(-1px)}
 .pw-wrap{position:relative}
-.eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  background:transparent;border:0;color:var(--dim);font-size:15px;cursor:pointer;
-  padding:6px;transition:.25s;text-shadow:var(--glow)}
+.eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:0;
+  color:var(--dim);font-size:15px;cursor:pointer;padding:6px;transition:.25s;text-shadow:var(--glow)}
 .eye:hover{color:#fff;text-shadow:var(--glow2)}
-.btn{width:100%;padding:14px;border-radius:11px;border:1px solid #fff;cursor:pointer;
-  background:#fff;color:#000;font-family:var(--sans);font-weight:700;
-  letter-spacing:3px;font-size:12px;transition:.3s;position:relative;overflow:hidden;
-  animation:fadeUp .7s .55s var(--ease) both}
+.btn{width:100%;padding:14px;border-radius:11px;border:1px solid #fff;cursor:pointer;background:#fff;color:#000;
+  font-family:var(--sans);font-weight:700;letter-spacing:3px;font-size:12px;transition:.3s;position:relative;
+  overflow:hidden;animation:fadeUp .7s .55s var(--ease) both}
 .btn:hover{background:#000;color:#fff;box-shadow:var(--glow2);transform:translateY(-2px)}
 .btn:active{transform:translateY(0) scale(.985)}
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
@@ -126,194 +103,156 @@ body::before{
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
   transform:skewX(-20deg);animation:shine 4.5s ease-in-out infinite}
 .btn.ghost::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)}
-.msg{margin-top:14px;text-align:center;font-size:11px;letter-spacing:2px;
-  color:#ff6b6b;min-height:16px;text-shadow:0 0 10px rgba(255,107,107,.6)}
+.msg{margin-top:14px;text-align:center;font-size:11px;letter-spacing:2px;color:#ff6b6b;min-height:16px;
+  text-shadow:0 0 10px rgba(255,107,107,.6)}
 .msg.shake{animation:shake .45s ease}
 .hint{margin-top:22px;text-align:center;font-size:9px;color:var(--dimmer);letter-spacing:2px}
-.lock{margin-top:10px;text-align:center;font-size:10px;letter-spacing:2px;
-  color:#ffb84d;min-height:14px}
+.lock{margin-top:10px;text-align:center;font-size:10px;letter-spacing:2px;color:#ffb84d;min-height:14px}
+.mode-line{margin-top:12px;text-align:center;font-size:9px;letter-spacing:2px;color:#4a4a4a}
 
 /* PANEL */
 #panel{position:relative;z-index:5;display:grid;grid-template-columns:240px 1fr;height:100vh}
 #panel.panel-in{animation:popIn .6s var(--ease) both}
-aside{border-right:1px solid var(--line);background:rgba(6,6,6,.85);
-  backdrop-filter:blur(14px);padding:24px 16px;display:flex;flex-direction:column;gap:8px;
-  animation:slideR .85s var(--ease) both}
-.side-brand{font-size:15px;font-weight:900;letter-spacing:4px;text-align:center;
-  padding-bottom:18px;margin-bottom:10px;border-bottom:1px solid var(--line);
-  animation:glowPulse 3s ease-in-out infinite}
-.side-brand span{display:block;font-size:8px;letter-spacing:5px;color:var(--dim);
-  margin-top:8px;font-weight:400}
+aside{border-right:1px solid var(--line);background:rgba(6,6,6,.85);backdrop-filter:blur(14px);
+  padding:24px 16px;display:flex;flex-direction:column;gap:8px;animation:slideR .85s var(--ease) both}
+.side-brand{font-size:15px;font-weight:900;letter-spacing:4px;text-align:center;padding-bottom:18px;
+  margin-bottom:10px;border-bottom:1px solid var(--line);animation:glowPulse 3s ease-in-out infinite}
+.side-brand span{display:block;font-size:8px;letter-spacing:5px;color:var(--dim);margin-top:8px;font-weight:400}
 .nav{display:flex;flex-direction:column;gap:6px}
-.nav button{position:relative;display:flex;align-items:center;gap:11px;padding:12px 14px;
-  border-radius:10px;background:transparent;border:1px solid transparent;color:var(--dim);
-  font-family:var(--sans);font-size:11px;letter-spacing:2px;cursor:pointer;
-  transition:transform .3s var(--ease),color .25s,border-color .25s,background .25s;
+.nav button{position:relative;display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:10px;
+  background:transparent;border:1px solid transparent;color:var(--dim);font-family:var(--sans);font-size:11px;
+  letter-spacing:2px;cursor:pointer;transition:transform .3s var(--ease),color .25s,border-color .25s,background .25s;
   text-align:left;width:100%;text-shadow:var(--glow);animation:slideR .6s var(--ease) both}
-.nav button:nth-child(1){animation-delay:.10s}
-.nav button:nth-child(2){animation-delay:.16s}
-.nav button:nth-child(3){animation-delay:.22s}
-.nav button:nth-child(4){animation-delay:.28s}
-.nav button:nth-child(5){animation-delay:.34s}
-.nav button:nth-child(6){animation-delay:.40s}
-.nav button::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
-  width:0;height:60%;background:#fff;border-radius:0 3px 3px 0;
-  box-shadow:var(--glow2);transition:width .3s var(--ease)}
+.nav button:nth-child(1){animation-delay:.10s}.nav button:nth-child(2){animation-delay:.16s}
+.nav button:nth-child(3){animation-delay:.22s}.nav button:nth-child(4){animation-delay:.28s}
+.nav button:nth-child(5){animation-delay:.34s}.nav button:nth-child(6){animation-delay:.40s}
+.nav button::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:0;height:60%;
+  background:#fff;border-radius:0 3px 3px 0;box-shadow:var(--glow2);transition:width .3s var(--ease)}
 .nav button:hover{color:#fff;border-color:var(--line2);transform:translateX(6px);background:#0c0c0c}
 .nav button.active{color:#fff;background:#101010;border-color:#fff;box-shadow:var(--glow)}
 .nav button.active::before{width:3px}
 .nav button i{font-style:normal;font-size:14px;width:18px;text-align:center}
-.side-foot{margin-top:auto;font-size:9px;color:var(--dimmer);letter-spacing:2px;
-  text-align:center;padding-top:16px;border-top:1px solid var(--line)}
+.side-foot{margin-top:auto;font-size:9px;color:var(--dimmer);letter-spacing:2px;text-align:center;
+  padding-top:16px;border-top:1px solid var(--line)}
+.mode-badge{display:block;text-align:center;font-size:9px;letter-spacing:3px;padding:6px;
+  border:1px solid var(--line2);border-radius:99px;margin-top:10px;color:var(--dim)}
+.mode-badge.live{border-color:#9dff9d;color:#9dff9d;text-shadow:0 0 10px rgba(157,255,157,.5)}
+.mode-badge.sandbox{border-color:#ffb84d;color:#ffb84d;text-shadow:0 0 10px rgba(255,184,77,.5)}
 main{overflow-y:auto;padding:30px 34px 60px;position:relative}
 main::-webkit-scrollbar{width:8px}
 main::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
-main::-webkit-scrollbar-thumb:hover{background:#3a3a3a}
-.topbar{display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:28px;animation:fadeUp .6s both}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;animation:fadeUp .6s both}
 .topbar h1{font-size:19px;letter-spacing:5px;font-weight:700;animation:slideL .7s var(--ease) both}
 .topbar .who{font-size:10px;letter-spacing:2px;color:var(--dim);animation:slideR .7s var(--ease) both}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;
-  margin-right:7px;box-shadow:0 0 10px #fff;animation:blink 1.6s ease-in-out infinite}
-
-/* PAGE TRANSITIONS */
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;margin-right:7px;
+  box-shadow:0 0 10px #fff;animation:blink 1.6s ease-in-out infinite}
 main section{position:relative}
 main section.page-in{animation:pageIn .5s var(--ease) both}
 main section.page-out{animation:pageOut .28s ease both}
-#sweep{position:absolute;top:0;left:0;right:0;height:2px;overflow:hidden;
-  opacity:0;pointer-events:none;z-index:30}
+#sweep{position:absolute;top:0;left:0;right:0;height:2px;overflow:hidden;opacity:0;pointer-events:none;z-index:30}
 #sweep.on{opacity:1}
-#sweep::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,#fff,transparent);
+#sweep::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fff,transparent);
   animation:sweepLine .6s linear}
 
 /* CARDS */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-.card{background:linear-gradient(160deg,#0d0d0d,#070707);
-  border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;
-  overflow:hidden;transition:transform .4s var(--ease),border-color .3s,box-shadow .3s;
+.card{background:linear-gradient(160deg,#0d0d0d,#070707);border:1px solid var(--line);border-radius:16px;
+  padding:22px;position:relative;overflow:hidden;transition:transform .4s var(--ease),border-color .3s,box-shadow .3s;
   animation:slideUp .7s var(--ease) both;transform-style:preserve-3d}
-.grid .card:nth-child(1){animation-delay:.05s}
-.grid .card:nth-child(2){animation-delay:.11s}
-.grid .card:nth-child(3){animation-delay:.17s}
-.grid .card:nth-child(4){animation-delay:.23s}
-.grid .card:nth-child(5){animation-delay:.29s}
-.grid .card:nth-child(6){animation-delay:.35s}
+.grid .card:nth-child(1){animation-delay:.05s}.grid .card:nth-child(2){animation-delay:.11s}
+.grid .card:nth-child(3){animation-delay:.17s}.grid .card:nth-child(4){animation-delay:.23s}
+.grid .card:nth-child(5){animation-delay:.29s}.grid .card:nth-child(6){animation-delay:.35s}
 @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 .card:hover{border-color:#fff;box-shadow:0 24px 60px rgba(0,0,0,.9),var(--glow)}
 .card::after{content:"";position:absolute;top:0;left:-100%;width:55%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
   transform:skewX(-18deg);animation:shine 6s ease-in-out infinite}
 .card .k{font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:14px}
-.card .v{font-size:26px;font-weight:900;letter-spacing:1px;text-shadow:var(--glow2);
-  font-family:var(--mono);animation:fadeUp .6s var(--ease) both}
+.card .v{font-size:26px;font-weight:900;letter-spacing:1px;text-shadow:var(--glow2);font-family:var(--mono)}
 .card .s{font-size:9px;color:var(--dimmer);margin-top:10px;letter-spacing:2px}
 .bar{height:6px;background:#161616;border-radius:99px;overflow:hidden;margin-top:16px}
-.bar>i{display:block;height:100%;width:0;border-radius:99px;
-  background:linear-gradient(90deg,#6b6b6b,#fff);
-  box-shadow:0 0 16px rgba(255,255,255,.7);
-  transition:width 1s var(--ease)}
+.bar>i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#6b6b6b,#fff);
+  box-shadow:0 0 16px rgba(255,255,255,.7);transition:width 1s var(--ease)}
 
 /* TERMINAL */
 .term{background:#000;border:1px solid var(--line2);border-radius:14px;overflow:hidden;
   box-shadow:0 28px 80px rgba(0,0,0,.95),var(--glow);animation:slideUp .7s .1s var(--ease) both}
-.term-head{display:flex;align-items:center;gap:8px;padding:11px 15px;
-  background:#0a0a0a;border-bottom:1px solid var(--line2)}
+.term-head{display:flex;align-items:center;gap:8px;padding:11px 15px;background:#0a0a0a;
+  border-bottom:1px solid var(--line2)}
 .term-head b{width:10px;height:10px;border-radius:50%;background:#3a3a3a;display:inline-block}
 .term-head b:first-child{background:#fff;box-shadow:0 0 10px #fff}
 .term-head span{margin-left:auto;font-size:9px;letter-spacing:3px;color:var(--dim)}
-.term-body{height:min(52vh,440px);overflow-y:auto;padding:16px;font-family:var(--mono);
-  font-size:12.5px;line-height:1.7;white-space:pre-wrap;word-break:break-word;
-  color:#e8e8e8;text-shadow:var(--glow)}
+.term-body{height:min(50vh,420px);overflow-y:auto;padding:16px;font-family:var(--mono);font-size:12.5px;
+  line-height:1.7;white-space:pre-wrap;word-break:break-word;color:#e8e8e8;text-shadow:var(--glow)}
 .term-body::-webkit-scrollbar{width:7px}
 .term-body::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
 .term-body>div{animation:termIn .3s var(--ease) both}
-.tl{color:#e8e8e8}
-.tl-ok{color:#9dff9d}
-.tl-err{color:#ff8080}
-.tl-dim{color:#6a6a6a}
-.tl-yel{color:#ffe066}
-.tl-blue{color:#7ec8ff}
-.tl-mag{color:#ff9de6}
-.tl-cyan{color:#9dffea}
-.term-line{display:flex;align-items:center;gap:9px;padding:12px 16px;
-  border-top:1px solid var(--line2);background:#070707;font-family:var(--mono);font-size:13px}
+.tl{color:#e8e8e8}.tl-ok{color:#9dff9d}.tl-err{color:#ff8080}.tl-dim{color:#6a6a6a}
+.tl-yel{color:#ffe066}.tl-blue{color:#7ec8ff}.tl-mag{color:#ff9de6}.tl-cyan{color:#9dffea}
+.term-line{display:flex;align-items:center;gap:9px;padding:12px 16px;border-top:1px solid var(--line2);
+  background:#070707;font-family:var(--mono);font-size:13px}
 .term-line .ps1{color:#fff;text-shadow:var(--glow2);white-space:nowrap}
-.term-line input{flex:1;background:transparent;border:none;outline:none;color:#fff;
-  font-family:var(--mono);font-size:13px;text-shadow:var(--glow)}
+.term-line input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:var(--mono);
+  font-size:13px;text-shadow:var(--glow)}
 .term-line input::placeholder{color:#3a3a3a}
+.run-btn{background:#fff;color:#000;border:0;border-radius:7px;padding:8px 16px;font-family:var(--mono);
+  font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:.2s;white-space:nowrap}
+.run-btn:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(255,255,255,.55)}
+.run-btn:active{transform:translateY(0) scale(.97)}
+.run-btn:disabled{opacity:.4;cursor:not-allowed}
 
 /* ROWS / FORMS */
-.row{display:flex;align-items:center;justify-content:space-between;gap:14px;
-  padding:15px 18px;border:1px solid var(--line);border-radius:12px;background:#0a0a0a;
-  margin-bottom:10px;transition:transform .3s var(--ease),border-color .25s,box-shadow .25s;
-  animation:slideR .5s var(--ease) both}
-.row:nth-child(1){animation-delay:.05s}
-.row:nth-child(2){animation-delay:.11s}
-.row:nth-child(3){animation-delay:.17s}
-.row:nth-child(4){animation-delay:.23s}
+.row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 18px;
+  border:1px solid var(--line);border-radius:12px;background:#0a0a0a;margin-bottom:10px;
+  transition:transform .3s var(--ease),border-color .25s,box-shadow .25s;animation:slideR .5s var(--ease) both}
+.row:nth-child(1){animation-delay:.05s}.row:nth-child(2){animation-delay:.11s}
+.row:nth-child(3){animation-delay:.17s}.row:nth-child(4){animation-delay:.23s}
 .row:hover{border-color:#fff;transform:translateX(7px);box-shadow:var(--glow)}
 .row .n{font-family:var(--mono);font-size:13px;letter-spacing:.5px}
 .row .m{font-size:9px;color:var(--dim);letter-spacing:2px;margin-top:5px}
-.tag{font-size:9px;padding:5px 11px;border:1px solid var(--line2);border-radius:99px;
-  letter-spacing:2px;color:var(--dim);white-space:nowrap}
+.tag{font-size:9px;padding:5px 11px;border:1px solid var(--line2);border-radius:99px;letter-spacing:2px;
+  color:var(--dim);white-space:nowrap}
 .tag.on{border-color:#fff;color:#fff;box-shadow:var(--glow)}
 .drop{border:1.5px dashed var(--line2);border-radius:15px;padding:48px 20px;text-align:center;
   transition:.4s var(--ease);cursor:pointer;background:#070707;animation:slideUp .6s var(--ease) both}
 .drop:hover,.drop.over{border-color:#fff;background:#0d0d0d;box-shadow:var(--glow);transform:scale(1.015)}
 .drop h3{font-size:13px;letter-spacing:4px;margin-bottom:10px}
 .drop p{font-size:10px;color:var(--dim);letter-spacing:2px}
-input.txt,textarea.txt{width:100%;padding:13px 15px;background:#050505;
-  border:1px solid var(--line2);border-radius:11px;color:#fff;font-family:var(--mono);
-  font-size:13px;outline:none;transition:.25s;text-shadow:var(--glow)}
+input.txt,textarea.txt{width:100%;padding:13px 15px;background:#050505;border:1px solid var(--line2);
+  border-radius:11px;color:#fff;font-family:var(--mono);font-size:13px;outline:none;transition:.25s;text-shadow:var(--glow)}
 input.txt::placeholder{color:#3a3a3a}
 input.txt:focus,textarea.txt:focus{border-color:#fff;box-shadow:var(--glow)}
 label.lbl{display:block;font-size:9px;letter-spacing:3px;color:var(--dim);margin:18px 0 9px}
-.switch{display:flex;align-items:center;gap:12px;margin-top:18px;font-size:10px;
-  letter-spacing:2px;color:var(--dim);cursor:pointer}
-.switch input{appearance:none;width:44px;height:23px;border-radius:99px;background:#1a1a1a;
-  border:1px solid var(--line2);position:relative;cursor:pointer;transition:.3s}
-.switch input:checked{background:#fff;box-shadow:var(--glow2)}
-.switch input::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;
-  border-radius:50%;background:#666;transition:.3s var(--ease)}
-.switch input:checked::after{left:23px;background:#000}
-pre.out{background:#000;border:1px solid var(--line);border-radius:11px;padding:14px;
-  font-family:var(--mono);font-size:12px;color:#ddd;max-height:260px;overflow:auto;
-  white-space:pre-wrap;text-shadow:var(--glow);margin-top:14px;animation:slideUp .5s var(--ease) both}
-.badge{display:inline-block;font-size:9px;letter-spacing:3px;padding:6px 12px;
-  border:1px solid var(--line2);border-radius:99px;color:var(--dim);margin-bottom:18px;
-  animation:slideR .5s var(--ease) both}
+pre.out{background:#000;border:1px solid var(--line);border-radius:11px;padding:14px;font-family:var(--mono);
+  font-size:12px;color:#ddd;max-height:260px;overflow:auto;white-space:pre-wrap;text-shadow:var(--glow);
+  margin-top:14px;animation:slideUp .5s var(--ease) both}
+.badge{display:inline-block;font-size:9px;letter-spacing:3px;padding:6px 12px;border:1px solid var(--line2);
+  border-radius:99px;color:var(--dim);margin-bottom:18px;animation:slideR .5s var(--ease) both}
 h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;font-weight:500;
   animation:slideR .5s .05s var(--ease) both}
-.note{font-size:10px;letter-spacing:1.5px;color:var(--dimmer);line-height:1.9;
-  border-left:2px solid var(--line2);padding-left:12px;margin-top:16px;
-  animation:fadeUp .6s var(--ease) both}
+.note{font-size:10px;letter-spacing:1.5px;color:var(--dimmer);line-height:1.9;border-left:2px solid var(--line2);
+  padding-left:12px;margin-top:16px;animation:fadeUp .6s var(--ease) both}
 
-/* toast */
-#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,110px);
-  background:#fff;color:#000;padding:13px 26px;border-radius:11px;font-size:11px;
-  letter-spacing:2px;font-weight:700;z-index:99;
-  transition:transform .55s var(--ease),opacity .4s;
-  box-shadow:0 0 36px rgba(255,255,255,.55);opacity:0;overflow:hidden}
+#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,110px);background:#fff;color:#000;
+  padding:13px 26px;border-radius:11px;font-size:11px;letter-spacing:2px;font-weight:700;z-index:99;
+  transition:transform .55s var(--ease),opacity .4s;box-shadow:0 0 36px rgba(255,255,255,.55);opacity:0;overflow:hidden}
 #toast.show{transform:translate(-50%,0);opacity:1}
 #toast.err{background:#ff4d4d;color:#fff;box-shadow:0 0 36px rgba(255,77,77,.65)}
 #toast::after{content:"";position:absolute;bottom:0;left:0;height:2px;background:rgba(0,0,0,.3);
   animation:toastBar 2.8s linear forwards}
 
-/* mobile */
 @media(max-width:840px){
   #panel{grid-template-columns:1fr}
-  aside{flex-direction:row;overflow-x:auto;border-right:none;
-        border-bottom:1px solid var(--line);padding:12px;gap:6px;align-items:center}
-  .side-brand,.side-foot{display:none}
+  aside{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--line);
+    padding:12px;gap:6px;align-items:center}
+  .side-brand,.side-foot,.mode-badge{display:none}
   .nav{flex-direction:row}
   .nav button{white-space:nowrap;padding:10px 12px}
   .nav button::before{display:none}
   main{padding:22px 16px 60px}
 }
 @media(prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms!important;animation-iteration-count:1!important;
-    transition-duration:.01ms!important}
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 </style>
 </head>
@@ -322,15 +261,14 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
 <div class="scanline"></div>
 <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
 
-<!-- ══════════ LOGIN ══════════ -->
+<!-- LOGIN -->
 <div id="login">
   <div class="login-card">
     <div class="brand" id="brand"></div>
     <div class="scan"></div>
     <div class="field">
       <label>LOGIN ID</label>
-      <input id="lg-user" type="text" autocomplete="off" autocorrect="off"
-             autocapitalize="off" spellcheck="false" placeholder="enter id">
+      <input id="lg-user" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="enter id">
     </div>
     <div class="field">
       <label>PASSWORD</label>
@@ -343,10 +281,11 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
     <div class="msg" id="lg-msg"></div>
     <div class="lock" id="lg-lock"></div>
     <div class="hint">4 GB RAM · 100% CPU · 1 GB STORAGE</div>
+    <div class="mode-line" id="mode-line">DETECTING BACKEND…</div>
   </div>
 </div>
 
-<!-- ══════════ PANEL ══════════ -->
+<!-- PANEL -->
 <div id="panel" class="hidden">
   <aside>
     <div class="side-brand">SUKUNA<span>HOSTING PANEL</span></div>
@@ -358,7 +297,8 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
       <button data-page="set"><i>⚙</i>SETTINGS</button>
       <button onclick="doLogout()"><i>⏻</i>LOGOUT</button>
     </nav>
-    <div class="side-foot" id="side-foot">v2.1 · SUKUNA CORE</div>
+    <span class="mode-badge" id="mode-badge">CHECKING…</span>
+    <div class="side-foot" id="side-foot">v3.0 · SUKUNA CORE</div>
   </aside>
 
   <main>
@@ -382,7 +322,7 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
           <div class="s" id="st-plat">—</div></div>
         <div class="card tilt"><div class="k">NODE</div>
           <div class="v" id="st-node" style="font-size:19px">—</div>
-          <div class="s">RUNTIME</div></div>
+          <div class="s">SERVER RUNTIME</div></div>
         <div class="card tilt"><div class="k">HOSTED FILE</div>
           <div class="v" id="st-file" style="font-size:15px">—</div>
           <div class="s">SERVED AT /site</div></div>
@@ -402,19 +342,18 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
         <button class="btn ghost" style="width:auto;padding:12px 22px" onclick="openSite()">OPEN /site</button>
         <button class="btn ghost" style="width:auto;padding:12px 22px" onclick="deleteFile()">DELETE FILE</button>
       </div>
-      <div class="note">Browser storage quota applies. For real 1 GB hosting on a VPS,
-        deploy the Node backend (server.js) — this static file only stores in your browser.</div>
+      <div class="note" id="files-note">Real file hosting requires the Node backend. This file stores uploads in your browser.</div>
     </section>
 
     <section id="page-term" class="hidden">
-      <div class="badge">SHELL · PIP · NPM · GIT · SANDBOX</div>
+      <div class="badge">SHELL · PIP · NPM · GIT</div>
       <div class="term">
-        <div class="term-head"><b></b><b></b><b></b><span id="term-status">SANDBOX</span></div>
+        <div class="term-head"><b></b><b></b><b></b><span id="term-status">READY</span></div>
         <div class="term-body" id="term-out"></div>
         <div class="term-line">
           <span class="ps1" id="term-ps1">sukuna@panel:~$</span>
-          <input id="term-in" placeholder="type a command… (help)" autocomplete="off"
-                 autocapitalize="off" spellcheck="false">
+          <input id="term-in" placeholder="type command… then press RUN" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <button class="run-btn" id="run-btn" onclick="runCurrent()">▶ RUN</button>
         </div>
       </div>
       <h2 class="sec">QUICK ACTIONS</h2>
@@ -430,17 +369,14 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
         <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('ls -la')">ls -la</button>
         <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('clear')">clear</button>
       </div>
-      <div class="note">Sandbox mode — commands run inside this page.
-        For a real interactive shell with node-pty + WebSocket,
-        deploy the Flask/Node backend on a VPS.</div>
+      <div class="note" id="term-note">Real shell commands require the Node backend. In sandbox mode, commands are simulated.</div>
     </section>
 
     <section id="page-py" class="hidden">
       <div class="badge">PYTHON & NODE RUNTIMES</div>
       <h2 class="sec">PYTHON INTERPRETERS</h2>
       <div id="py-list"></div>
-      <button class="btn ghost" style="width:auto;padding:12px 22px;margin-top:16px"
-              onclick="loadRuntimes()">RESCAN</button>
+      <button class="btn ghost" style="width:auto;padding:12px 22px;margin-top:16px" onclick="loadRuntimes()">RESCAN</button>
       <h2 class="sec">NODE.JS</h2>
       <div id="node-list"></div>
     </section>
@@ -450,20 +386,16 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
       <div class="card" style="animation:none">
         <label class="lbl">STARTUP COMMAND (CMD STARTUP)</label>
         <input class="txt" id="set-cmd" placeholder="e.g. python -m http.server 9000 --directory hosted">
-        <label class="switch">
-          <input type="checkbox" id="set-auto" checked>
-          RUN AUTOMATICALLY WHEN PANEL STARTS
-        </label>
         <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
           <button class="btn" style="width:auto;padding:12px 24px" onclick="saveSettings()">SAVE</button>
-          <button class="btn ghost" style="width:auto;padding:12px 24px" onclick="runStartup()">RUN NOW</button>
+          <button class="btn ghost" style="width:auto;padding:12px 24px" onclick="runStartup()">▶ RUN STARTUP</button>
         </div>
       </div>
       <h2 class="sec">RESOURCE LIMITS</h2>
       <div class="row"><div><div class="n">MEMORY</div><div class="m">HARD LIMIT</div></div><div class="tag on">4 GB</div></div>
       <div class="row"><div><div class="n">CPU</div><div class="m">HARD LIMIT</div></div><div class="tag on">100 %</div></div>
       <div class="row"><div><div class="n">STORAGE</div><div class="m">SINGLE FILE HOST</div></div><div class="tag on">1 GB</div></div>
-      <h2 class="sec">STARTUP OUTPUT</h2>
+      <h2 class="sec">OUTPUT</h2>
       <pre class="out" id="set-out">—</pre>
     </section>
   </main>
@@ -473,20 +405,9 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
 
 <script>
 "use strict";
-/* ═══════════════════════════════════════════════════
-   CONFIG
-   ═══════════════════════════════════════════════════ */
+/* ─────────────── CONFIG ─────────────── */
 const $  = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
-
-/* Obfuscated credentials — username: hardik2321 / password: Hardik@2321 */
-const _K = 3;
-const _U = [101,94,111,97,102,104,47,48,47,46];
-const _P = [69,94,111,97,102,104,61,47,48,47,46];
-const dec = a => a.map(c => String.fromCharCode(c + _K)).join("");
-const USER_OK = dec(_U);
-const PASS_OK = dec(_P);
-
 const MAX_RAM_GB   = 4;
 const MAX_CPU      = 100;
 const MAX_STORAGE  = 1024 * 1024 * 1024;
@@ -496,25 +417,29 @@ const IDLE_MINUTES = 10;
 const SESSION_TTL  = 2 * 60 * 60 * 1000;
 const UPTIME_START = Date.now();
 
-/* ═══════════════════════════════════════════════════
-   UTILITIES
-   ═══════════════════════════════════════════════════ */
+/* obfuscated credentials — hardik2321 / Hardik@2321 (sandbox mode only) */
+const _K = 3;
+const _U = [101,94,111,97,102,104,47,48,47,46];
+const _P = [69,94,111,97,102,104,61,47,48,47,46];
+const dec = a => a.map(c => String.fromCharCode(c + _K)).join("");
+const USER_OK = dec(_U);
+const PASS_OK = dec(_P);
+
+const SITE_KEY  = 'sk_site_v1';
+const SET_KEY   = 'sk_cfg_v1';
+const LOCK_KEY  = 'sk_lock_v1';
+const TRY_KEY   = 'sk_try_v1';
+const AUTH_KEY  = 'sk_auth_v1';
+
+let MODE = 'unknown';   // 'live' | 'sandbox'
+let memFile = null;
+
+/* ─────────────── UTILS ─────────────── */
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const human = n => {
-  const u = ['B','KB','MB','GB','TB'];
-  let i = 0;
-  while (n >= 1024 && i < u.length - 1){ n /= 1024; i++; }
-  return n.toFixed(1) + ' ' + u[i];
-};
+const human = n => { const u=['B','KB','MB','GB','TB']; let i=0; while(n>=1024&&i<u.length-1){n/=1024;i++;} return n.toFixed(1)+' '+u[i]; };
 const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
-const esc = s => String(s).replace(/[&<>"']/g, c =>
-  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ctEq = (a, b) => {
-  if (a.length !== b.length) return false;
-  let r = 0;
-  for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return r === 0;
-};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ctEq = (a, b) => { if (a.length!==b.length) return false; let r=0; for (let i=0;i<a.length;i++) r|=a.charCodeAt(i)^b.charCodeAt(i); return r===0; };
 
 function toast(msg, err){
   const t = $('#toast');
@@ -524,83 +449,27 @@ function toast(msg, err){
   t._h = setTimeout(() => t.className = '', 2800);
 }
 
-/* ═══════════════════════════════════════════════════
-   STORAGE
-   ═══════════════════════════════════════════════════ */
-const SITE_KEY  = 'sk_site_v1';
-const SET_KEY   = 'sk_cfg_v1';
-const LOCK_KEY  = 'sk_lock_v1';
-const TRY_KEY   = 'sk_try_v1';
-const AUTH_KEY  = 'sk_auth_v1';
+/* ─────────────── STORAGE ─────────────── */
+function getSite(){ if (memFile) return memFile; try { return JSON.parse(localStorage.getItem(SITE_KEY)); } catch(e){ return null; } }
+function setSite(o){ try { localStorage.setItem(SITE_KEY, JSON.stringify(o)); memFile=null; return true; } catch(e){ memFile=o; return false; } }
+function delSite(){ memFile=null; try { localStorage.removeItem(SITE_KEY); } catch(e){} }
+function getCfg(){ try { return Object.assign({ startup_cmd:'' }, JSON.parse(localStorage.getItem(SET_KEY))||{}); } catch(e){ return { startup_cmd:'' }; } }
+function setCfg(o){ try { localStorage.setItem(SET_KEY, JSON.stringify(o)); } catch(e){} }
 
-let memFile = null;
-
-function getSite(){
-  if (memFile) return memFile;
-  try { return JSON.parse(localStorage.getItem(SITE_KEY)); }
-  catch (e) { return null; }
-}
-function setSite(obj){
-  try { localStorage.setItem(SITE_KEY, JSON.stringify(obj)); memFile = null; return true; }
-  catch (e) { memFile = obj; return false; }
-}
-function delSite(){
-  memFile = null;
-  try { localStorage.removeItem(SITE_KEY); } catch (e) {}
-}
-function getCfg(){
-  try { return Object.assign({ startup_cmd:'', autorun:true },
-    JSON.parse(localStorage.getItem(SET_KEY)) || {}); }
-  catch (e) { return { startup_cmd:'', autorun:true }; }
-}
-function setCfg(o){
-  try { localStorage.setItem(SET_KEY, JSON.stringify(o)); } catch (e) {}
-}
-
-/* ═══════════════════════════════════════════════════
-   SESSION
-   ═══════════════════════════════════════════════════ */
+/* ─────────────── SESSION ─────────────── */
 function sessionValid(){
-  try {
-    const s = JSON.parse(sessionStorage.getItem(AUTH_KEY));
-    return s && s.t && (Date.now() - s.t < SESSION_TTL);
-  } catch (e) { return false; }
+  try { const s = JSON.parse(sessionStorage.getItem(AUTH_KEY)); return s && s.t && (Date.now()-s.t < SESSION_TTL); }
+  catch(e){ return false; }
 }
 function sessionOpen(){ sessionStorage.setItem(AUTH_KEY, JSON.stringify({ t: Date.now() })); }
 function sessionClose(){ sessionStorage.removeItem(AUTH_KEY); }
 
-/* ═══════════════════════════════════════════════════
-   BRAND ANIMATION
-   ═══════════════════════════════════════════════════ */
-(function(){
-  const b = $('#brand');
-  const word = 'SUKUNA';
-  b.innerHTML = word.split('').map((c,i) =>
-    `<span style="animation-delay:${0.08*i+0.1}s">${c}</span>`
-  ).join('') + '<small>HOSTING PANEL</small>';
-})();
-
-/* ═══════════════════════════════════════════════════
-   LOCKOUT
-   ═══════════════════════════════════════════════════ */
-function lockRemaining(){
-  try {
-    const until = +(localStorage.getItem(LOCK_KEY) || 0);
-    return Math.max(0, Math.ceil((until - Date.now()) / 1000));
-  } catch (e) { return 0; }
-}
-function writeLock(sec){
-  try { localStorage.setItem(LOCK_KEY, Date.now() + sec * 1000); } catch (e) {}
-}
-function triesGet(){
-  try { return +(localStorage.getItem(TRY_KEY) || 0); } catch (e) { return 0; }
-}
-function triesSet(n){
-  try { localStorage.setItem(TRY_KEY, String(n)); } catch (e) {}
-}
-function triesClear(){
-  try { localStorage.removeItem(TRY_KEY); } catch (e) {}
-}
+/* ─────────────── LOCKOUT ─────────────── */
+function lockRemaining(){ try { return Math.max(0, Math.ceil((+(localStorage.getItem(LOCK_KEY)||0) - Date.now())/1000)); } catch(e){ return 0; } }
+function writeLock(s){ try { localStorage.setItem(LOCK_KEY, Date.now()+s*1000); } catch(e){} }
+function triesGet(){ try { return +(localStorage.getItem(TRY_KEY)||0); } catch(e){ return 0; } }
+function triesSet(n){ try { localStorage.setItem(TRY_KEY, String(n)); } catch(e){} }
+function triesClear(){ try { localStorage.removeItem(TRY_KEY); } catch(e){} }
 
 let lockTimer = null;
 function startLockWatch(){
@@ -611,12 +480,10 @@ function startLockWatch(){
     if (!btn) return;
     if (s > 0){
       $('#lg-lock').textContent = 'LOCKED · RETRY IN ' + s + 's';
-      btn.disabled = true;
-      btn.textContent = 'LOCKED (' + s + 's)';
+      btn.disabled = true; btn.textContent = 'LOCKED (' + s + 's)';
     } else {
       $('#lg-lock').textContent = '';
-      btn.disabled = false;
-      btn.textContent = 'ACCESS PANEL';
+      btn.disabled = false; btn.textContent = 'ACCESS PANEL';
       clearInterval(lockTimer);
     }
   };
@@ -624,16 +491,88 @@ function startLockWatch(){
   lockTimer = setInterval(tick, 1000);
 }
 
-/* ═══════════════════════════════════════════════════
-   LOGIN  (never reloads — this fixes the loop)
-   ═══════════════════════════════════════════════════ */
+/* ─────────────── BRAND ─────────────── */
+(function(){
+  const b = $('#brand');
+  const word = 'SUKUNA';
+  b.innerHTML = word.split('').map((c,i) => `<span style="animation-delay:${0.08*i+0.1}s">${c}</span>`).join('') +
+                '<small>HOSTING PANEL</small>';
+})();
+
+/* ─────────────── BACKEND DETECTION ─────────────── */
+async function detectBackend(){
+  try {
+    const r = await fetch('/api/me', {
+      credentials: 'same-origin',
+      signal: AbortSignal.timeout(3000),
+    });
+    const text = await r.text();
+    try {
+      JSON.parse(text);
+      MODE = 'live';
+    } catch(e){
+      MODE = 'sandbox';
+    }
+  } catch(e){
+    MODE = 'sandbox';
+  }
+  updateModeBadge();
+}
+
+function updateModeBadge(){
+  const m = $('#mode-line');
+  if (m) m.textContent = MODE === 'live' ? '● LIVE SERVER CONNECTED' : '● SANDBOX MODE (NO BACKEND)';
+
+  const b = $('#mode-badge');
+  if (b){
+    b.textContent = MODE === 'live' ? 'LIVE' : 'SANDBOX';
+    b.className = 'mode-badge ' + (MODE === 'live' ? 'live' : 'sandbox');
+  }
+
+  const note1 = $('#files-note');
+  if (note1) note1.textContent = MODE === 'live'
+    ? 'Files upload to the server and are served at /site.'
+    : 'Sandbox mode: files are stored in your browser only. Deploy the Node backend for real hosting.';
+
+  const note2 = $('#term-note');
+  if (note2) note2.textContent = MODE === 'live'
+    ? 'Live mode: commands run on the server. Real pip / npm / git.'
+    : 'Sandbox mode: commands are simulated. Deploy the Node backend for real execution.';
+}
+
+/* ─────────────── API (backend-aware) ─────────────── */
+async function apiGet(path){
+  if (MODE === 'live'){
+    try {
+      const r = await fetch(path, { credentials:'same-origin', signal: AbortSignal.timeout(8000) });
+      return await r.json();
+    } catch(e){ return null; }
+  }
+  return null;
+}
+async function apiPost(path, body){
+  if (MODE === 'live'){
+    try {
+      const r = await fetch(path, {
+        method:'POST',
+        credentials:'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body || {}),
+        signal: AbortSignal.timeout(90000),
+      });
+      return await r.json();
+    } catch(e){ return { ok:false, out:'network error: ' + e.message }; }
+  }
+  return null;
+}
+
+/* ─────────────── LOGIN ─────────────── */
 let loginBusy = false;
 
 async function doLogin(){
-  if (loginBusy) return;
-  if (lockRemaining() > 0) return;
-
+  if (loginBusy || lockRemaining() > 0) return;
   loginBusy = true;
+
   const btn = $('#lg-btn');
   const msg = $('#lg-msg');
   const uIn = $('#lg-user');
@@ -645,23 +584,39 @@ async function doLogin(){
   msg.classList.remove('shake');
 
   try {
-    await sleep(280);                              // deliberate delay
+    await sleep(260);
     const u = uIn.value.trim();
     const p = pIn.value;
 
-    const userOk = ctEq(u, USER_OK);
-    const passOk = ctEq(p, PASS_OK);
+    let ok = false;
+    let errMsg = 'INVALID ID OR PASSWORD';
 
-    if (userOk && passOk){
+    if (MODE === 'live'){
+      try {
+        const r = await fetch('/api/login', {
+          method:'POST',
+          credentials:'same-origin',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify({ user:u, pass:p }),
+          signal: AbortSignal.timeout(10000),
+        });
+        const data = await r.json().catch(() => ({}));
+        ok = !!data.ok;
+        if (!ok) errMsg = String(data.msg || 'INVALID ID OR PASSWORD').toUpperCase();
+      } catch(e){
+        errMsg = 'BACKEND UNREACHABLE';
+      }
+    } else {
+      ok = ctEq(u, USER_OK) && ctEq(p, PASS_OK);
+    }
+
+    if (ok){
       sessionOpen();
       triesClear();
       pIn.value = '';
-      msg.textContent = '';
-
-      const lg = $('#login');
-      lg.classList.add('login-out');
+      $('#login').classList.add('login-out');
       setTimeout(() => {
-        lg.classList.add('hidden');
+        $('#login').classList.add('hidden');
         const pnl = $('#panel');
         pnl.classList.remove('hidden');
         pnl.classList.add('panel-in');
@@ -670,7 +625,6 @@ async function doLogin(){
       return;
     }
 
-    /* wrong creds */
     const tries = triesGet() + 1;
     triesSet(tries);
     if (tries >= MAX_ATTEMPTS){
@@ -679,15 +633,14 @@ async function doLogin(){
       startLockWatch();
       msg.textContent = 'TOO MANY ATTEMPTS · ACCESS LOCKED';
     } else {
-      msg.textContent = 'INVALID ID OR PASSWORD (' + (MAX_ATTEMPTS - tries) + ' LEFT)';
+      msg.textContent = errMsg + ' (' + (MAX_ATTEMPTS - tries) + ' LEFT)';
     }
     msg.classList.remove('shake'); void msg.offsetWidth;
     msg.classList.add('shake');
     pIn.value = '';
-
   } catch (err){
-    console.error('[login]', err);
     msg.textContent = 'UNEXPECTED ERROR · CHECK CONSOLE';
+    console.error(err);
   } finally {
     loginBusy = false;
     if (!sessionValid()){
@@ -707,30 +660,25 @@ $('#eye').onclick = () => {
 $('#lg-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 $('#lg-user').addEventListener('keydown', e => { if (e.key === 'Enter') $('#lg-pass').focus(); });
 
-/* idle auto logout */
 let idleTimer = null;
 function resetIdle(){
   clearTimeout(idleTimer);
   idleTimer = setTimeout(() => {
-    if (sessionValid()){
-      toast('SESSION EXPIRED · LOGGING OUT', true);
-      setTimeout(doLogout, 900);
-    }
+    if (sessionValid()){ toast('SESSION EXPIRED · LOGGING OUT', true); setTimeout(doLogout, 900); }
   }, IDLE_MINUTES * 60 * 1000);
 }
 ['mousemove','keydown','click','touchstart','scroll'].forEach(ev =>
   document.addEventListener(ev, resetIdle, { passive:true }));
 
-function doLogout(){
+async function doLogout(){
   sessionClose();
+  if (MODE === 'live'){ try { await fetch('/api/logout', { method:'POST', credentials:'same-origin' }); } catch(e){} }
   clearInterval(statsTimer);
   clearTimeout(idleTimer);
-  const pnl = $('#panel');
-  pnl.classList.add('hidden');
+  $('#panel').classList.add('hidden');
   const lg = $('#login');
   lg.classList.remove('login-out', 'hidden');
-  lg.style.animation = 'none'; void lg.offsetWidth;
-  lg.style.animation = '';
+  lg.style.animation = 'none'; void lg.offsetWidth; lg.style.animation = '';
   $('#lg-user').value = '';
   $('#lg-pass').value = '';
   $('#lg-btn').disabled = false;
@@ -739,11 +687,8 @@ function doLogout(){
   setTimeout(() => $('#lg-user').focus(), 300);
 }
 
-/* ═══════════════════════════════════════════════════
-   NAV / PAGE TRANSITIONS
-   ═══════════════════════════════════════════════════ */
-const TITLES = { dash:'DASHBOARD', files:'FILE HOST', term:'TERMINAL',
-                 py:'RUNTIMES', set:'SETTINGS' };
+/* ─────────────── NAV ─────────────── */
+const TITLES = { dash:'DASHBOARD', files:'FILE HOST', term:'TERMINAL', py:'RUNTIMES', set:'SETTINGS' };
 let currentPage = 'dash', switching = false;
 
 function goPage(p){
@@ -754,8 +699,7 @@ function goPage(p){
   const inEl  = $('#page-' + p);
   const sweep = $('#sweep');
 
-  sweep.classList.remove('on'); void sweep.offsetWidth;
-  sweep.classList.add('on');
+  sweep.classList.remove('on'); void sweep.offsetWidth; sweep.classList.add('on');
   setTimeout(() => sweep.classList.remove('on'), 650);
 
   outEl.classList.add('page-out');
@@ -763,7 +707,6 @@ function goPage(p){
   setTimeout(() => {
     outEl.classList.add('hidden');
     outEl.classList.remove('page-out');
-
     inEl.classList.remove('hidden');
     inEl.classList.add('page-in');
     setTimeout(() => inEl.classList.remove('page-in'), 540);
@@ -791,141 +734,156 @@ $$('.nav button[data-page]').forEach(btn => {
   };
 });
 
-/* 3D tilt on cards */
+/* 3D tilt */
 document.addEventListener('mousemove', e => {
   $$('.card.tilt').forEach(card => {
     const r = card.getBoundingClientRect();
-    if (e.clientX < r.left || e.clientX > r.right ||
-        e.clientY < r.top  || e.clientY > r.bottom){
-      card.style.transform = '';
-      card.style.borderColor = '';
-      card.style.boxShadow = '';
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom){
+      card.style.transform = ''; card.style.borderColor = ''; card.style.boxShadow = '';
       return;
     }
     const cx = (e.clientX - r.left) / r.width - 0.5;
     const cy = (e.clientY - r.top)  / r.height - 0.5;
-    card.style.transform =
-      `perspective(900px) rotateX(${-cy*6}deg) rotateY(${cx*6}deg) translateY(-4px)`;
+    card.style.transform = `perspective(900px) rotateX(${-cy*6}deg) rotateY(${cx*6}deg) translateY(-4px)`;
     card.style.borderColor = '#fff';
-    card.style.boxShadow =
-      '0 24px 60px rgba(0,0,0,.9), 0 0 10px rgba(255,255,255,.4)';
+    card.style.boxShadow = '0 24px 60px rgba(0,0,0,.9), 0 0 10px rgba(255,255,255,.4)';
   });
 });
 
-/* ═══════════════════════════════════════════════════
-   LIVE STATS
-   ═══════════════════════════════════════════════════ */
+/* ─────────────── STATS ─────────────── */
 let statsTimer = null;
-let cpuVal = 18, ramVal = 1.1;
+let cpuSim = 18, ramSim = 1.1;
 
-function loadStats(){
-  cpuVal += (Math.random() - 0.5) * 16;
-  cpuVal = clamp(cpuVal, 3, 92);
-  ramVal += (Math.random() - 0.5) * 0.22;
-  ramVal = clamp(ramVal, 0.4, MAX_RAM_GB * 0.92);
+async function loadStats(){
+  let s;
+
+  if (MODE === 'live'){
+    s = await apiGet('/api/stats');
+    if (s && s.ok){
+      $('#st-cpu').textContent = s.cpu + '%';
+      $('#bar-cpu').style.width = clamp((s.cpu/s.cpu_limit||s.cpu) * 100, 0, 100) + '%';
+      $('#st-ram').textContent = s.ram.used_gb + ' / ' + s.ram.total_gb + ' GB';
+      $('#bar-ram').style.width = clamp((s.ram.used_gb/s.ram.total_gb)*100, 0, 100) + '%';
+      $('#st-sto').textContent = s.storage.used_h;
+      $('#bar-sto').style.width = Math.max(1.5, s.storage.pct) + '%';
+      $('#st-py').textContent = s.python || '—';
+      $('#st-plat').textContent = String(s.platform || '').toUpperCase();
+      $('#st-node').textContent = s.node || '—';
+      $('#st-file').textContent = s.hosted || 'NONE';
+      return;
+    }
+  }
+
+  /* sandbox fallback */
+  cpuSim += (Math.random() - 0.5) * 16;
+  cpuSim = clamp(cpuSim, 3, 92);
+  ramSim += (Math.random() - 0.5) * 0.22;
+  ramSim = clamp(ramSim, 0.4, MAX_RAM_GB * 0.92);
 
   const site = getSite();
   const used = site ? site.size : 0;
-  const pct = (v, max) => Math.min(100, (v / max) * 100);
-
-  $('#st-cpu').textContent = cpuVal.toFixed(1) + '%';
-  $('#bar-cpu').style.width = pct(cpuVal, MAX_CPU) + '%';
-  $('#st-ram').textContent = ramVal.toFixed(2) + ' / ' + MAX_RAM_GB + ' GB';
-  $('#bar-ram').style.width = pct(ramVal, MAX_RAM_GB) + '%';
+  $('#st-cpu').textContent = cpuSim.toFixed(1) + '%';
+  $('#bar-cpu').style.width = clamp((cpuSim/MAX_CPU)*100, 0, 100) + '%';
+  $('#st-ram').textContent = ramSim.toFixed(2) + ' / ' + MAX_RAM_GB + ' GB';
+  $('#bar-ram').style.width = clamp((ramSim/MAX_RAM_GB)*100, 0, 100) + '%';
   $('#st-sto').textContent = human(used);
-  $('#bar-sto').style.width = Math.max(1.5, pct(used, MAX_STORAGE)) + '%';
-  $('#st-py').textContent = PYTHON_VERSIONS[0].version.replace('Python ', '');
+  $('#bar-sto').style.width = Math.max(1.5, clamp((used/MAX_STORAGE)*100, 0, 100)) + '%';
+  $('#st-py').textContent = '3.11.4';
   $('#st-plat').textContent = 'SANDBOX · ' + (navigator.platform || 'WEB').toUpperCase();
-  $('#st-node').textContent = NODE_VERSION;
+  $('#st-node').textContent = 'v20.10.0';
   $('#st-file').textContent = site ? site.name : 'NONE';
 }
 
-/* ═══════════════════════════════════════════════════
-   RUNTIME DATA (simulated, but version numbers are real)
-   ═══════════════════════════════════════════════════ */
-const PYTHON_VERSIONS = [
-  { path:'/usr/bin/python3',    version:'Python 3.11.4',  active:true  },
-  { path:'/usr/bin/python3.10', version:'Python 3.10.12', active:false },
-  { path:'/usr/bin/python3.9',  version:'Python 3.9.18',  active:false },
-  { path:'/usr/bin/python2.7',  version:'Python 2.7.18',  active:false },
-];
-const NODE_VERSION = 'v20.10.0';
-const NPM_VERSION  = '10.2.4';
-
-/* ═══════════════════════════════════════════════════
-   FILE HOST
-   ═══════════════════════════════════════════════════ */
+/* ─────────────── FILES ─────────────── */
 const drop = $('#drop');
 drop.onclick = () => $('#file-input').click();
-['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => {
-  e.preventDefault(); drop.classList.add('over');
-}));
-['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => {
-  e.preventDefault(); drop.classList.remove('over');
-}));
-drop.addEventListener('drop', e => {
-  if (e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
-});
-$('#file-input').onchange = e => {
-  if (e.target.files.length) uploadFile(e.target.files[0]);
-};
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => { if (e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]); });
+$('#file-input').onchange = e => { if (e.target.files.length) uploadFile(e.target.files[0]); };
 
-function uploadFile(file){
-  if (file.size > MAX_STORAGE){
-    toast('FILE EXCEEDS 1 GB', true); return;
+async function uploadFile(file){
+  if (file.size > MAX_STORAGE){ toast('FILE EXCEEDS 1 GB', true); return; }
+
+  if (MODE === 'live'){
+    toast('UPLOADING ' + file.name + ' …');
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const r = await fetch('/api/upload', { method:'POST', credentials:'same-origin', body: fd });
+      const data = await r.json();
+      toast(data.msg || (data.ok ? 'HOSTED' : 'FAILED'), !data.ok);
+      loadFiles(); loadStats();
+    } catch(e){
+      toast('UPLOAD FAILED', true);
+    }
+    return;
   }
+
   toast('READING ' + file.name + ' …');
   const reader = new FileReader();
   reader.onload = ev => {
-    const ok = setSite({
-      name: file.name,
-      size: file.size,
-      type: file.type || 'text/plain',
-      data: ev.target.result,
-      at: Date.now(),
-    });
+    const ok = setSite({ name: file.name, size: file.size, type: file.type || 'text/plain', data: ev.target.result, at: Date.now() });
     toast(ok ? 'HOSTED ' + file.name : 'HOSTED THIS SESSION ONLY (quota full)', !ok);
-    loadFiles();
-    loadStats();
+    loadFiles(); loadStats();
   };
   reader.onerror = () => toast('READ FAILED', true);
   reader.readAsDataURL(file);
 }
 
-function loadFiles(){
-  const site = getSite();
+async function loadFiles(){
   const box = $('#file-list');
-  const used = site ? site.size : 0;
 
+  if (MODE === 'live'){
+    const r = await apiGet('/api/files');
+    if (r && r.ok){
+      if (!r.files.length){
+        box.innerHTML = '<div class="row"><div><div class="n">NO FILE HOSTED</div>' +
+          '<div class="m">UPLOAD A FILE TO ACTIVATE /site</div></div><div class="tag">EMPTY</div></div>';
+      } else {
+        box.innerHTML = r.files.map(f => `
+          <div class="row">
+            <div><div class="n">${esc(f.name)}</div>
+            <div class="m">${(f.size/1024).toFixed(1)} KB · SERVED AT /site</div></div>
+            <div class="tag on">LIVE</div>
+          </div>`).join('') + `
+          <div class="row"><div><div class="n">STORAGE USED</div>
+          <div class="m">LIMIT ${r.limit_h}</div></div><div class="tag">${r.used_h}</div></div>`;
+      }
+      return;
+    }
+  }
+
+  const site = getSite();
+  const used = site ? site.size : 0;
   box.innerHTML = (site ? `
     <div class="row">
-      <div>
-        <div class="n">${esc(site.name)}</div>
-        <div class="m">${(site.size/1024).toFixed(1)} KB · SERVED AT /site</div>
-      </div>
-      <div class="tag on">LIVE</div>
+      <div><div class="n">${esc(site.name)}</div>
+      <div class="m">${(site.size/1024).toFixed(1)} KB · BROWSER ONLY</div></div>
+      <div class="tag on">SANDBOX</div>
     </div>` : `
     <div class="row">
-      <div>
-        <div class="n">NO FILE HOSTED</div>
-        <div class="m">UPLOAD A FILE TO ACTIVATE /site</div>
-      </div>
+      <div><div class="n">NO FILE HOSTED</div>
+      <div class="m">UPLOAD A FILE TO ACTIVATE</div></div>
       <div class="tag">EMPTY</div>
     </div>`) + `
-    <div class="row">
-      <div><div class="n">STORAGE USED</div><div class="m">LIMIT ${human(MAX_STORAGE)}</div></div>
-      <div class="tag">${human(used)}</div>
-    </div>`;
+    <div class="row"><div><div class="n">STORAGE USED</div>
+    <div class="m">LIMIT ${human(MAX_STORAGE)}</div></div><div class="tag">${human(used)}</div></div>`;
 }
 
-function deleteFile(){
-  delSite();
-  toast('HOSTED FILE REMOVED');
-  loadFiles();
-  loadStats();
+async function deleteFile(){
+  if (MODE === 'live'){
+    const r = await apiPost('/api/delete', {});
+    toast(r && r.ok ? 'FILE REMOVED' : 'DELETE FAILED', !(r && r.ok));
+  } else {
+    delSite();
+    toast('FILE REMOVED');
+  }
+  loadFiles(); loadStats();
 }
 
 function openSite(){
+  if (MODE === 'live'){ window.open('/site', '_blank'); return; }
   const site = getSite();
   if (!site){ toast('NO FILE HOSTED', true); return; }
   try {
@@ -934,22 +892,18 @@ function openSite(){
     const bin = atob(b64);
     const arr = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-    const blob = new Blob([arr], { type: mime });
-    const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(new Blob([arr], { type: mime }));
     const w = window.open(url, '_blank');
     if (!w) toast('POPUP BLOCKED', true);
     setTimeout(() => URL.revokeObjectURL(url), 60000);
-  } catch (e){
-    toast('CANNOT OPEN FILE', true);
-  }
+  } catch(e){ toast('CANNOT OPEN FILE', true); }
 }
 
-/* ═══════════════════════════════════════════════════
-   TERMINAL
-   ═══════════════════════════════════════════════════ */
+/* ─────────────── TERMINAL ─────────────── */
 const termOut = $('#term-out');
 const termIn  = $('#term-in');
 const termPs1 = $('#term-ps1');
+const runBtn  = $('#run-btn');
 let cwd = '~';
 let history = [], hIdx = -1;
 
@@ -968,154 +922,104 @@ function twHtml(html){
   termOut.scrollTop = termOut.scrollHeight;
 }
 
-const BLOCKED = [/^sudo\b/, /^su\b/, /rm\s+-rf\s+\//, /mkfs/, /dd\s+if=/,
-                 /^shutdown\b/, /^reboot\b/, /^:\s*\(\)/];
+const BLOCKED = [/^sudo\b/, /^su\b/, /rm\s+-rf\s+\//, /mkfs/, /dd\s+if=/, /^shutdown\b/, /^reboot\b/, /^:\s*\(\)/];
 
-function runCmd(raw){
+async function runCmd(raw){
   const line = raw.trim();
   if (!line) return;
   twHtml(`<span class="tl-dim">sukuna@panel:${esc(cwd)}$</span> <span class="tl">${esc(line)}</span>`);
 
   if (BLOCKED.some(re => re.test(line))){
-    tw('⛔ command blocked by panel policy', 'tl-err');
+    tw('⛔ blocked by panel policy', 'tl-err');
     return;
   }
 
+  if (line === 'clear' || line === 'cls'){ termOut.innerHTML = ''; return; }
+
+  /* LIVE MODE — actually run on server */
+  if (MODE === 'live'){
+    runBtn.disabled = true;
+    const data = await apiPost('/api/terminal', { cmd: line });
+    runBtn.disabled = false;
+
+    if (!data){
+      tw('network error', 'tl-err');
+      return;
+    }
+    if (data.out) tw(data.out.replace(/\n$/, ''), data.ok ? 'tl' : 'tl-err');
+    else if (!data.ok) tw('command failed (exit ' + (data.code||1) + ')', 'tl-err');
+    return;
+  }
+
+  /* SANDBOX MODE — simulate */
+  simulateCmd(line);
+}
+
+function simulateCmd(line){
   const [cmd, ...args] = line.split(/\s+/);
   const arg = args.join(' ');
 
-  switch (cmd){
+  switch(cmd){
     case 'help':
-      tw('SUKUNA SHELL — available commands:', 'tl-cyan');
-      tw('  help                  this list');
-      tw('  clear                 clear screen');
-      tw('  pwd                   print working directory');
-      tw('  ls / ls -la           list hosted file');
-      tw('  cat <file>            print file contents');
-      tw('  cd <dir>              change directory');
-      tw('  whoami                current user');
-      tw('  date                  system time');
-      tw('  uptime                panel uptime');
-      tw('  echo <text>           print text');
-      tw('  pip install <pkg>     install python package');
-      tw('  pip list              installed packages');
-      tw('  pip install --upgrade pip');
-      tw('  python --version      interpreter version');
-      tw('  npm install <pkg>     install node package');
-      tw('  npm install -g npm@latest');
-      tw('  npm list              installed packages');
-      tw('  node -v               node version');
-      tw('  git --version         git version');
-      tw('  git init / git status / git clone <url>');
-      tw('  sudo / rm -rf / etc   blocked by policy', 'tl-dim');
+      tw('SUKUNA SHELL (sandbox) — commands:', 'tl-cyan');
+      tw('  help / clear / pwd / whoami / date / uptime');
+      tw('  ls / ls -la / cd / cat <file> / echo <text>');
+      tw('  pip install <pkg>    pip list    python --version');
+      tw('  npm install <pkg>    npm list    node -v');
+      tw('  git --version        git status');
       return;
-
-    case 'clear':
-    case 'cls':
-      termOut.innerHTML = '';
-      return;
-
-    case 'pwd':
-      tw('/hosted' + (cwd === '~' ? '' : '/' + cwd.replace(/^~\//, '')));
-      return;
-
-    case 'whoami':
-      tw('sukuna');
-      return;
-
-    case 'date':
-      tw(new Date().toString());
-      return;
-
+    case 'pwd': tw('/hosted'); return;
+    case 'whoami': tw('sukuna'); return;
+    case 'date': tw(new Date().toString()); return;
     case 'uptime': {
-      const u = Math.floor((Date.now() - UPTIME_START) / 1000);
-      tw(`up ${Math.floor(u/60)} min ${u%60} sec  ·  load avg ${cpuVal.toFixed(2)}`);
+      const u = Math.floor((Date.now()-UPTIME_START)/1000);
+      tw('up ' + Math.floor(u/60) + ' min ' + (u%60) + ' sec');
       return;
     }
-
-    case 'echo':
-      tw(arg);
-      return;
-
+    case 'echo': tw(arg); return;
     case 'ls': {
       const site = getSite();
-      const flags = args.includes('-la') || args.includes('-l');
-      if (!site){
-        tw('total 0');
-        return;
-      }
-      if (flags){
+      if (!site){ tw('total 0'); return; }
+      if (arg.includes('-la') || arg.includes('-l')){
         tw('total 1');
-        tw(`-rw-r--r-- 1 sukuna sukuna ${String(site.size).padStart(9)} ${site.name}`);
-      } else {
-        tw(site.name);
-      }
+        tw('-rw-r--r-- 1 sukuna sukuna ' + String(site.size).padStart(9) + ' ' + site.name);
+      } else tw(site.name);
       return;
     }
-
     case 'cat': {
       const site = getSite();
-      if (!site){ tw('cat: ' + (arg || '') + ': No such file or directory', 'tl-err'); return; }
+      if (!site){ tw('cat: ' + arg + ': No such file', 'tl-err'); return; }
       if (!arg || arg === site.name){
-        if (site.type.startsWith('text/') || site.name.match(/\.(html|js|css|json|txt|md|py)$/)){
-          try {
-            const [, b64] = site.data.split(',');
-            tw(atob(b64).slice(0, 3000) || '(empty file)');
-          } catch (e){ tw('cat: read error', 'tl-err'); }
-        } else {
-          tw('cat: ' + site.name + ': binary file', 'tl-dim');
-        }
-        return;
-      }
-      tw('cat: ' + arg + ': No such file or directory', 'tl-err');
+        try { const [, b64] = site.data.split(','); tw(atob(b64).slice(0,3000) || '(empty)'); }
+        catch(e){ tw('cat: read error', 'tl-err'); }
+      } else tw('cat: ' + arg + ': No such file', 'tl-err');
       return;
     }
-
     case 'cd': {
-      const target = arg || '~';
-      if (target === '~' || target === '/'){
-        cwd = '~';
-      } else if (target === '..'){
-        cwd = '~';
-      } else {
-        cwd = target.replace(/^~\//, '');
-      }
+      cwd = (!arg || arg === '~' || arg === '/' || arg === '..') ? '~' : arg.replace(/^~\//, '');
       termPs1.textContent = `sukuna@panel:${cwd}$`;
       return;
     }
-
     case 'python':
-    case 'python3':
-    case 'py': {
-      if (arg === '--version' || arg === '-V'){
-        tw(PYTHON_VERSIONS[0].version);
-      } else if (arg === '-c' || arg.startsWith('-c ')){
-        tw('(sandbox) cannot execute python code', 'tl-dim');
-      } else {
-        tw('Python 3.11.4 (sandbox)', 'tl-dim');
-      }
+    case 'python3': {
+      if (arg === '--version' || arg === '-V') tw('Python 3.11.4');
+      else tw('Python 3.11.4 (sandbox)', 'tl-dim');
       return;
     }
-
     case 'pip':
     case 'pip3': {
       if (args[0] === 'install' && args[1] === '--upgrade' && args[2] === 'pip'){
-        tw('Requirement already satisfied: pip in /usr/lib/python3/dist-packages (23.0.1)', 'tl-dim');
         tw('Collecting pip');
         tw('  Downloading pip-24.0-py3-none-any.whl (2.1 MB)');
-        tw('Installing collected packages: pip');
         tw('Successfully installed pip-24.0', 'tl-ok');
         return;
       }
       if (args[0] === 'install'){
         const pkgs = args.slice(1);
-        if (!pkgs.length){ tw('ERROR: You must give at least one requirement to install', 'tl-err'); return; }
-        tw(`Collecting ${pkgs.join(', ')}`, 'tl-dim');
-        pkgs.forEach(p => {
-          tw(`  Downloading ${p}-py3-none-any.whl`);
-        });
-        tw(`Installing collected packages: ${pkgs.join(', ')}`);
-        tw(`Successfully installed ${pkgs.join(' ')}`, 'tl-ok');
+        if (!pkgs.length){ tw('ERROR: You must give at least one requirement', 'tl-err'); return; }
+        tw('Collecting ' + pkgs.join(', '), 'tl-dim');
+        pkgs.forEach(p => tw('  Downloading ' + p + '-py3-none-any.whl'));
+        tw('Successfully installed ' + pkgs.join(' '), 'tl-ok');
         return;
       }
       if (args[0] === 'list'){
@@ -1124,105 +1028,65 @@ function runCmd(raw){
         tw('Flask        3.0.0');
         tw('psutil       5.9.8');
         tw('requests     2.31.0');
-        tw('werkzeug     3.0.1');
         return;
       }
-      if (args[0] === '--version' || args[0] === '-V'){
-        tw('pip 23.0.1 from /usr/lib/python3/dist-packages/pip (python 3.11)');
-        return;
-      }
-      tw('pip: unknown command ' + arg, 'tl-err');
+      tw('pip: unknown command', 'tl-err');
       return;
     }
-
-    case 'node': {
-      if (arg === '-v' || arg === '--version'){
-        tw(NODE_VERSION);
-        return;
-      }
-      tw('(sandbox) cannot execute node code', 'tl-dim');
-      return;
-    }
-
+    case 'node': tw(arg === '-v' ? 'v20.10.0' : 'v20.10.0 (sandbox)', 'tl-dim'); return;
     case 'npm': {
-      if (arg === '-v' || arg === '--version'){
-        tw(NPM_VERSION);
-        return;
-      }
+      if (arg === '-v'){ tw('10.2.4'); return; }
       if (args[0] === 'install' && args[1] === '-g' && args[2] === 'npm@latest'){
-        tw('npm WARN using --force Recommended protections disabled.', 'tl-dim');
         tw('changed 1 package in 2s');
         tw('npm@10.5.0 updated', 'tl-ok');
         return;
       }
       if (args[0] === 'install' || args[0] === 'i'){
         const pkgs = args.slice(1).filter(a => !a.startsWith('-'));
-        if (!pkgs.length){ tw('npm error: specify package to install', 'tl-err'); return; }
-        tw(`npm WARN deprecated ${pkgs[0]}@latest: package metadata`, 'tl-dim');
-        tw(`added ${pkgs.length * 71} packages in 1.4s`);
-        tw(`packages: ${pkgs.join(', ')}`, 'tl-ok');
+        if (!pkgs.length){ tw('npm error: specify package', 'tl-err'); return; }
+        tw('added ' + (pkgs.length*71) + ' packages in 1.4s');
+        tw('packages: ' + pkgs.join(', '), 'tl-ok');
         return;
       }
       if (args[0] === 'list' || args[0] === 'ls'){
         tw('sukuna@panel');
         tw('├── express@4.18.2');
-        tw('├── ws@8.16.0');
-        tw('└── multer@1.4.5');
+        tw('└── ws@8.16.0');
         return;
       }
       tw('npm error: unknown command', 'tl-err');
       return;
     }
-
     case 'git': {
-      if (arg === '--version'){
-        tw('git version 2.42.0');
-        return;
-      }
-      if (arg === 'status'){
-        tw('On branch main');
-        tw('nothing to commit, working tree clean', 'tl-ok');
-        return;
-      }
-      if (arg === 'init'){
-        tw('Initialized empty Git repository in /hosted/.git/', 'tl-ok');
-        return;
-      }
-      if (args[0] === 'clone'){
-        tw(`Cloning into '${args[1] || 'repo'}'...`, 'tl-dim');
-        tw('remote: Enumerating objects: 128, done.', 'tl-dim');
-        tw('remote: Total 128 (delta 0), reused 0 (delta 0)', 'tl-dim');
-        tw('Receiving objects: 100% (128/128), done.', 'tl-ok');
-        return;
-      }
+      if (arg === '--version'){ tw('git version 2.42.0'); return; }
+      if (arg === 'status'){ tw('nothing to commit, working tree clean', 'tl-ok'); return; }
+      if (arg === 'init'){ tw('Initialized empty Git repository', 'tl-ok'); return; }
       tw('git: unknown subcommand', 'tl-err');
       return;
     }
-
-    case 'wget':
-    case 'curl':
-      tw('(sandbox) network requests blocked', 'tl-dim');
-      return;
-
     default:
-      tw(`sh: ${cmd}: command not found`, 'tl-err');
+      tw('sh: ' + cmd + ': command not found', 'tl-err');
   }
 }
 
+/* RUN BUTTON */
+async function runCurrent(){
+  const cmd = termIn.value.trim();
+  if (!cmd) return;
+  termIn.value = '';
+  history.push(cmd); hIdx = history.length;
+  await runCmd(cmd);
+  termIn.focus();
+}
+
 termIn.addEventListener('keydown', e => {
-  if (e.key === 'Enter'){
-    const cmd = termIn.value;
-    termIn.value = '';
-    if (!cmd.trim()) return;
-    history.push(cmd); hIdx = history.length;
-    runCmd(cmd);
-  }
+  if (e.key === 'Enter'){ e.preventDefault(); runCurrent(); }
   if (e.key === 'ArrowUp'){
     if (hIdx > 0){ hIdx--; termIn.value = history[hIdx]; }
     e.preventDefault();
   }
   if (e.key === 'ArrowDown'){
-    if (hIdx < history.length - 1){ hIdx++; termIn.value = history[hIdx]; }
+    if (hIdx < history.length-1){ hIdx++; termIn.value = history[hIdx]; }
     else { hIdx = history.length; termIn.value = ''; }
     e.preventDefault();
   }
@@ -1230,72 +1094,74 @@ termIn.addEventListener('keydown', e => {
 
 function quick(cmd){
   termIn.value = cmd;
-  termIn.dispatchEvent(new KeyboardEvent('keydown', { key:'Enter' }));
+  termIn.focus();
 }
 
-/* ═══════════════════════════════════════════════════
-   RUNTIMES
-   ═══════════════════════════════════════════════════ */
-function loadRuntimes(){
+/* ─────────────── RUNTIMES ─────────────── */
+async function loadRuntimes(){
   const py = $('#py-list');
-  py.innerHTML = PYTHON_VERSIONS.map(v => `
-    <div class="row">
-      <div>
-        <div class="n">${esc(v.version)}</div>
-        <div class="m">${esc(v.path)}</div>
-      </div>
-      <div class="tag ${v.active ? 'on' : ''}">${v.active ? 'ACTIVE' : 'AVAILABLE'}</div>
-    </div>`).join('');
+  py.innerHTML = '<div class="row"><div><div class="n">SCANNING…</div></div></div>';
 
+  if (MODE === 'live'){
+    const r = await apiGet('/api/python/versions');
+    if (r && r.ok && r.versions.length){
+      py.innerHTML = r.versions.map(v => `
+        <div class="row">
+          <div><div class="n">${esc(v.version)}</div>
+          <div class="m">${esc(v.path)}</div></div>
+          <div class="tag ${v.active ? 'on' : ''}">${v.active ? 'DEFAULT' : 'AVAILABLE'}</div>
+        </div>`).join('');
+    } else {
+      py.innerHTML = '<div class="row"><div><div class="n">NO PYTHON FOUND</div>' +
+        '<div class="m">INSTALL PYTHON3 ON THE SERVER</div></div><div class="tag">MISSING</div></div>';
+    }
+  } else {
+    py.innerHTML = `
+      <div class="row"><div><div class="n">Python 3.11.4</div>
+      <div class="m">/usr/bin/python3 · SANDBOX SIMULATION</div></div>
+      <div class="tag on">DEFAULT</div></div>
+      <div class="row"><div><div class="n">Python 3.10.12</div>
+      <div class="m">/usr/bin/python3.10 · SANDBOX SIMULATION</div></div>
+      <div class="tag">AVAILABLE</div></div>`;
+  }
+
+  let nodeVer = 'v20.10.0', npmVer = '10.2.4';
+  if (MODE === 'live'){
+    const s = await apiGet('/api/stats');
+    if (s && s.ok && s.node) nodeVer = s.node;
+  }
   $('#node-list').innerHTML = `
-    <div class="row">
-      <div>
-        <div class="n">Node.js ${NODE_VERSION}</div>
-        <div class="m">SERVER RUNTIME · ACTIVE</div>
-      </div>
-      <div class="tag on">ACTIVE</div>
-    </div>
-    <div class="row">
-      <div>
-        <div class="n">npm ${NPM_VERSION}</div>
-        <div class="m">INSTALL / UPGRADE VIA TERMINAL</div>
-      </div>
-      <div class="tag">npm i -g npm@latest</div>
-    </div>`;
+    <div class="row"><div><div class="n">Node.js ${esc(nodeVer)}</div>
+    <div class="m">SERVER RUNTIME · ACTIVE</div></div><div class="tag on">ACTIVE</div></div>
+    <div class="row"><div><div class="n">npm ${npmVer}</div>
+    <div class="m">UPGRADE VIA TERMINAL</div></div><div class="tag">npm i -g npm@latest</div></div>`;
 }
 
-/* ═══════════════════════════════════════════════════
-   SETTINGS
-   ═══════════════════════════════════════════════════ */
+/* ─────────────── SETTINGS ─────────────── */
 function loadSettings(){
   const cfg = getCfg();
   $('#set-cmd').value = cfg.startup_cmd || '';
-  $('#set-auto').checked = cfg.autorun !== false;
 }
 function saveSettings(){
-  setCfg({
-    startup_cmd: $('#set-cmd').value.trim(),
-    autorun: $('#set-auto').checked,
-  });
+  setCfg({ startup_cmd: $('#set-cmd').value.trim() });
   toast('SETTINGS SAVED');
 }
-function runStartup(){
+async function runStartup(){
   const cmd = $('#set-cmd').value.trim();
   if (!cmd){ toast('NO COMMAND SET', true); return; }
-  runCmd(cmd);
+  $('#set-out').textContent = '> ' + cmd + '\n(running…)';
+  goPage('term');
+  setTimeout(() => { runCmd(cmd); }, 400);
   $('#set-out').textContent = '> ' + cmd + '\n(sent to terminal)';
-  toast('COMMAND SENT TO TERMINAL');
 }
 
-/* ═══════════════════════════════════════════════════
-   BOOT
-   ═══════════════════════════════════════════════════ */
+/* ─────────────── BOOT ─────────────── */
 function boot(){
   $('#who-txt').textContent = 'ADMIN';
-
-  tw('SUKUNA HOSTING PANEL v2.1', 'tl-cyan');
-  tw('sandbox session authenticated', 'tl-dim');
-  tw('type "help" for available commands', 'tl-dim');
+  tw('SUKUNA HOSTING PANEL v3.0', 'tl-cyan');
+  tw(MODE === 'live' ? '● LIVE SERVER CONNECTED' : '● SANDBOX MODE — no backend', MODE === 'live' ? 'tl-ok' : 'tl-yel');
+  tw('type a command then click ▶ RUN', 'tl-dim');
+  tw('type "help" for a list', 'tl-dim');
   tw('');
 
   loadStats();
@@ -1304,21 +1170,20 @@ function boot(){
   loadRuntimes();
 
   clearInterval(statsTimer);
-  statsTimer = setInterval(loadStats, 2200);
+  statsTimer = setInterval(loadStats, 2500);
   resetIdle();
+  updateModeBadge();
 }
 
-/* ═══════════════════════════════════════════════════
-   INIT — never reloads
-   ═══════════════════════════════════════════════════ */
-(function init(){
+/* ─────────────── INIT ─────────────── */
+(async function init(){
   if (lockRemaining() > 0) startLockWatch();
+  await detectBackend();
 
   if (sessionValid()){
     $('#login').classList.add('hidden');
-    const pnl = $('#panel');
-    pnl.classList.remove('hidden');
-    pnl.classList.add('panel-in');
+    $('#panel').classList.remove('hidden');
+    $('#panel').classList.add('panel-in');
     boot();
   } else {
     sessionClose();
@@ -1326,7 +1191,6 @@ function boot(){
   }
 })();
 
-/* block page-wide drag navigation */
 ['dragover','drop'].forEach(ev => window.addEventListener(ev, e => {
   if (!e.target.closest('#drop')) e.preventDefault();
 }));
