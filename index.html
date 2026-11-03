@@ -13,27 +13,40 @@
   --txt:#fff;--dim:#8a8a8a;--dimmer:#565656;
   --glow:0 0 6px rgba(255,255,255,.20),0 0 20px rgba(255,255,255,.10);
   --glow2:0 0 10px rgba(255,255,255,.45),0 0 36px rgba(255,255,255,.16);
+  --ok:#9dff9d;--err:#ff8080;--warn:#ffb84d;
   --mono:'JetBrains Mono',Consolas,monospace;
   --sans:'Orbitron','Segoe UI',system-ui,sans-serif;
   --ease:cubic-bezier(.22,.85,.24,1);
 }
 html,body{height:100%}
-body{background:radial-gradient(1200px 800px at 10% -20%,#191919,transparent 60%),
-  radial-gradient(900px 700px at 115% 115%,#141414,transparent 55%),var(--bg);
+body{
+  background:
+    radial-gradient(1200px 800px at 10% -20%,#191919,transparent 60%),
+    radial-gradient(900px 700px at 115% 115%,#141414,transparent 55%),
+    var(--bg);
   color:var(--txt);font-family:var(--sans);text-shadow:var(--glow);
-  overflow:hidden;user-select:none;-webkit-font-smoothing:antialiased}
-input,textarea,.term-body{user-select:text}
+  overflow:hidden;user-select:none;-webkit-font-smoothing:antialiased;
+}
+input,textarea,.term-body,.output-body{user-select:text}
 .hidden{display:none!important}
-body::before{content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
-  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+
+/* ══════ ANIMATED BACKGROUND ══════ */
+body::before{
+  content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
     linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
-  background-size:56px 56px,56px 56px;animation:gridDrift 18s linear infinite;
+  background-size:56px 56px,56px 56px;
+  animation:gridDrift 18s linear infinite;
   mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%);
-  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%)}
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%);
+}
 @keyframes gridDrift{from{background-position:0 0,0 0}to{background-position:56px 56px,56px 56px}}
-.scanline{position:fixed;left:0;right:0;height:120px;z-index:1;pointer-events:none;
+.scanline{
+  position:fixed;left:0;right:0;height:120px;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,transparent,rgba(255,255,255,.035),transparent);
-  animation:scanDown 9s linear infinite}
+  animation:scanDown 9s linear infinite;
+}
 @keyframes scanDown{from{top:-140px}to{top:100%}}
 .orb{position:fixed;border-radius:50%;filter:blur(70px);opacity:.13;z-index:0;
   pointer-events:none;background:#fff;animation:floaty 20s ease-in-out infinite}
@@ -41,6 +54,8 @@ body::before{content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
 .orb.b{width:300px;height:300px;bottom:-100px;right:-70px;animation-delay:-7s}
 .orb.c{width:220px;height:220px;top:40%;left:55%;animation-delay:-13s}
 @keyframes floaty{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(50px,-60px) scale(1.15)}}
+
+/* ══════ KEYFRAMES ══════ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 @keyframes slideR{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
 @keyframes slideL{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
@@ -48,7 +63,8 @@ body::before{content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
 @keyframes letterIn{from{opacity:0;transform:translateY(30px) rotateX(-80deg)}to{opacity:1;transform:none}}
 @keyframes shine{0%,70%{left:-130%}100%{left:160%}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-@keyframes glowPulse{0%,100%{text-shadow:0 0 6px rgba(255,255,255,.22),0 0 22px rgba(255,255,255,.10)}
+@keyframes glowPulse{
+  0%,100%{text-shadow:0 0 6px rgba(255,255,255,.22),0 0 22px rgba(255,255,255,.10)}
   50%{text-shadow:0 0 12px rgba(255,255,255,.6),0 0 42px rgba(255,255,255,.30)}}
 @keyframes spinRing{to{transform:rotate(360deg)}}
 @keyframes scanX{0%,100%{transform:scaleX(.15);opacity:.2}50%{transform:scaleX(1);opacity:.8}}
@@ -60,15 +76,26 @@ body::before{content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
 @keyframes loginOut{to{opacity:0;transform:translateY(-70px) scale(.92);filter:blur(8px)}}
 @keyframes toastBar{from{width:100%}to{width:0}}
 @keyframes termIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(50px) rotateX(12deg) scale(.94)}to{opacity:1;transform:none}}
+@keyframes runPulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}
+  70%{box-shadow:0 0 0 12px rgba(255,255,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+@keyframes runRow{
+  0%,100%{background:linear-gradient(160deg,#0d0d0d,#070707)}
+  50%{background:linear-gradient(160deg,#141414,#0a0a0a)}}
+@keyframes statusPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+@keyframes valueGlow{
+  0%{color:#fff;text-shadow:0 0 30px #fff}
+  100%{color:#fff;text-shadow:var(--glow2)}}
 
-/* LOGIN */
+/* ══════ LOGIN ══════ */
 #login{position:fixed;inset:0;display:grid;place-items:center;z-index:20;padding:20px;animation:popIn .8s var(--ease) both}
 #login.login-out{animation:loginOut .65s var(--ease) forwards}
 .login-card{position:relative;width:min(430px,94vw);padding:46px 34px 36px;
   background:rgba(8,8,8,.9);border:1px solid var(--line);border-radius:22px;
   backdrop-filter:blur(16px);box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 40px 90px rgba(0,0,0,.95);
   animation:cardIn 1s var(--ease) both;overflow:hidden}
-@keyframes cardIn{from{opacity:0;transform:translateY(50px) rotateX(12deg) scale(.94)}to{opacity:1;transform:none}}
 .login-card::before{content:"";position:absolute;inset:-2px;border-radius:24px;padding:2px;z-index:-1;
   background:conic-gradient(from 0deg,transparent 0 62%,rgba(255,255,255,.9) 80%,transparent 94%);
   animation:spinRing 6s linear infinite;filter:blur(.5px)}
@@ -103,14 +130,13 @@ body::before{content:"";position:fixed;inset:-50%;z-index:0;pointer-events:none;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
   transform:skewX(-20deg);animation:shine 4.5s ease-in-out infinite}
 .btn.ghost::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)}
-.msg{margin-top:14px;text-align:center;font-size:11px;letter-spacing:2px;color:#ff6b6b;min-height:16px;
+.msg{margin-top:14px;text-align:center;font-size:11px;letter-spacing:2px;color:var(--err);min-height:16px;
   text-shadow:0 0 10px rgba(255,107,107,.6)}
 .msg.shake{animation:shake .45s ease}
 .hint{margin-top:22px;text-align:center;font-size:9px;color:var(--dimmer);letter-spacing:2px}
-.lock{margin-top:10px;text-align:center;font-size:10px;letter-spacing:2px;color:#ffb84d;min-height:14px}
-.mode-line{margin-top:12px;text-align:center;font-size:9px;letter-spacing:2px;color:#4a4a4a}
+.lock{margin-top:10px;text-align:center;font-size:10px;letter-spacing:2px;color:var(--warn);min-height:14px}
 
-/* PANEL */
+/* ══════ PANEL ══════ */
 #panel{position:relative;z-index:5;display:grid;grid-template-columns:240px 1fr;height:100vh}
 #panel.panel-in{animation:popIn .6s var(--ease) both}
 aside{border-right:1px solid var(--line);background:rgba(6,6,6,.85);backdrop-filter:blur(14px);
@@ -134,18 +160,16 @@ aside{border-right:1px solid var(--line);background:rgba(6,6,6,.85);backdrop-fil
 .nav button i{font-style:normal;font-size:14px;width:18px;text-align:center}
 .side-foot{margin-top:auto;font-size:9px;color:var(--dimmer);letter-spacing:2px;text-align:center;
   padding-top:16px;border-top:1px solid var(--line)}
-.mode-badge{display:block;text-align:center;font-size:9px;letter-spacing:3px;padding:6px;
-  border:1px solid var(--line2);border-radius:99px;margin-top:10px;color:var(--dim)}
-.mode-badge.live{border-color:#9dff9d;color:#9dff9d;text-shadow:0 0 10px rgba(157,255,157,.5)}
-.mode-badge.sandbox{border-color:#ffb84d;color:#ffb84d;text-shadow:0 0 10px rgba(255,184,77,.5)}
+
 main{overflow-y:auto;padding:30px 34px 60px;position:relative}
 main::-webkit-scrollbar{width:8px}
 main::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;animation:fadeUp .6s both}
 .topbar h1{font-size:19px;letter-spacing:5px;font-weight:700;animation:slideL .7s var(--ease) both}
 .topbar .who{font-size:10px;letter-spacing:2px;color:var(--dim);animation:slideR .7s var(--ease) both}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;margin-right:7px;
-  box-shadow:0 0 10px #fff;animation:blink 1.6s ease-in-out infinite}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ok);margin-right:7px;
+  box-shadow:0 0 10px var(--ok);animation:statusPulse 1.8s ease-in-out infinite}
+
 main section{position:relative}
 main section.page-in{animation:pageIn .5s var(--ease) both}
 main section.page-out{animation:pageOut .28s ease both}
@@ -154,70 +178,139 @@ main section.page-out{animation:pageOut .28s ease both}
 #sweep::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fff,transparent);
   animation:sweepLine .6s linear}
 
-/* CARDS */
+/* ══════ CARDS ══════ */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
 .card{background:linear-gradient(160deg,#0d0d0d,#070707);border:1px solid var(--line);border-radius:16px;
   padding:22px;position:relative;overflow:hidden;transition:transform .4s var(--ease),border-color .3s,box-shadow .3s;
-  animation:slideUp .7s var(--ease) both;transform-style:preserve-3d}
+  animation:fadeUp .7s var(--ease) both;transform-style:preserve-3d}
 .grid .card:nth-child(1){animation-delay:.05s}.grid .card:nth-child(2){animation-delay:.11s}
 .grid .card:nth-child(3){animation-delay:.17s}.grid .card:nth-child(4){animation-delay:.23s}
 .grid .card:nth-child(5){animation-delay:.29s}.grid .card:nth-child(6){animation-delay:.35s}
-@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 .card:hover{border-color:#fff;box-shadow:0 24px 60px rgba(0,0,0,.9),var(--glow)}
 .card::after{content:"";position:absolute;top:0;left:-100%;width:55%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
   transform:skewX(-18deg);animation:shine 6s ease-in-out infinite}
 .card .k{font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:14px}
-.card .v{font-size:26px;font-weight:900;letter-spacing:1px;text-shadow:var(--glow2);font-family:var(--mono)}
+.card .v{font-size:26px;font-weight:900;letter-spacing:1px;text-shadow:var(--glow2);font-family:var(--mono);
+  transition:color .3s,text-shadow .3s}
 .card .s{font-size:9px;color:var(--dimmer);margin-top:10px;letter-spacing:2px}
+.card.updated .v{animation:valueGlow 1s var(--ease)}
 .bar{height:6px;background:#161616;border-radius:99px;overflow:hidden;margin-top:16px}
 .bar>i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#6b6b6b,#fff);
   box-shadow:0 0 16px rgba(255,255,255,.7);transition:width 1s var(--ease)}
 
-/* TERMINAL */
+/* ══════ BADGE ══════ */
+.badge{display:inline-block;font-size:9px;letter-spacing:3px;padding:6px 12px;border:1px solid var(--line2);
+  border-radius:99px;color:var(--dim);margin-bottom:18px;animation:slideR .5s var(--ease) both}
+.badge.live{border-color:var(--ok);color:var(--ok);text-shadow:0 0 10px rgba(157,255,157,.5)}
+
+/* ══════ FILE HOST ══════ */
+.drop{border:1.5px dashed var(--line2);border-radius:15px;padding:44px 20px;text-align:center;
+  transition:.4s var(--ease);cursor:pointer;background:#070707;animation:fadeUp .6s var(--ease) both}
+.drop:hover,.drop.over{border-color:#fff;background:#0d0d0d;box-shadow:var(--glow);transform:scale(1.015)}
+.drop h3{font-size:13px;letter-spacing:4px;margin-bottom:10px}
+.drop p{font-size:10px;color:var(--dim);letter-spacing:2px}
+.file-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 18px;
+  border:1px solid var(--line);border-radius:12px;background:#0a0a0a;margin-bottom:10px;
+  transition:transform .3s var(--ease),border-color .25s,box-shadow .25s;
+  animation:slideR .5s var(--ease) both}
+.file-row:nth-child(1){animation-delay:.05s}.file-row:nth-child(2){animation-delay:.11s}
+.file-row:nth-child(3){animation-delay:.17s}.file-row:nth-child(4){animation-delay:.23s}
+.file-row:hover{border-color:#fff;transform:translateX(6px);box-shadow:var(--glow)}
+.file-row.running{border-color:var(--ok);animation:runRow 2.4s ease-in-out infinite}
+.file-row .file-info{flex:1;min-width:0}
+.file-row .file-name{font-family:var(--mono);font-size:13px;letter-spacing:.5px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.file-row .file-meta{font-size:9px;color:var(--dim);letter-spacing:2px;margin-top:5px}
+.file-actions{display:flex;gap:8px;flex-shrink:0}
+.act-btn{border:1px solid var(--line2);background:transparent;color:#fff;border-radius:8px;
+  padding:8px 14px;font-family:var(--mono);font-size:10px;letter-spacing:2px;cursor:pointer;
+  transition:.25s;text-shadow:var(--glow);white-space:nowrap}
+.act-btn:hover{border-color:#fff;box-shadow:var(--glow);transform:translateY(-1px)}
+.act-btn.run{background:#fff;color:#000;border-color:#fff}
+.act-btn.run:hover{background:#000;color:#fff}
+.act-btn.stop{border-color:var(--err);color:var(--err)}
+.act-btn.stop:hover{background:var(--err);color:#000;border-color:var(--err)}
+.act-btn.run.running{animation:runPulse 1.6s ease-in-out infinite}
+.act-btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+.tag{font-size:9px;padding:5px 11px;border:1px solid var(--line2);border-radius:99px;letter-spacing:2px;
+  color:var(--dim);white-space:nowrap}
+.tag.on{border-color:var(--ok);color:var(--ok);text-shadow:0 0 10px rgba(157,255,157,.5)}
+
+/* ══════ LIVE OUTPUT PANEL ══════ */
+.output-panel{margin-top:20px;border:1px solid var(--line2);border-radius:14px;overflow:hidden;
+  background:#000;box-shadow:0 24px 70px rgba(0,0,0,.9),var(--glow);animation:fadeUp .6s .1s var(--ease) both}
+.output-tabs{display:flex;overflow-x:auto;background:#0a0a0a;border-bottom:1px solid var(--line2);
+  scrollbar-width:thin}
+.output-tabs::-webkit-scrollbar{height:4px}
+.output-tabs::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
+.out-tab{display:flex;align-items:center;gap:8px;padding:10px 14px;border:0;background:transparent;
+  color:var(--dim);font-family:var(--mono);font-size:11px;letter-spacing:1.5px;cursor:pointer;
+  border-right:1px solid var(--line2);transition:.25s;white-space:nowrap}
+.out-tab:hover{color:#fff;background:#0f0f0f}
+.out-tab.active{color:#fff;background:#000;border-bottom:2px solid #fff}
+.out-tab.running{color:var(--ok)}
+.out-tab .live-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);
+  animation:statusPulse 1.4s ease-in-out infinite}
+.out-tab .stop-tab{background:transparent;border:0;color:var(--err);cursor:pointer;padding:0 4px;
+  font-size:12px;opacity:.7;transition:.2s}
+.out-tab .stop-tab:hover{opacity:1;transform:scale(1.2)}
+.output-body{height:min(46vh,380px);overflow-y:auto;padding:16px;font-family:var(--mono);font-size:12.5px;
+  line-height:1.7;white-space:pre-wrap;word-break:break-word;color:#e8e8e8;text-shadow:var(--glow)}
+.output-body::-webkit-scrollbar{width:7px}
+.output-body::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
+.out-line{animation:termIn .25s var(--ease) both}
+.out-line.cmd{color:#fff}
+.out-line.exit{color:var(--warn);font-style:italic}
+.out-line.errtxt{color:var(--err)}
+.output-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;
+  border-top:1px solid var(--line2);background:#070707;font-family:var(--mono);font-size:11px;
+  letter-spacing:2px}
+.output-footer .stat{color:var(--dim)}
+.output-footer .stat.running{color:var(--ok);animation:statusPulse 1.8s ease-in-out infinite}
+.output-footer .stat.stopped{color:var(--dimmer)}
+.empty-output{padding:50px 20px;text-align:center;color:var(--dimmer);font-family:var(--mono);
+  font-size:11px;letter-spacing:2px}
+.empty-output .icon{font-size:32px;display:block;margin-bottom:12px;opacity:.3}
+
+/* ══════ TERMINAL ══════ */
 .term{background:#000;border:1px solid var(--line2);border-radius:14px;overflow:hidden;
-  box-shadow:0 28px 80px rgba(0,0,0,.95),var(--glow);animation:slideUp .7s .1s var(--ease) both}
+  box-shadow:0 28px 80px rgba(0,0,0,.95),var(--glow);animation:fadeUp .7s .1s var(--ease) both}
 .term-head{display:flex;align-items:center;gap:8px;padding:11px 15px;background:#0a0a0a;
   border-bottom:1px solid var(--line2)}
 .term-head b{width:10px;height:10px;border-radius:50%;background:#3a3a3a;display:inline-block}
 .term-head b:first-child{background:#fff;box-shadow:0 0 10px #fff}
 .term-head span{margin-left:auto;font-size:9px;letter-spacing:3px;color:var(--dim)}
-.term-body{height:min(50vh,420px);overflow-y:auto;padding:16px;font-family:var(--mono);font-size:12.5px;
+.term-body{height:min(48vh,400px);overflow-y:auto;padding:16px;font-family:var(--mono);font-size:12.5px;
   line-height:1.7;white-space:pre-wrap;word-break:break-word;color:#e8e8e8;text-shadow:var(--glow)}
 .term-body::-webkit-scrollbar{width:7px}
 .term-body::-webkit-scrollbar-thumb{background:#242424;border-radius:8px}
-.term-body>div{animation:termIn .3s var(--ease) both}
-.tl{color:#e8e8e8}.tl-ok{color:#9dff9d}.tl-err{color:#ff8080}.tl-dim{color:#6a6a6a}
-.tl-yel{color:#ffe066}.tl-blue{color:#7ec8ff}.tl-mag{color:#ff9de6}.tl-cyan{color:#9dffea}
-.term-line{display:flex;align-items:center;gap:9px;padding:12px 16px;border-top:1px solid var(--line2);
+.term-body .tl{padding:1px 0}
+.term-body .tl-cmd{color:#fff}
+.term-body .tl-err{color:var(--err)}
+.term-body .tl-dim{color:#6a6a6a}
+.term-input{display:flex;align-items:center;gap:9px;padding:12px 16px;border-top:1px solid var(--line2);
   background:#070707;font-family:var(--mono);font-size:13px}
-.term-line .ps1{color:#fff;text-shadow:var(--glow2);white-space:nowrap}
-.term-line input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:var(--mono);
+.term-input .ps1{color:#fff;text-shadow:var(--glow2);white-space:nowrap}
+.term-input input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:var(--mono);
   font-size:13px;text-shadow:var(--glow)}
-.term-line input::placeholder{color:#3a3a3a}
-.run-btn{background:#fff;color:#000;border:0;border-radius:7px;padding:8px 16px;font-family:var(--mono);
+.term-input input::placeholder{color:#3a3a3a}
+.run-btn{background:#fff;color:#000;border:0;border-radius:7px;padding:8px 18px;font-family:var(--mono);
   font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:.2s;white-space:nowrap}
 .run-btn:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(255,255,255,.55)}
 .run-btn:active{transform:translateY(0) scale(.97)}
 .run-btn:disabled{opacity:.4;cursor:not-allowed}
+.run-btn.stop{background:var(--err);color:#000}
 
-/* ROWS / FORMS */
+/* ══════ RUNTIMES / SETTINGS ══════ */
 .row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 18px;
   border:1px solid var(--line);border-radius:12px;background:#0a0a0a;margin-bottom:10px;
   transition:transform .3s var(--ease),border-color .25s,box-shadow .25s;animation:slideR .5s var(--ease) both}
 .row:nth-child(1){animation-delay:.05s}.row:nth-child(2){animation-delay:.11s}
 .row:nth-child(3){animation-delay:.17s}.row:nth-child(4){animation-delay:.23s}
-.row:hover{border-color:#fff;transform:translateX(7px);box-shadow:var(--glow)}
+.row:hover{border-color:#fff;transform:translateX(6px);box-shadow:var(--glow)}
 .row .n{font-family:var(--mono);font-size:13px;letter-spacing:.5px}
 .row .m{font-size:9px;color:var(--dim);letter-spacing:2px;margin-top:5px}
-.tag{font-size:9px;padding:5px 11px;border:1px solid var(--line2);border-radius:99px;letter-spacing:2px;
-  color:var(--dim);white-space:nowrap}
-.tag.on{border-color:#fff;color:#fff;box-shadow:var(--glow)}
-.drop{border:1.5px dashed var(--line2);border-radius:15px;padding:48px 20px;text-align:center;
-  transition:.4s var(--ease);cursor:pointer;background:#070707;animation:slideUp .6s var(--ease) both}
-.drop:hover,.drop.over{border-color:#fff;background:#0d0d0d;box-shadow:var(--glow);transform:scale(1.015)}
-.drop h3{font-size:13px;letter-spacing:4px;margin-bottom:10px}
-.drop p{font-size:10px;color:var(--dim);letter-spacing:2px}
 input.txt,textarea.txt{width:100%;padding:13px 15px;background:#050505;border:1px solid var(--line2);
   border-radius:11px;color:#fff;font-family:var(--mono);font-size:13px;outline:none;transition:.25s;text-shadow:var(--glow)}
 input.txt::placeholder{color:#3a3a3a}
@@ -225,31 +318,50 @@ input.txt:focus,textarea.txt:focus{border-color:#fff;box-shadow:var(--glow)}
 label.lbl{display:block;font-size:9px;letter-spacing:3px;color:var(--dim);margin:18px 0 9px}
 pre.out{background:#000;border:1px solid var(--line);border-radius:11px;padding:14px;font-family:var(--mono);
   font-size:12px;color:#ddd;max-height:260px;overflow:auto;white-space:pre-wrap;text-shadow:var(--glow);
-  margin-top:14px;animation:slideUp .5s var(--ease) both}
-.badge{display:inline-block;font-size:9px;letter-spacing:3px;padding:6px 12px;border:1px solid var(--line2);
-  border-radius:99px;color:var(--dim);margin-bottom:18px;animation:slideR .5s var(--ease) both}
+  margin-top:14px;animation:fadeUp .5s var(--ease) both}
 h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;font-weight:500;
   animation:slideR .5s .05s var(--ease) both}
 .note{font-size:10px;letter-spacing:1.5px;color:var(--dimmer);line-height:1.9;border-left:2px solid var(--line2);
   padding-left:12px;margin-top:16px;animation:fadeUp .6s var(--ease) both}
 
+/* ══════ TOAST ══════ */
 #toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,110px);background:#fff;color:#000;
   padding:13px 26px;border-radius:11px;font-size:11px;letter-spacing:2px;font-weight:700;z-index:99;
   transition:transform .55s var(--ease),opacity .4s;box-shadow:0 0 36px rgba(255,255,255,.55);opacity:0;overflow:hidden}
 #toast.show{transform:translate(-50%,0);opacity:1}
-#toast.err{background:#ff4d4d;color:#fff;box-shadow:0 0 36px rgba(255,77,77,.65)}
+#toast.err{background:var(--err);color:#000;box-shadow:0 0 36px rgba(255,128,128,.65)}
+#toast.ok{background:var(--ok);color:#000;box-shadow:0 0 36px rgba(157,255,157,.65)}
 #toast::after{content:"";position:absolute;bottom:0;left:0;height:2px;background:rgba(0,0,0,.3);
   animation:toastBar 2.8s linear forwards}
 
+/* ══════ MODAL ══════ */
+.modal-back{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);
+  z-index:50;display:grid;place-items:center;padding:20px;animation:popIn .3s var(--ease) both}
+.modal{background:#0a0a0a;border:1px solid var(--line2);border-radius:16px;width:min(760px,96vw);
+  max-height:90vh;display:flex;flex-direction:column;box-shadow:0 40px 100px rgba(0,0,0,.95);
+  animation:fadeUp .4s var(--ease) both}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;
+  border-bottom:1px solid var(--line2)}
+.modal-head h3{font-size:13px;letter-spacing:3px;font-weight:700}
+.modal-close{background:transparent;border:0;color:var(--dim);font-size:20px;cursor:pointer;
+  transition:.2s;padding:4px 10px;border-radius:6px}
+.modal-close:hover{color:#fff;background:#1a1a1a}
+.modal-body{padding:20px;overflow:auto;flex:1}
+.modal-body textarea{width:100%;height:min(60vh,500px);resize:vertical;font-size:12.5px;line-height:1.6}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--line2);display:flex;justify-content:flex-end;gap:10px}
+
+/* ══════ RESPONSIVE ══════ */
 @media(max-width:840px){
   #panel{grid-template-columns:1fr}
   aside{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--line);
     padding:12px;gap:6px;align-items:center}
-  .side-brand,.side-foot,.mode-badge{display:none}
+  .side-brand,.side-foot{display:none}
   .nav{flex-direction:row}
   .nav button{white-space:nowrap;padding:10px 12px}
   .nav button::before{display:none}
   main{padding:22px 16px 60px}
+  .file-row{flex-direction:column;align-items:flex-start;gap:10px}
+  .file-actions{width:100%;justify-content:flex-end}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -261,14 +373,15 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
 <div class="scanline"></div>
 <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
 
-<!-- LOGIN -->
+<!-- ══════ LOGIN ══════ -->
 <div id="login">
   <div class="login-card">
     <div class="brand" id="brand"></div>
     <div class="scan"></div>
     <div class="field">
       <label>LOGIN ID</label>
-      <input id="lg-user" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="enter id">
+      <input id="lg-user" type="text" autocomplete="off" autocorrect="off" autocapitalize="off"
+             spellcheck="false" placeholder="enter id">
     </div>
     <div class="field">
       <label>PASSWORD</label>
@@ -281,11 +394,10 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
     <div class="msg" id="lg-msg"></div>
     <div class="lock" id="lg-lock"></div>
     <div class="hint">4 GB RAM · 100% CPU · 1 GB STORAGE</div>
-    <div class="mode-line" id="mode-line">DETECTING BACKEND…</div>
   </div>
 </div>
 
-<!-- PANEL -->
+<!-- ══════ PANEL ══════ -->
 <div id="panel" class="hidden">
   <aside>
     <div class="side-brand">SUKUNA<span>HOSTING PANEL</span></div>
@@ -297,8 +409,7 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
       <button data-page="set"><i>⚙</i>SETTINGS</button>
       <button onclick="doLogout()"><i>⏻</i>LOGOUT</button>
     </nav>
-    <span class="mode-badge" id="mode-badge">CHECKING…</span>
-    <div class="side-foot" id="side-foot">v3.0 · SUKUNA CORE</div>
+    <div class="side-foot" id="side-foot">v4.0 · LIVE</div>
   </aside>
 
   <main>
@@ -309,71 +420,88 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
     </div>
 
     <section id="page-dash">
-      <div class="badge">SYSTEM ONLINE · LIVE METRICS</div>
+      <div class="badge live">● LIVE SERVER · REAL METRICS</div>
       <div class="grid">
-        <div class="card tilt"><div class="k">CPU USAGE</div><div class="v" id="st-cpu">0%</div>
+        <div class="card tilt" data-k="cpu">
+          <div class="k">CPU USAGE</div><div class="v" id="st-cpu">0%</div>
           <div class="s">LIMIT 100%</div><div class="bar"><i id="bar-cpu"></i></div></div>
-        <div class="card tilt"><div class="k">MEMORY</div><div class="v" id="st-ram">0 / 4 GB</div>
+        <div class="card tilt" data-k="ram">
+          <div class="k">MEMORY</div><div class="v" id="st-ram">0 / 4 GB</div>
           <div class="s">LIMIT 4 GB</div><div class="bar"><i id="bar-ram"></i></div></div>
-        <div class="card tilt"><div class="k">STORAGE</div><div class="v" id="st-sto">0 B</div>
-          <div class="s">LIMIT 1 GB · 1 FILE</div><div class="bar"><i id="bar-sto"></i></div></div>
-        <div class="card tilt"><div class="k">PYTHON</div>
-          <div class="v" id="st-py" style="font-size:19px">—</div>
+        <div class="card tilt" data-k="sto">
+          <div class="k">STORAGE</div><div class="v" id="st-sto">0 B</div>
+          <div class="s">LIMIT 1 GB</div><div class="bar"><i id="bar-sto"></i></div></div>
+        <div class="card tilt" data-k="py">
+          <div class="k">PYTHON</div><div class="v" id="st-py" style="font-size:19px">—</div>
           <div class="s" id="st-plat">—</div></div>
-        <div class="card tilt"><div class="k">NODE</div>
-          <div class="v" id="st-node" style="font-size:19px">—</div>
+        <div class="card tilt" data-k="node">
+          <div class="k">NODE</div><div class="v" id="st-node" style="font-size:19px">—</div>
           <div class="s">SERVER RUNTIME</div></div>
-        <div class="card tilt"><div class="k">HOSTED FILE</div>
-          <div class="v" id="st-file" style="font-size:15px">—</div>
-          <div class="s">SERVED AT /site</div></div>
+        <div class="card tilt" data-k="run">
+          <div class="k">RUNNING</div><div class="v" id="st-running" style="font-size:26px">0</div>
+          <div class="s">PROCESSES</div></div>
       </div>
     </section>
 
     <section id="page-files" class="hidden">
-      <div class="badge">SINGLE FILE STATIC HOST · MAX 1 GB</div>
+      <div class="badge live">REAL HOSTING · UPLOAD · RUN · STOP</div>
       <div class="drop" id="drop">
         <h3>DROP YOUR FILE HERE</h3>
-        <p>or click to browse · only ONE file is hosted at a time</p>
+        <p>or click to browse · .py .js .html .sh · max 1 GB</p>
         <input type="file" id="file-input" class="hidden">
       </div>
-      <h2 class="sec">CURRENTLY HOSTED</h2>
+      <h2 class="sec">HOSTED FILES</h2>
       <div id="file-list"></div>
-      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-        <button class="btn ghost" style="width:auto;padding:12px 22px" onclick="openSite()">OPEN /site</button>
-        <button class="btn ghost" style="width:auto;padding:12px 22px" onclick="deleteFile()">DELETE FILE</button>
+
+      <h2 class="sec">LIVE OUTPUT</h2>
+      <div class="output-panel">
+        <div class="output-tabs" id="output-tabs"></div>
+        <div class="output-body" id="output-body">
+          <div class="empty-output" id="output-empty">
+            <span class="icon">▶</span>
+            CLICK RUN ON A FILE TO SEE LIVE OUTPUT
+          </div>
+        </div>
+        <div class="output-footer">
+          <span class="stat stopped" id="output-stat">IDLE</span>
+          <span id="output-cmd" style="color:var(--dim)"></span>
+        </div>
       </div>
-      <div class="note" id="files-note">Real file hosting requires the Node backend. This file stores uploads in your browser.</div>
+      <div class="note">RUN executes with python3 / node / bash depending on file extension.
+        STOP sends SIGTERM to the process group.</div>
     </section>
 
     <section id="page-term" class="hidden">
-      <div class="badge">SHELL · PIP · NPM · GIT</div>
+      <div class="badge live">REAL TERMINAL · PIP · NPM · GIT</div>
       <div class="term">
         <div class="term-head"><b></b><b></b><b></b><span id="term-status">READY</span></div>
         <div class="term-body" id="term-out"></div>
-        <div class="term-line">
-          <span class="ps1" id="term-ps1">sukuna@panel:~$</span>
-          <input id="term-in" placeholder="type command… then press RUN" autocomplete="off" autocapitalize="off" spellcheck="false">
-          <button class="run-btn" id="run-btn" onclick="runCurrent()">▶ RUN</button>
+        <div class="term-input">
+          <span class="ps1">sukuna@panel:~$</span>
+          <input id="term-in" placeholder="type command then press RUN"
+                 autocomplete="off" autocapitalize="off" spellcheck="false">
+          <button class="run-btn" id="term-run" onclick="runTerm()">▶ RUN</button>
+          <button class="run-btn stop hidden" id="term-stop" onclick="stopTerm()">⏹ STOP</button>
         </div>
       </div>
       <h2 class="sec">QUICK ACTIONS</h2>
       <div style="display:flex;gap:9px;flex-wrap:wrap">
         <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip install flask')">pip install flask</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip install psutil requests')">pip install psutil</button>
         <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip list')">pip list</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('pip install --upgrade pip')">upgrade pip</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('python3 --version')">python3 --version</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('node -v')">node -v</button>
         <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('npm install express')">npm i express</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('npm install -g npm@latest')">upgrade npm</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('node -v && npm -v')">node -v</button>
-        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('python --version')">python --version</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('npm list')">npm list</button>
+        <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('git --version')">git --version</button>
         <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('ls -la')">ls -la</button>
         <button class="btn ghost" style="width:auto;padding:10px 18px" onclick="quick('clear')">clear</button>
       </div>
-      <div class="note" id="term-note">Real shell commands require the Node backend. In sandbox mode, commands are simulated.</div>
+      <div class="note">Every command runs on the server. Output streams live.
+        Use STOP to interrupt long-running commands.</div>
     </section>
 
     <section id="page-py" class="hidden">
-      <div class="badge">PYTHON & NODE RUNTIMES</div>
+      <div class="badge live">REAL RUNTIMES</div>
       <h2 class="sec">PYTHON INTERPRETERS</h2>
       <div id="py-list"></div>
       <button class="btn ghost" style="width:auto;padding:12px 22px;margin-top:16px" onclick="loadRuntimes()">RESCAN</button>
@@ -382,32 +510,47 @@ h2.sec{font-size:12px;letter-spacing:4px;color:var(--dim);margin:26px 0 14px;fon
     </section>
 
     <section id="page-set" class="hidden">
-      <div class="badge">PANEL CONFIGURATION</div>
+      <div class="badge live">PANEL CONFIG</div>
       <div class="card" style="animation:none">
-        <label class="lbl">STARTUP COMMAND (CMD STARTUP)</label>
-        <input class="txt" id="set-cmd" placeholder="e.g. python -m http.server 9000 --directory hosted">
+        <label class="lbl">SET DEFAULT PYTHON (used by RUN)</label>
+        <input class="txt" id="set-py" placeholder="e.g. /usr/bin/python3">
         <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
           <button class="btn" style="width:auto;padding:12px 24px" onclick="saveSettings()">SAVE</button>
-          <button class="btn ghost" style="width:auto;padding:12px 24px" onclick="runStartup()">▶ RUN STARTUP</button>
         </div>
       </div>
       <h2 class="sec">RESOURCE LIMITS</h2>
       <div class="row"><div><div class="n">MEMORY</div><div class="m">HARD LIMIT</div></div><div class="tag on">4 GB</div></div>
       <div class="row"><div><div class="n">CPU</div><div class="m">HARD LIMIT</div></div><div class="tag on">100 %</div></div>
       <div class="row"><div><div class="n">STORAGE</div><div class="m">SINGLE FILE HOST</div></div><div class="tag on">1 GB</div></div>
-      <h2 class="sec">OUTPUT</h2>
-      <pre class="out" id="set-out">—</pre>
     </section>
   </main>
 </div>
 
 <div id="toast"></div>
 
+<!-- ══════ MODAL ══════ -->
+<div class="modal-back hidden" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-title">VIEW FILE</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <textarea class="txt" id="modal-content" spellcheck="false"></textarea>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" style="width:auto;padding:10px 20px" onclick="closeModal()">CLOSE</button>
+      <button class="btn" style="width:auto;padding:10px 20px" id="modal-save" onclick="saveModalFile()">SAVE</button>
+    </div>
+  </div>
+</div>
+
 <script>
 "use strict";
-/* ─────────────── CONFIG ─────────────── */
 const $  = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
+
+/* ────── CONFIG ────── */
 const MAX_RAM_GB   = 4;
 const MAX_CPU      = 100;
 const MAX_STORAGE  = 1024 * 1024 * 1024;
@@ -415,48 +558,28 @@ const MAX_ATTEMPTS = 5;
 const LOCK_SECONDS = 60;
 const IDLE_MINUTES = 10;
 const SESSION_TTL  = 2 * 60 * 60 * 1000;
-const UPTIME_START = Date.now();
 
-/* obfuscated credentials — hardik2321 / Hardik@2321 (sandbox mode only) */
-const _K = 3;
-const _U = [101,94,111,97,102,104,47,48,47,46];
-const _P = [69,94,111,97,102,104,61,47,48,47,46];
-const dec = a => a.map(c => String.fromCharCode(c + _K)).join("");
-const USER_OK = dec(_U);
-const PASS_OK = dec(_P);
-
-const SITE_KEY  = 'sk_site_v1';
-const SET_KEY   = 'sk_cfg_v1';
+/* ────── STORAGE KEYS ────── */
 const LOCK_KEY  = 'sk_lock_v1';
 const TRY_KEY   = 'sk_try_v1';
 const AUTH_KEY  = 'sk_auth_v1';
+const CFG_KEY   = 'sk_cfg_v1';
 
-let MODE = 'unknown';   // 'live' | 'sandbox'
-let memFile = null;
-
-/* ─────────────── UTILS ─────────────── */
+/* ────── UTILS ────── */
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const human = n => { const u=['B','KB','MB','GB','TB']; let i=0; while(n>=1024&&i<u.length-1){n/=1024;i++;} return n.toFixed(1)+' '+u[i]; };
 const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ctEq = (a, b) => { if (a.length!==b.length) return false; let r=0; for (let i=0;i<a.length;i++) r|=a.charCodeAt(i)^b.charCodeAt(i); return r===0; };
 
-function toast(msg, err){
+function toast(msg, type){
   const t = $('#toast');
   t.textContent = msg;
-  t.className = 'show' + (err ? ' err' : '');
+  t.className = 'show' + (type === 'err' ? ' err' : type === 'ok' ? ' ok' : '');
   clearTimeout(t._h);
   t._h = setTimeout(() => t.className = '', 2800);
 }
 
-/* ─────────────── STORAGE ─────────────── */
-function getSite(){ if (memFile) return memFile; try { return JSON.parse(localStorage.getItem(SITE_KEY)); } catch(e){ return null; } }
-function setSite(o){ try { localStorage.setItem(SITE_KEY, JSON.stringify(o)); memFile=null; return true; } catch(e){ memFile=o; return false; } }
-function delSite(){ memFile=null; try { localStorage.removeItem(SITE_KEY); } catch(e){} }
-function getCfg(){ try { return Object.assign({ startup_cmd:'' }, JSON.parse(localStorage.getItem(SET_KEY))||{}); } catch(e){ return { startup_cmd:'' }; } }
-function setCfg(o){ try { localStorage.setItem(SET_KEY, JSON.stringify(o)); } catch(e){} }
-
-/* ─────────────── SESSION ─────────────── */
+/* ────── SESSION ────── */
 function sessionValid(){
   try { const s = JSON.parse(sessionStorage.getItem(AUTH_KEY)); return s && s.t && (Date.now()-s.t < SESSION_TTL); }
   catch(e){ return false; }
@@ -464,7 +587,7 @@ function sessionValid(){
 function sessionOpen(){ sessionStorage.setItem(AUTH_KEY, JSON.stringify({ t: Date.now() })); }
 function sessionClose(){ sessionStorage.removeItem(AUTH_KEY); }
 
-/* ─────────────── LOCKOUT ─────────────── */
+/* ────── LOCKOUT ────── */
 function lockRemaining(){ try { return Math.max(0, Math.ceil((+(localStorage.getItem(LOCK_KEY)||0) - Date.now())/1000)); } catch(e){ return 0; } }
 function writeLock(s){ try { localStorage.setItem(LOCK_KEY, Date.now()+s*1000); } catch(e){} }
 function triesGet(){ try { return +(localStorage.getItem(TRY_KEY)||0); } catch(e){ return 0; } }
@@ -491,7 +614,11 @@ function startLockWatch(){
   lockTimer = setInterval(tick, 1000);
 }
 
-/* ─────────────── BRAND ─────────────── */
+/* ────── CONFIG ────── */
+function getCfg(){ try { return Object.assign({ py:'' }, JSON.parse(localStorage.getItem(CFG_KEY)||'{}')); } catch(e){ return { py:'' }; } }
+function setCfg(o){ try { localStorage.setItem(CFG_KEY, JSON.stringify(o)); } catch(e){} }
+
+/* ────── BRAND ────── */
 (function(){
   const b = $('#brand');
   const word = 'SUKUNA';
@@ -499,74 +626,32 @@ function startLockWatch(){
                 '<small>HOSTING PANEL</small>';
 })();
 
-/* ─────────────── BACKEND DETECTION ─────────────── */
-async function detectBackend(){
+/* ────── API ────── */
+async function api(url, body, method){
+  const opt = {
+    method: method || (body ? 'POST' : 'GET'),
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  if (body) opt.body = JSON.stringify(body);
+
+  const ctl = new AbortController();
+  const to = setTimeout(() => ctl.abort(), 30000);
+  opt.signal = ctl.signal;
+
   try {
-    const r = await fetch('/api/me', {
-      credentials: 'same-origin',
-      signal: AbortSignal.timeout(3000),
-    });
+    const r = await fetch(url, opt);
+    clearTimeout(to);
     const text = await r.text();
-    try {
-      JSON.parse(text);
-      MODE = 'live';
-    } catch(e){
-      MODE = 'sandbox';
-    }
+    try { return JSON.parse(text); }
+    catch(e){ return { ok:false, msg:'BACKEND OFFLINE', offline:true }; }
   } catch(e){
-    MODE = 'sandbox';
+    clearTimeout(to);
+    return { ok:false, msg:'BACKEND OFFLINE', offline:true };
   }
-  updateModeBadge();
 }
 
-function updateModeBadge(){
-  const m = $('#mode-line');
-  if (m) m.textContent = MODE === 'live' ? '● LIVE SERVER CONNECTED' : '● SANDBOX MODE (NO BACKEND)';
-
-  const b = $('#mode-badge');
-  if (b){
-    b.textContent = MODE === 'live' ? 'LIVE' : 'SANDBOX';
-    b.className = 'mode-badge ' + (MODE === 'live' ? 'live' : 'sandbox');
-  }
-
-  const note1 = $('#files-note');
-  if (note1) note1.textContent = MODE === 'live'
-    ? 'Files upload to the server and are served at /site.'
-    : 'Sandbox mode: files are stored in your browser only. Deploy the Node backend for real hosting.';
-
-  const note2 = $('#term-note');
-  if (note2) note2.textContent = MODE === 'live'
-    ? 'Live mode: commands run on the server. Real pip / npm / git.'
-    : 'Sandbox mode: commands are simulated. Deploy the Node backend for real execution.';
-}
-
-/* ─────────────── API (backend-aware) ─────────────── */
-async function apiGet(path){
-  if (MODE === 'live'){
-    try {
-      const r = await fetch(path, { credentials:'same-origin', signal: AbortSignal.timeout(8000) });
-      return await r.json();
-    } catch(e){ return null; }
-  }
-  return null;
-}
-async function apiPost(path, body){
-  if (MODE === 'live'){
-    try {
-      const r = await fetch(path, {
-        method:'POST',
-        credentials:'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body || {}),
-        signal: AbortSignal.timeout(90000),
-      });
-      return await r.json();
-    } catch(e){ return { ok:false, out:'network error: ' + e.message }; }
-  }
-  return null;
-}
-
-/* ─────────────── LOGIN ─────────────── */
+/* ────── LOGIN ────── */
 let loginBusy = false;
 
 async function doLogin(){
@@ -584,33 +669,12 @@ async function doLogin(){
   msg.classList.remove('shake');
 
   try {
-    await sleep(260);
+    await sleep(240);
     const u = uIn.value.trim();
     const p = pIn.value;
+    const res = await api('/api/login', { user:u, pass:p });
 
-    let ok = false;
-    let errMsg = 'INVALID ID OR PASSWORD';
-
-    if (MODE === 'live'){
-      try {
-        const r = await fetch('/api/login', {
-          method:'POST',
-          credentials:'same-origin',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify({ user:u, pass:p }),
-          signal: AbortSignal.timeout(10000),
-        });
-        const data = await r.json().catch(() => ({}));
-        ok = !!data.ok;
-        if (!ok) errMsg = String(data.msg || 'INVALID ID OR PASSWORD').toUpperCase();
-      } catch(e){
-        errMsg = 'BACKEND UNREACHABLE';
-      }
-    } else {
-      ok = ctEq(u, USER_OK) && ctEq(p, PASS_OK);
-    }
-
-    if (ok){
+    if (res && res.ok){
       sessionOpen();
       triesClear();
       pIn.value = '';
@@ -625,21 +689,26 @@ async function doLogin(){
       return;
     }
 
-    const tries = triesGet() + 1;
-    triesSet(tries);
-    if (tries >= MAX_ATTEMPTS){
-      writeLock(LOCK_SECONDS);
-      triesSet(0);
-      startLockWatch();
-      msg.textContent = 'TOO MANY ATTEMPTS · ACCESS LOCKED';
+    if (res && res.offline){
+      msg.textContent = 'BACKEND OFFLINE · RUN node server.js';
     } else {
-      msg.textContent = errMsg + ' (' + (MAX_ATTEMPTS - tries) + ' LEFT)';
+      const tries = triesGet() + 1;
+      triesSet(tries);
+      if (tries >= MAX_ATTEMPTS){
+        writeLock(LOCK_SECONDS);
+        triesSet(0);
+        startLockWatch();
+        msg.textContent = 'TOO MANY ATTEMPTS · LOCKED';
+      } else {
+        msg.textContent = String((res && res.msg) || 'LOGIN FAILED').toUpperCase() +
+                          ' (' + (MAX_ATTEMPTS - tries) + ' LEFT)';
+      }
     }
     msg.classList.remove('shake'); void msg.offsetWidth;
     msg.classList.add('shake');
     pIn.value = '';
-  } catch (err){
-    msg.textContent = 'UNEXPECTED ERROR · CHECK CONSOLE';
+  } catch(err){
+    msg.textContent = 'UNEXPECTED ERROR';
     console.error(err);
   } finally {
     loginBusy = false;
@@ -664,7 +733,7 @@ let idleTimer = null;
 function resetIdle(){
   clearTimeout(idleTimer);
   idleTimer = setTimeout(() => {
-    if (sessionValid()){ toast('SESSION EXPIRED · LOGGING OUT', true); setTimeout(doLogout, 900); }
+    if (sessionValid()){ toast('SESSION EXPIRED', 'err'); setTimeout(doLogout, 900); }
   }, IDLE_MINUTES * 60 * 1000);
 }
 ['mousemove','keydown','click','touchstart','scroll'].forEach(ev =>
@@ -672,9 +741,10 @@ function resetIdle(){
 
 async function doLogout(){
   sessionClose();
-  if (MODE === 'live'){ try { await fetch('/api/logout', { method:'POST', credentials:'same-origin' }); } catch(e){} }
+  try { await api('/api/logout', {}); } catch(e){}
   clearInterval(statsTimer);
   clearTimeout(idleTimer);
+  closeAllStreams();
   $('#panel').classList.add('hidden');
   const lg = $('#login');
   lg.classList.remove('login-out', 'hidden');
@@ -687,42 +757,34 @@ async function doLogout(){
   setTimeout(() => $('#lg-user').focus(), 300);
 }
 
-/* ─────────────── NAV ─────────────── */
+/* ────── NAV ────── */
 const TITLES = { dash:'DASHBOARD', files:'FILE HOST', term:'TERMINAL', py:'RUNTIMES', set:'SETTINGS' };
 let currentPage = 'dash', switching = false;
 
 function goPage(p){
   if (p === currentPage || switching) return;
   switching = true;
-
   const outEl = $('#page-' + currentPage);
   const inEl  = $('#page-' + p);
   const sweep = $('#sweep');
-
   sweep.classList.remove('on'); void sweep.offsetWidth; sweep.classList.add('on');
   setTimeout(() => sweep.classList.remove('on'), 650);
-
   outEl.classList.add('page-out');
-
   setTimeout(() => {
     outEl.classList.add('hidden');
     outEl.classList.remove('page-out');
     inEl.classList.remove('hidden');
     inEl.classList.add('page-in');
     setTimeout(() => inEl.classList.remove('page-in'), 540);
-
     currentPage = p;
     switching = false;
-
     if (p === 'files') loadFiles();
     if (p === 'py')    loadRuntimes();
     if (p === 'set')   loadSettings();
     if (p === 'term')  setTimeout(() => $('#term-in').focus(), 150);
   }, 250);
-
   $('#page-title').textContent = TITLES[p];
-  $('#page-title').style.animation = 'none';
-  void $('#page-title').offsetWidth;
+  $('#page-title').style.animation = 'none'; void $('#page-title').offsetWidth;
   $('#page-title').style.animation = 'slideL .55s cubic-bezier(.22,.85,.24,1)';
 }
 
@@ -750,51 +812,36 @@ document.addEventListener('mousemove', e => {
   });
 });
 
-/* ─────────────── STATS ─────────────── */
+/* ────── LIVE STATS ────── */
 let statsTimer = null;
-let cpuSim = 18, ramSim = 1.1;
 
 async function loadStats(){
-  let s;
+  const s = await api('/api/stats');
+  if (!s || !s.ok) return;
 
-  if (MODE === 'live'){
-    s = await apiGet('/api/stats');
-    if (s && s.ok){
-      $('#st-cpu').textContent = s.cpu + '%';
-      $('#bar-cpu').style.width = clamp((s.cpu/s.cpu_limit||s.cpu) * 100, 0, 100) + '%';
-      $('#st-ram').textContent = s.ram.used_gb + ' / ' + s.ram.total_gb + ' GB';
-      $('#bar-ram').style.width = clamp((s.ram.used_gb/s.ram.total_gb)*100, 0, 100) + '%';
-      $('#st-sto').textContent = s.storage.used_h;
-      $('#bar-sto').style.width = Math.max(1.5, s.storage.pct) + '%';
-      $('#st-py').textContent = s.python || '—';
-      $('#st-plat').textContent = String(s.platform || '').toUpperCase();
-      $('#st-node').textContent = s.node || '—';
-      $('#st-file').textContent = s.hosted || 'NONE';
-      return;
+  const setV = (sel, val, barSel, pct) => {
+    const el = $(sel);
+    if (el && el.textContent !== val){
+      el.textContent = val;
+      const card = el.closest('.card');
+      if (card){ card.classList.remove('updated'); void card.offsetWidth; card.classList.add('updated'); }
     }
-  }
+    if (barSel){ const b = $(barSel); if (b) b.style.width = clamp(pct, 0, 100) + '%'; }
+  };
 
-  /* sandbox fallback */
-  cpuSim += (Math.random() - 0.5) * 16;
-  cpuSim = clamp(cpuSim, 3, 92);
-  ramSim += (Math.random() - 0.5) * 0.22;
-  ramSim = clamp(ramSim, 0.4, MAX_RAM_GB * 0.92);
-
-  const site = getSite();
-  const used = site ? site.size : 0;
-  $('#st-cpu').textContent = cpuSim.toFixed(1) + '%';
-  $('#bar-cpu').style.width = clamp((cpuSim/MAX_CPU)*100, 0, 100) + '%';
-  $('#st-ram').textContent = ramSim.toFixed(2) + ' / ' + MAX_RAM_GB + ' GB';
-  $('#bar-ram').style.width = clamp((ramSim/MAX_RAM_GB)*100, 0, 100) + '%';
-  $('#st-sto').textContent = human(used);
-  $('#bar-sto').style.width = Math.max(1.5, clamp((used/MAX_STORAGE)*100, 0, 100)) + '%';
-  $('#st-py').textContent = '3.11.4';
-  $('#st-plat').textContent = 'SANDBOX · ' + (navigator.platform || 'WEB').toUpperCase();
-  $('#st-node').textContent = 'v20.10.0';
-  $('#st-file').textContent = site ? site.name : 'NONE';
+  setV('#st-cpu', s.cpu + '%', '#bar-cpu', (s.cpu/MAX_CPU)*100);
+  setV('#st-ram', s.ram.used_gb + ' / ' + s.ram.total_gb + ' GB', '#bar-ram', (s.ram.used_gb/s.ram.total_gb)*100);
+  setV('#st-sto', s.storage.used_h, '#bar-sto', s.storage.pct);
+  setV('#st-py', s.python || '—');
+  $('#st-plat').textContent = String(s.platform || '').toUpperCase();
+  setV('#st-node', s.node || '—');
+  setV('#st-running', String(s.running || 0));
+  $('#side-foot').textContent = 'v4.0 · LIVE · ' + (s.running || 0) + ' RUNNING';
 }
 
-/* ─────────────── FILES ─────────────── */
+/* ────── FILES + RUN/STOP ────── */
+const runs = new Map(); // runId -> { file, cmd, es, tab, bodyEl, statusEl, done }
+
 const drop = $('#drop');
 drop.onclick = () => $('#file-input').click();
 ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
@@ -803,113 +850,227 @@ drop.addEventListener('drop', e => { if (e.dataTransfer.files.length) uploadFile
 $('#file-input').onchange = e => { if (e.target.files.length) uploadFile(e.target.files[0]); };
 
 async function uploadFile(file){
-  if (file.size > MAX_STORAGE){ toast('FILE EXCEEDS 1 GB', true); return; }
-
-  if (MODE === 'live'){
-    toast('UPLOADING ' + file.name + ' …');
-    try {
-      const fd = new FormData();
-      fd.append('file', file);
-      const r = await fetch('/api/upload', { method:'POST', credentials:'same-origin', body: fd });
-      const data = await r.json();
-      toast(data.msg || (data.ok ? 'HOSTED' : 'FAILED'), !data.ok);
-      loadFiles(); loadStats();
-    } catch(e){
-      toast('UPLOAD FAILED', true);
-    }
-    return;
+  if (file.size > MAX_STORAGE){ toast('FILE EXCEEDS 1 GB', 'err'); return; }
+  toast('UPLOADING ' + file.name + ' …');
+  const fd = new FormData();
+  fd.append('file', file);
+  try {
+    const r = await fetch('/api/upload', { method:'POST', credentials:'same-origin', body: fd });
+    const data = await r.json();
+    toast(data.msg || (data.ok ? 'UPLOADED' : 'FAILED'), data.ok ? 'ok' : 'err');
+    loadFiles();
+    loadStats();
+  } catch(e){
+    toast('UPLOAD FAILED', 'err');
   }
-
-  toast('READING ' + file.name + ' …');
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const ok = setSite({ name: file.name, size: file.size, type: file.type || 'text/plain', data: ev.target.result, at: Date.now() });
-    toast(ok ? 'HOSTED ' + file.name : 'HOSTED THIS SESSION ONLY (quota full)', !ok);
-    loadFiles(); loadStats();
-  };
-  reader.onerror = () => toast('READ FAILED', true);
-  reader.readAsDataURL(file);
 }
 
 async function loadFiles(){
+  const r = await api('/api/files');
   const box = $('#file-list');
-
-  if (MODE === 'live'){
-    const r = await apiGet('/api/files');
-    if (r && r.ok){
-      if (!r.files.length){
-        box.innerHTML = '<div class="row"><div><div class="n">NO FILE HOSTED</div>' +
-          '<div class="m">UPLOAD A FILE TO ACTIVATE /site</div></div><div class="tag">EMPTY</div></div>';
-      } else {
-        box.innerHTML = r.files.map(f => `
-          <div class="row">
-            <div><div class="n">${esc(f.name)}</div>
-            <div class="m">${(f.size/1024).toFixed(1)} KB · SERVED AT /site</div></div>
-            <div class="tag on">LIVE</div>
-          </div>`).join('') + `
-          <div class="row"><div><div class="n">STORAGE USED</div>
-          <div class="m">LIMIT ${r.limit_h}</div></div><div class="tag">${r.used_h}</div></div>`;
-      }
-      return;
-    }
+  if (!r || !r.ok){
+    box.innerHTML = '<div class="file-row"><div class="file-info"><div class="file-name">BACKEND OFFLINE</div><div class="file-meta">RUN node server.js</div></div></div>';
+    return;
   }
-
-  const site = getSite();
-  const used = site ? site.size : 0;
-  box.innerHTML = (site ? `
-    <div class="row">
-      <div><div class="n">${esc(site.name)}</div>
-      <div class="m">${(site.size/1024).toFixed(1)} KB · BROWSER ONLY</div></div>
-      <div class="tag on">SANDBOX</div>
-    </div>` : `
-    <div class="row">
-      <div><div class="n">NO FILE HOSTED</div>
-      <div class="m">UPLOAD A FILE TO ACTIVATE</div></div>
-      <div class="tag">EMPTY</div>
-    </div>`) + `
-    <div class="row"><div><div class="n">STORAGE USED</div>
-    <div class="m">LIMIT ${human(MAX_STORAGE)}</div></div><div class="tag">${human(used)}</div></div>`;
+  if (!r.files.length){
+    box.innerHTML = '<div class="file-row"><div class="file-info"><div class="file-name">NO FILES</div><div class="file-meta">UPLOAD A FILE TO BEGIN</div></div></div>';
+    return;
+  }
+  const canRun = ext => /\.(py|js|mjs|sh)$/i.test(ext);
+  box.innerHTML = r.files.map(f => {
+    const isRunning = !!f.runId;
+    const runnable  = canRun(f.name);
+    return `
+      <div class="file-row ${isRunning ? 'running' : ''}" data-file="${esc(f.name)}">
+        <div class="file-info">
+          <div class="file-name">${esc(f.name)}</div>
+          <div class="file-meta">${(f.size/1024).toFixed(1)} KB · ${isRunning ? '<span style="color:var(--ok)">● RUNNING</span>' : 'IDLE'}</div>
+        </div>
+        <div class="file-actions">
+          ${runnable ? (isRunning
+            ? `<button class="act-btn stop" onclick="stopFile('${esc(f.name)}','${esc(f.runId)}')">⏹ STOP</button>`
+            : `<button class="act-btn run" onclick="runFile('${esc(f.name)}')">▶ RUN</button>`
+          ) : ''}
+          <button class="act-btn" onclick="viewFile('${esc(f.name)}')">📄 VIEW</button>
+          <button class="act-btn" onclick="deleteFile('${esc(f.name)}')" style="color:var(--err);border-color:var(--err)">✕</button>
+        </div>
+      </div>`;
+  }).join('');
 }
 
-async function deleteFile(){
-  if (MODE === 'live'){
-    const r = await apiPost('/api/delete', {});
-    toast(r && r.ok ? 'FILE REMOVED' : 'DELETE FAILED', !(r && r.ok));
+async function runFile(file){
+  const res = await api('/api/run', { file });
+  if (!res || !res.ok){
+    toast((res && res.msg) || 'RUN FAILED', 'err');
+    return;
+  }
+  toast('STARTED · ' + res.cmd, 'ok');
+  createRunTab(res.runId, res.cmd, file);
+  openStream(res.runId);
+  loadFiles();
+  loadStats();
+}
+
+async function stopFile(file, runId){
+  const res = await api('/api/stop', { runId });
+  if (!res || !res.ok){
+    toast((res && res.msg) || 'STOP FAILED', 'err');
+    return;
+  }
+  toast('STOPPING · ' + file, 'ok');
+}
+
+async function deleteFile(file){
+  if (!confirm('Delete ' + file + '?')) return;
+  const res = await api('/api/delete', { file });
+  if (res && res.ok){
+    toast('DELETED ' + file, 'ok');
+    loadFiles(); loadStats();
   } else {
-    delSite();
-    toast('FILE REMOVED');
+    toast((res && res.msg) || 'DELETE FAILED', 'err');
   }
-  loadFiles(); loadStats();
 }
 
-function openSite(){
-  if (MODE === 'live'){ window.open('/site', '_blank'); return; }
-  const site = getSite();
-  if (!site){ toast('NO FILE HOSTED', true); return; }
-  try {
-    const [head, b64] = site.data.split(',');
-    const mime = (head.match(/:(.*?);/) || [,'application/octet-stream'])[1];
-    const bin = atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-    const url = URL.createObjectURL(new Blob([arr], { type: mime }));
-    const w = window.open(url, '_blank');
-    if (!w) toast('POPUP BLOCKED', true);
-    setTimeout(() => URL.revokeObjectURL(url), 60000);
-  } catch(e){ toast('CANNOT OPEN FILE', true); }
+/* ────── OUTPUT TABS + STREAM ────── */
+function createRunTab(runId, cmd, file){
+  // If already there, just switch to it
+  if (runs.has(runId)){ activateTab(runId); return runs.get(runId); }
+
+  const tabs = $('#output-tabs');
+  const body = $('#output-body');
+  $('#output-empty')?.classList.add('hidden');
+
+  const tab = document.createElement('button');
+  tab.className = 'out-tab running';
+  tab.dataset.runid = runId;
+  tab.innerHTML = `
+    <span class="live-dot"></span>
+    <span>${esc(file)}</span>
+    <button class="stop-tab" title="stop">✕</button>
+  `;
+  tab.querySelector('.stop-tab').onclick = e => {
+    e.stopPropagation();
+    const r = runs.get(runId);
+    if (r && !r.done) stopFile(r.file, runId);
+  };
+  tab.onclick = () => activateTab(runId);
+  tabs.appendChild(tab);
+
+  const bodyEl = document.createElement('div');
+  bodyEl.className = 'hidden';
+  bodyEl.dataset.runid = runId;
+  bodyEl.innerHTML = `<div class="out-line cmd">$ ${esc(cmd)}</div>`;
+  body.appendChild(bodyEl);
+
+  const run = { runId, file, cmd, tab, bodyEl, done:false, es:null };
+  runs.set(runId, run);
+
+  activateTab(runId);
+  return run;
 }
 
-/* ─────────────── TERMINAL ─────────────── */
+function activateTab(runId){
+  $$('.out-tab').forEach(t => t.classList.toggle('active', t.dataset.runid === runId));
+  $$('.output-body > div').forEach(d => {
+    if (d.classList.contains('empty-output')) return;
+    d.classList.toggle('hidden', d.dataset.runid !== runId);
+  });
+  const run = runs.get(runId);
+  if (run){
+    $('#output-cmd').textContent = '$ ' + run.cmd;
+    $('#output-stat').textContent = run.done ? 'STOPPED' : 'RUNNING';
+    $('#output-stat').className = 'stat ' + (run.done ? 'stopped' : 'running');
+  }
+}
+
+function openStream(runId){
+  const run = runs.get(runId);
+  if (!run || run.es) return;
+
+  const es = new EventSource('/api/stream/' + runId, { withCredentials: true });
+  run.es = es;
+
+  es.onmessage = e => {
+    let m;
+    try { m = JSON.parse(e.data); } catch(err){ return; }
+    if (m.t === 'out' || m.t === 'err'){
+      const line = document.createElement('div');
+      line.className = 'out-line' + (m.t === 'err' ? ' errtxt' : '');
+      line.textContent = m.d;
+      run.bodyEl.appendChild(line);
+      if (run.bodyEl.parentElement.scrollTop + run.bodyEl.parentElement.clientHeight > run.bodyEl.parentElement.scrollHeight - 100){
+        run.bodyEl.parentElement.scrollTop = run.bodyEl.parentElement.scrollHeight;
+      }
+    } else if (m.t === 'exit'){
+      run.done = true;
+      const line = document.createElement('div');
+      line.className = 'out-line exit';
+      line.textContent = `\n[process exited with code ${m.code}]`;
+      run.bodyEl.appendChild(line);
+      run.tab.classList.remove('running');
+      run.tab.querySelector('.live-dot')?.remove();
+      if (runId === currentTab()) {
+        $('#output-stat').textContent = 'EXITED';
+        $('#output-stat').className = 'stat stopped';
+      }
+      es.close();
+      run.es = null;
+      loadFiles(); loadStats();
+    }
+  };
+  es.onerror = () => { es.close(); run.es = null; };
+}
+
+function currentTab(){
+  const t = $('.out-tab.active');
+  return t ? t.dataset.runid : null;
+}
+
+function closeAllStreams(){
+  for (const [, r] of runs){ if (r.es){ try { r.es.close(); } catch(e){} } }
+  runs.clear();
+}
+
+/* ────── VIEW / EDIT FILE ────── */
+let modalFile = null;
+
+async function viewFile(name){
+  const r = await api('/api/file/' + encodeURIComponent(name), null, 'GET');
+  if (!r || !r.ok){
+    toast((r && r.msg) || 'CANNOT OPEN', 'err');
+    return;
+  }
+  modalFile = name;
+  $('#modal-title').textContent = 'VIEW / EDIT · ' + name;
+  $('#modal-content').value = r.content;
+  $('#modal').classList.remove('hidden');
+}
+
+function closeModal(){
+  $('#modal').classList.add('hidden');
+  modalFile = null;
+}
+
+async function saveModalFile(){
+  if (!modalFile) return;
+  const content = $('#modal-content').value;
+  const r = await api('/api/file/' + encodeURIComponent(modalFile), { content }, 'POST');
+  if (r && r.ok){ toast('SAVED', 'ok'); closeModal(); loadFiles(); }
+  else { toast((r && r.msg) || 'SAVE FAILED', 'err'); }
+}
+
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+/* ────── TERMINAL ────── */
 const termOut = $('#term-out');
 const termIn  = $('#term-in');
-const termPs1 = $('#term-ps1');
-const runBtn  = $('#run-btn');
-let cwd = '~';
-let history = [], hIdx = -1;
+const termRunBtn = $('#term-run');
+const termStopBtn = $('#term-stop');
+let termRunId = null;
 
 function tw(text, cls){
   const d = document.createElement('div');
-  d.className = cls || 'tl';
+  d.className = 'tl ' + (cls || '');
   d.textContent = text;
   termOut.appendChild(d);
   termOut.scrollTop = termOut.scrollHeight;
@@ -922,174 +1083,65 @@ function twHtml(html){
   termOut.scrollTop = termOut.scrollHeight;
 }
 
-const BLOCKED = [/^sudo\b/, /^su\b/, /rm\s+-rf\s+\//, /mkfs/, /dd\s+if=/, /^shutdown\b/, /^reboot\b/, /^:\s*\(\)/];
-
-async function runCmd(raw){
-  const line = raw.trim();
-  if (!line) return;
-  twHtml(`<span class="tl-dim">sukuna@panel:${esc(cwd)}$</span> <span class="tl">${esc(line)}</span>`);
-
-  if (BLOCKED.some(re => re.test(line))){
-    tw('⛔ blocked by panel policy', 'tl-err');
-    return;
-  }
-
-  if (line === 'clear' || line === 'cls'){ termOut.innerHTML = ''; return; }
-
-  /* LIVE MODE — actually run on server */
-  if (MODE === 'live'){
-    runBtn.disabled = true;
-    const data = await apiPost('/api/terminal', { cmd: line });
-    runBtn.disabled = false;
-
-    if (!data){
-      tw('network error', 'tl-err');
-      return;
-    }
-    if (data.out) tw(data.out.replace(/\n$/, ''), data.ok ? 'tl' : 'tl-err');
-    else if (!data.ok) tw('command failed (exit ' + (data.code||1) + ')', 'tl-err');
-    return;
-  }
-
-  /* SANDBOX MODE — simulate */
-  simulateCmd(line);
-}
-
-function simulateCmd(line){
-  const [cmd, ...args] = line.split(/\s+/);
-  const arg = args.join(' ');
-
-  switch(cmd){
-    case 'help':
-      tw('SUKUNA SHELL (sandbox) — commands:', 'tl-cyan');
-      tw('  help / clear / pwd / whoami / date / uptime');
-      tw('  ls / ls -la / cd / cat <file> / echo <text>');
-      tw('  pip install <pkg>    pip list    python --version');
-      tw('  npm install <pkg>    npm list    node -v');
-      tw('  git --version        git status');
-      return;
-    case 'pwd': tw('/hosted'); return;
-    case 'whoami': tw('sukuna'); return;
-    case 'date': tw(new Date().toString()); return;
-    case 'uptime': {
-      const u = Math.floor((Date.now()-UPTIME_START)/1000);
-      tw('up ' + Math.floor(u/60) + ' min ' + (u%60) + ' sec');
-      return;
-    }
-    case 'echo': tw(arg); return;
-    case 'ls': {
-      const site = getSite();
-      if (!site){ tw('total 0'); return; }
-      if (arg.includes('-la') || arg.includes('-l')){
-        tw('total 1');
-        tw('-rw-r--r-- 1 sukuna sukuna ' + String(site.size).padStart(9) + ' ' + site.name);
-      } else tw(site.name);
-      return;
-    }
-    case 'cat': {
-      const site = getSite();
-      if (!site){ tw('cat: ' + arg + ': No such file', 'tl-err'); return; }
-      if (!arg || arg === site.name){
-        try { const [, b64] = site.data.split(','); tw(atob(b64).slice(0,3000) || '(empty)'); }
-        catch(e){ tw('cat: read error', 'tl-err'); }
-      } else tw('cat: ' + arg + ': No such file', 'tl-err');
-      return;
-    }
-    case 'cd': {
-      cwd = (!arg || arg === '~' || arg === '/' || arg === '..') ? '~' : arg.replace(/^~\//, '');
-      termPs1.textContent = `sukuna@panel:${cwd}$`;
-      return;
-    }
-    case 'python':
-    case 'python3': {
-      if (arg === '--version' || arg === '-V') tw('Python 3.11.4');
-      else tw('Python 3.11.4 (sandbox)', 'tl-dim');
-      return;
-    }
-    case 'pip':
-    case 'pip3': {
-      if (args[0] === 'install' && args[1] === '--upgrade' && args[2] === 'pip'){
-        tw('Collecting pip');
-        tw('  Downloading pip-24.0-py3-none-any.whl (2.1 MB)');
-        tw('Successfully installed pip-24.0', 'tl-ok');
-        return;
-      }
-      if (args[0] === 'install'){
-        const pkgs = args.slice(1);
-        if (!pkgs.length){ tw('ERROR: You must give at least one requirement', 'tl-err'); return; }
-        tw('Collecting ' + pkgs.join(', '), 'tl-dim');
-        pkgs.forEach(p => tw('  Downloading ' + p + '-py3-none-any.whl'));
-        tw('Successfully installed ' + pkgs.join(' '), 'tl-ok');
-        return;
-      }
-      if (args[0] === 'list'){
-        tw('Package      Version');
-        tw('------------ -------');
-        tw('Flask        3.0.0');
-        tw('psutil       5.9.8');
-        tw('requests     2.31.0');
-        return;
-      }
-      tw('pip: unknown command', 'tl-err');
-      return;
-    }
-    case 'node': tw(arg === '-v' ? 'v20.10.0' : 'v20.10.0 (sandbox)', 'tl-dim'); return;
-    case 'npm': {
-      if (arg === '-v'){ tw('10.2.4'); return; }
-      if (args[0] === 'install' && args[1] === '-g' && args[2] === 'npm@latest'){
-        tw('changed 1 package in 2s');
-        tw('npm@10.5.0 updated', 'tl-ok');
-        return;
-      }
-      if (args[0] === 'install' || args[0] === 'i'){
-        const pkgs = args.slice(1).filter(a => !a.startsWith('-'));
-        if (!pkgs.length){ tw('npm error: specify package', 'tl-err'); return; }
-        tw('added ' + (pkgs.length*71) + ' packages in 1.4s');
-        tw('packages: ' + pkgs.join(', '), 'tl-ok');
-        return;
-      }
-      if (args[0] === 'list' || args[0] === 'ls'){
-        tw('sukuna@panel');
-        tw('├── express@4.18.2');
-        tw('└── ws@8.16.0');
-        return;
-      }
-      tw('npm error: unknown command', 'tl-err');
-      return;
-    }
-    case 'git': {
-      if (arg === '--version'){ tw('git version 2.42.0'); return; }
-      if (arg === 'status'){ tw('nothing to commit, working tree clean', 'tl-ok'); return; }
-      if (arg === 'init'){ tw('Initialized empty Git repository', 'tl-ok'); return; }
-      tw('git: unknown subcommand', 'tl-err');
-      return;
-    }
-    default:
-      tw('sh: ' + cmd + ': command not found', 'tl-err');
-  }
-}
-
-/* RUN BUTTON */
-async function runCurrent(){
+async function runTerm(){
   const cmd = termIn.value.trim();
   if (!cmd) return;
+
+  if (cmd === 'clear' || cmd === 'cls'){ termOut.innerHTML = ''; termIn.value = ''; return; }
+
+  twHtml(`<span class="tl-dim">sukuna@panel:~$</span> <span class="tl-cmd">${esc(cmd)}</span>`);
   termIn.value = '';
-  history.push(cmd); hIdx = history.length;
-  await runCmd(cmd);
-  termIn.focus();
+
+  if (termRunId){ toast('A COMMAND IS RUNNING · STOP IT FIRST', 'err'); return; }
+
+  const res = await api('/api/terminal', { cmd });
+  if (!res || !res.ok){
+    tw((res && res.msg) || 'FAILED', 'tl-err');
+    return;
+  }
+  termRunId = res.runId;
+  termRunBtn.classList.add('hidden');
+  termStopBtn.classList.remove('hidden');
+  $('#term-status').textContent = 'RUNNING';
+
+  const es = new EventSource('/api/stream/' + res.runId, { withCredentials: true });
+  const buf = document.createElement('div');
+  buf.className = 'tl';
+  termOut.appendChild(buf);
+
+  es.onmessage = e => {
+    let m;
+    try { m = JSON.parse(e.data); } catch(err){ return; }
+    if (m.t === 'out' || m.t === 'err'){
+      buf.textContent += m.d;
+      termOut.scrollTop = termOut.scrollHeight;
+    } else if (m.t === 'exit'){
+      es.close();
+      termRunId = null;
+      termRunBtn.classList.remove('hidden');
+      termStopBtn.classList.add('hidden');
+      $('#term-status').textContent = m.code === 0 ? 'DONE' : 'EXITED ' + m.code;
+      if (m.code !== 0) tw('[exit code ' + m.code + ']', 'tl-dim');
+      else tw('', 'tl-dim');
+    }
+  };
+  es.onerror = () => {
+    es.close();
+    termRunId = null;
+    termRunBtn.classList.remove('hidden');
+    termStopBtn.classList.add('hidden');
+    $('#term-status').textContent = 'DISCONNECTED';
+  };
+}
+
+async function stopTerm(){
+  if (!termRunId) return;
+  await api('/api/stop', { runId: termRunId });
+  toast('STOPPING…', 'ok');
 }
 
 termIn.addEventListener('keydown', e => {
-  if (e.key === 'Enter'){ e.preventDefault(); runCurrent(); }
-  if (e.key === 'ArrowUp'){
-    if (hIdx > 0){ hIdx--; termIn.value = history[hIdx]; }
-    e.preventDefault();
-  }
-  if (e.key === 'ArrowDown'){
-    if (hIdx < history.length-1){ hIdx++; termIn.value = history[hIdx]; }
-    else { hIdx = history.length; termIn.value = ''; }
-    e.preventDefault();
-  }
+  if (e.key === 'Enter'){ e.preventDefault(); runTerm(); }
 });
 
 function quick(cmd){
@@ -1097,96 +1149,82 @@ function quick(cmd){
   termIn.focus();
 }
 
-/* ─────────────── RUNTIMES ─────────────── */
+/* ────── RUNTIMES ────── */
 async function loadRuntimes(){
   const py = $('#py-list');
   py.innerHTML = '<div class="row"><div><div class="n">SCANNING…</div></div></div>';
-
-  if (MODE === 'live'){
-    const r = await apiGet('/api/python/versions');
-    if (r && r.ok && r.versions.length){
-      py.innerHTML = r.versions.map(v => `
-        <div class="row">
-          <div><div class="n">${esc(v.version)}</div>
-          <div class="m">${esc(v.path)}</div></div>
-          <div class="tag ${v.active ? 'on' : ''}">${v.active ? 'DEFAULT' : 'AVAILABLE'}</div>
-        </div>`).join('');
-    } else {
-      py.innerHTML = '<div class="row"><div><div class="n">NO PYTHON FOUND</div>' +
-        '<div class="m">INSTALL PYTHON3 ON THE SERVER</div></div><div class="tag">MISSING</div></div>';
-    }
+  const r = await api('/api/python/versions');
+  if (!r || !r.ok || !r.versions.length){
+    py.innerHTML = '<div class="row"><div><div class="n">NO PYTHON FOUND</div><div class="m">INSTALL PYTHON3 ON THE SERVER</div></div><div class="tag">MISSING</div></div>';
   } else {
-    py.innerHTML = `
-      <div class="row"><div><div class="n">Python 3.11.4</div>
-      <div class="m">/usr/bin/python3 · SANDBOX SIMULATION</div></div>
-      <div class="tag on">DEFAULT</div></div>
-      <div class="row"><div><div class="n">Python 3.10.12</div>
-      <div class="m">/usr/bin/python3.10 · SANDBOX SIMULATION</div></div>
-      <div class="tag">AVAILABLE</div></div>`;
+    py.innerHTML = r.versions.map(v => `
+      <div class="row">
+        <div><div class="n">${esc(v.version)}</div><div class="m">${esc(v.path)}</div></div>
+        <div class="tag ${v.active ? 'on' : ''}">${v.active ? 'DEFAULT' : 'AVAILABLE'}</div>
+      </div>`).join('');
   }
-
-  let nodeVer = 'v20.10.0', npmVer = '10.2.4';
-  if (MODE === 'live'){
-    const s = await apiGet('/api/stats');
-    if (s && s.ok && s.node) nodeVer = s.node;
-  }
+  const s = await api('/api/stats');
+  const nodeV = (s && s.ok && s.node) ? s.node : '—';
   $('#node-list').innerHTML = `
-    <div class="row"><div><div class="n">Node.js ${esc(nodeVer)}</div>
-    <div class="m">SERVER RUNTIME · ACTIVE</div></div><div class="tag on">ACTIVE</div></div>
-    <div class="row"><div><div class="n">npm ${npmVer}</div>
-    <div class="m">UPGRADE VIA TERMINAL</div></div><div class="tag">npm i -g npm@latest</div></div>`;
+    <div class="row"><div><div class="n">Node.js ${esc(nodeV)}</div>
+    <div class="m">SERVER RUNTIME · ACTIVE</div></div><div class="tag on">ACTIVE</div></div>`;
 }
 
-/* ─────────────── SETTINGS ─────────────── */
+/* ────── SETTINGS ────── */
 function loadSettings(){
   const cfg = getCfg();
-  $('#set-cmd').value = cfg.startup_cmd || '';
+  $('#set-py').value = cfg.py || '';
 }
 function saveSettings(){
-  setCfg({ startup_cmd: $('#set-cmd').value.trim() });
-  toast('SETTINGS SAVED');
-}
-async function runStartup(){
-  const cmd = $('#set-cmd').value.trim();
-  if (!cmd){ toast('NO COMMAND SET', true); return; }
-  $('#set-out').textContent = '> ' + cmd + '\n(running…)';
-  goPage('term');
-  setTimeout(() => { runCmd(cmd); }, 400);
-  $('#set-out').textContent = '> ' + cmd + '\n(sent to terminal)';
+  setCfg({ py: $('#set-py').value.trim() });
+  toast('SAVED', 'ok');
 }
 
-/* ─────────────── BOOT ─────────────── */
-function boot(){
+/* ────── BOOT ────── */
+async function boot(){
   $('#who-txt').textContent = 'ADMIN';
-  tw('SUKUNA HOSTING PANEL v3.0', 'tl-cyan');
-  tw(MODE === 'live' ? '● LIVE SERVER CONNECTED' : '● SANDBOX MODE — no backend', MODE === 'live' ? 'tl-ok' : 'tl-yel');
-  tw('type a command then click ▶ RUN', 'tl-dim');
-  tw('type "help" for a list', 'tl-dim');
-  tw('');
+  tw('SUKUNA PANEL v4.0 · connected', 'tl-dim');
+  tw('type a command then press ▶ RUN', 'tl-dim');
+  tw('', '');
 
-  loadStats();
-  loadFiles();
-  loadSettings();
-  loadRuntimes();
+  await loadStats();
+  await loadFiles();
+  await loadSettings();
+  await loadRuntimes();
+  await attachRunningProcesses();
 
   clearInterval(statsTimer);
   statsTimer = setInterval(loadStats, 2500);
   resetIdle();
-  updateModeBadge();
 }
 
-/* ─────────────── INIT ─────────────── */
+async function attachRunningProcesses(){
+  const r = await api('/api/processes');
+  if (!r || !r.ok) return;
+  for (const p of r.processes){
+    const cmd = p.file ? ('python3 ' + p.file) : (p.cmd || '');
+    createRunTab(p.runId, cmd, p.file || 'terminal');
+    openStream(p.runId);
+  }
+}
+
+/* ────── INIT ────── */
 (async function init(){
   if (lockRemaining() > 0) startLockWatch();
-  await detectBackend();
 
   if (sessionValid()){
     $('#login').classList.add('hidden');
-    $('#panel').classList.remove('hidden');
-    $('#panel').classList.add('panel-in');
+    const pnl = $('#panel');
+    pnl.classList.remove('hidden');
+    pnl.classList.add('panel-in');
     boot();
   } else {
     sessionClose();
+    const me = await api('/api/me');
+    if (me && me.offline){
+      const m = $('#lg-msg');
+      if (m) m.textContent = 'BACKEND OFFLINE · RUN node server.js';
+    }
     setTimeout(() => $('#lg-user').focus(), 700);
   }
 })();
